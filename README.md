@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA 3D Solar System - Ultimate Straywav Phonk Edition</title>
+    <title>NASA 3D Solar System - Ultimate Free-Roam Spaceship Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
@@ -30,18 +30,18 @@
     <div id="startOverlay" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative flex items-center justify-center">
             <div class="w-32 h-32 rounded-full border-2 border-rose-500/50 animate-ping absolute"></div>
-            <div class="text-7xl">🌌</div>
+            <div class="text-7xl">🚀</div>
         </div>
         <div class="space-y-2">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-cyan-400 to-amber-300 tracking-wider">
-                NASA EYES // ULTIMATE PHONK 3D
+                NASA EYES // SPACESHIP FREE-ROAM
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-                Tích hợp Đai tiểu hành tinh, Đèn đêm Trái Đất, Bão mặt trời, Trạm ISS, Chế độ Cinematic & Nhạc Straywav.
+                Đã mở khóa Tàu vũ trụ tự do (W A S D), Khí quyển sáng rực, Quỹ đạo elip chuẩn Kepler & Nhạc Phonk Straywav.
             </p>
         </div>
         <button onclick="startExperience()" class="px-8 py-4 bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 font-orbitron font-bold text-xs sm:text-sm rounded-2xl text-white cinematic-glow transition active:scale-95 border border-rose-400 flex items-center gap-3">
-            <span>⚡</span> KHỞI ĐỘNG HỆ THỐNG ULTIMATE 3D
+            <span>⚡</span> BẮT ĐẦU KHÁM PHÁ VŨ TRỤ
         </button>
     </div>
 
@@ -50,11 +50,11 @@
         <source src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_febc508520.mp3?filename=drift-phonk-126548.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- HUD TRUNG TÂM ĐIỀU HÀNH -->
+    <!-- HUD ĐIỀU KHIỂN -->
     <header id="mainHud" class="absolute top-4 left-4 z-20 transition-all duration-300 pointer-events-auto">
         <div class="hud-panel p-4 rounded-2xl max-w-sm space-y-3 relative">
             <div class="flex justify-between items-center gap-3">
-                <span class="text-[10px] font-bold tracking-widest text-slate-400">NASA ULTIMATE SYSTEM</span>
+                <span class="text-[10px] font-bold tracking-widest text-slate-400">SPACESHIP COMMAND CENTER</span>
                 <div class="flex items-center gap-2">
                     <button onclick="toggleSpaceAudio()" id="audioToggleBtn" class="px-2.5 py-1 bg-rose-950/80 border border-rose-400 text-rose-300 rounded-lg text-[11px] font-bold hover:bg-rose-900 transition flex items-center gap-1.5 shadow-[0_0_12px_rgba(244,63,94,0.4)]">
                         <span id="audioIcon">🔊</span> <span id="audioStatus">Straywav: ON</span>
@@ -65,7 +65,20 @@
                 </div>
             </div>
 
-            <!-- THANH ĐIỀU CHỈNH AUDIO & TỐC ĐỘ -->
+            <!-- ĐIỀU KHIỂN TÀU VŨ TRỤ FREE-ROAM -->
+            <div class="bg-rose-950/40 p-2.5 rounded-xl border border-rose-500/40 space-y-1.5">
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] text-rose-300 font-bold uppercase tracking-wider">🛸 Chế độ Lái Tàu (Spaceship):</span>
+                    <button onclick="toggleSpaceshipMode()" id="spaceshipBtn" class="px-2 py-0.5 bg-rose-900 border border-rose-400 text-rose-100 text-[10px] font-bold rounded-md hover:bg-rose-800 transition">
+                        Bật Lái Tàu
+                    </button>
+                </div>
+                <div class="text-[9px] text-slate-300 leading-tight">
+                    Dùng phím <b class="text-cyan-300">W, A, S, D</b> để di chuyển, <b class="text-cyan-300">R / F</b> lên xuống, giữ <b class="text-cyan-300">Chuột trái</b> xoay hướng nhìn.
+                </div>
+            </div>
+
+            <!-- AUDIO & TIMEWARP -->
             <div class="grid grid-cols-2 gap-2 text-[10px]">
                 <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 space-y-1">
                     <span class="text-rose-300 font-bold">🎧 Nhạc Vol:</span>
@@ -77,7 +90,6 @@
                 </div>
             </div>
 
-            <!-- CÁC NÚT TÍNH NĂNG ĐẶC BIỆT -->
             <div class="flex gap-2">
                 <button onclick="toggleCinematicMode()" id="cinematicBtn" class="w-1/2 py-1.5 bg-purple-950 border border-purple-500 text-purple-200 text-[10px] font-bold rounded-xl hover:bg-purple-900 transition">
                     🎬 Cinematic Tour
@@ -93,7 +105,7 @@
                 <div class="border-t border-slate-800 pt-2">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300">TOÀN CẢNH HỆ MẶT TRỜI</div>
                     <p id="planetDesc" class="text-xs text-slate-300 leading-relaxed mt-1">
-                        Hiển thị 8 Hành Tinh, Đai Tiểu Hành Tinh, Trạm ISS, Bão Mặt Trời & hiệu ứng mây 3D.
+                        Hệ thống chiếu sáng PBR, hiệu ứng khí quyển phát sáng tỏa hào quang bao bọc hành tinh.
                     </p>
                 </div>
 
@@ -143,31 +155,31 @@
         let cameraDistance = 65, targetCameraDistance = 65;
         let cameraAngleX = 0.4, cameraAngleY = 0.0;
         let currentLookAt = new THREE.Vector3(0, 0, 0);
-        let timeSpeed = 1.0, isRealScale = false, isCinematic = false;
+        let timeSpeed = 1.0, isRealScale = false, isCinematic = false, isSpaceshipMode = false;
         let cinematicTimer = 0, cinematicIndex = 0;
-        let solarFlares = [];
+        let spaceshipPos = new THREE.Vector3(0, 10, 80);
+        let spaceshipVel = new THREE.Vector3(0, 0, 0);
+        let keysPressed = {};
 
         const planetDatabase = {
-            sun: { name: "MẶT TRỜI (SUN)", desc: "Ngôi sao trung tâm, cấu tạo từ plasma hydro cực nóng với bão lửa bùng nổ liên tục.", dist: "0 AU", temp: "5,500 °C", radius: "696,340 km", moons: "0", zoomDist: 65 },
-            mercury: { name: "SAO THỦY (MERCURY)", desc: "Hành tinh đá với bề mặt chi chít hố va chạm thiên thạch khắc sâu tương tự Mặt Trăng.", dist: "0.39 AU", temp: "-180 đến 430 °C", radius: "2,439 km", moons: "0", zoomDist: 6 },
-            venus: { name: "SAO KIM (VENUS)", desc: "Bao phủ bởi tầng mây dày axit sulfuric phản chiếu ánh sáng màu vàng cam rực rỡ.", dist: "0.72 AU", temp: "462 °C", radius: "6,051 km", moons: "0", zoomDist: 7 },
-            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh duy nhất có sự sống, trạm ISS quay quanh & lớp đèn đêm thành phố sáng rực.", dist: "1.00 AU", temp: "15 °C", radius: "6,371 km", moons: "1 + Trạm ISS", zoomDist: 8 },
-            mars: { name: "SAO HỎA (MARS)", desc: "Hành tinh Đỏ sa mạc lạnh giá với núi lửa khổng lồ và bụi oxit sắt đặc trưng.", dist: "1.52 AU", temp: "-63 °C", radius: "3,389 km", moons: "2 (Phobos, Deimos)", zoomDist: 7 },
-            jupiter: { name: "SAO MỘC (JUPITER)", desc: "Gã khổng lồ khí với các dải mây bão xoáy cuộn và Vết Đỏ Lớn kinh điển.", dist: "5.20 AU", temp: "-110 °C", radius: "69,911 km", moons: "95", zoomDist: 14 },
-            saturn: { name: "SAO THỔ (SATURN)", desc: "Nổi bật với hệ thống vành đai băng phức tạp sáng lấp lánh phản quang ấn tượng.", dist: "9.58 AU", temp: "-140 °C", radius: "58,232 km", moons: "146", zoomDist: 16 },
-            uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng khổng lồ màu xanh ngọc lam tĩnh lặng với trục quay nghiêng độc đáo.", dist: "19.22 AU", temp: "-195 °C", radius: "25,362 km", moons: "28", zoomDist: 11 },
-            neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Hành tinh xanh thẫm xa xôi với những dải bão ngầm và gió siêu thanh mạnh nhất.", dist: "30.05 AU", temp: "-200 °C", radius: "24,622 km", moons: "16", zoomDist: 11 }
+            sun: { name: "MẶT TRỜI (SUN)", desc: "Ngôi sao trung tâm chứa plasma hydro cực nóng.", dist: "0 AU", temp: "5,500 °C", radius: "696,340 km", moons: "0", zoomDist: 65 },
+            mercury: { name: "SAO THỦY (MERCURY)", desc: "Hành tinh đá với bề mặt chi chít hố va chạm thiên thạch.", dist: "0.39 AU", temp: "-180 đến 430 °C", radius: "2,439 km", moons: "0", zoomDist: 6 },
+            venus: { name: "SAO KIM (VENUS)", desc: "Bao phủ bởi tầng mây dày axit sulfuric màu vàng cam.", dist: "0.72 AU", temp: "462 °C", radius: "6,051 km", moons: "0", zoomDist: 7 },
+            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống với tầng khí quyển xanh lam phát sáng độc đáo.", dist: "1.00 AU", temp: "15 °C", radius: "6,371 km", moons: "1 + Trạm ISS", zoomDist: 8 },
+            mars: { name: "SAO HỎA (MARS)", desc: "Hành tinh Đỏ sa mạc lạnh giá với bụi oxit sắt.", dist: "1.52 AU", temp: "-63 °C", radius: "3,389 km", moons: "2", zoomDist: 7 },
+            jupiter: { name: "SAO MỘC (JUPITER)", desc: "Gã khổng lồ khí với các dải mây bão xoáy cuộn.", dist: "5.20 AU", temp: "-110 °C", radius: "69,911 km", moons: "95", zoomDist: 14 },
+            saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng phức tạp sáng lấp lánh.", dist: "9.58 AU", temp: "-140 °C", radius: "58,232 km", moons: "146", zoomDist: 16 },
+            uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng khổng lồ màu xanh ngọc lam.", dist: "19.22 AU", temp: "-195 °C", radius: "25,362 km", moons: "28", zoomDist: 11 },
+            neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Hành tinh xanh thẫm với gió siêu thanh mạnh nhất.", dist: "30.05 AU", temp: "-200 °C", radius: "24,622 km", moons: "16", zoomDist: 11 }
         };
 
         function toggleHudInfo() {
             isHudVisible = !isHudVisible;
             const content = document.getElementById("hudContent");
             const btn = document.getElementById("toggleHudBtn");
-            if (isHudVisible) {
-                content.style.maxHeight = "300px"; content.style.opacity = "1"; content.style.marginTop = "0.75rem"; btn.innerText = "👁️ Ẩn";
-            } else {
-                content.style.maxHeight = "0px"; content.style.opacity = "0"; content.style.marginTop = "0px"; btn.innerText = "👁️ Hiện Thông Tin";
-            }
+            content.style.maxHeight = isHudVisible ? "300px" : "0px";
+            content.style.opacity = isHudVisible ? "1" : "0";
+            btn.innerText = isHudVisible ? "👁️ Ẩn" : "👁️ Hiện";
         }
 
         function startExperience() {
@@ -186,33 +198,40 @@
 
         function toggleScaleMode() {
             isRealScale = !isRealScale;
-            const btn = document.getElementById("scaleModeBtn");
-            btn.innerText = isRealScale ? "🌌 Scale: Real" : "🌌 Scale: Default";
-            updatePlanetScales();
+            document.getElementById("scaleModeBtn").innerText = isRealScale ? "🌌 Scale: Real" : "🌌 Scale: Default";
+            Object.keys(planets).forEach(id => {
+                const p = planets[id];
+                const targetSize = isRealScale ? p.realSize : p.baseSize;
+                p.mesh.scale.set(targetSize / p.baseSize, targetSize / p.baseSize, targetSize / p.baseSize);
+            });
         }
 
         function toggleCinematicMode() {
             isCinematic = !isCinematic;
-            const btn = document.getElementById("cinematicBtn");
-            if (isCinematic) {
-                btn.className = "w-1/2 py-1.5 bg-rose-950 border border-rose-500 text-rose-200 text-[10px] font-bold rounded-xl animate-pulse";
-                btn.innerText = "🎬 Stop Tour";
+            isSpaceshipMode = false;
+            document.getElementById("cinematicBtn").className = isCinematic ? "w-1/2 py-1.5 bg-rose-950 border border-rose-500 text-rose-200 text-[10px] font-bold rounded-xl animate-pulse" : "w-1/2 py-1.5 bg-purple-950 border border-purple-500 text-purple-200 text-[10px] font-bold rounded-xl hover:bg-purple-900 transition";
+            document.getElementById("cinematicBtn").innerText = isCinematic ? "🎬 Stop Tour" : "🎬 Cinematic Tour";
+        }
+
+        function toggleSpaceshipMode() {
+            isSpaceshipMode = !isSpaceshipMode;
+            isCinematic = false;
+            const btn = document.getElementById("spaceshipBtn");
+            if (isSpaceshipMode) {
+                btn.className = "px-2 py-0.5 bg-cyan-600 border border-cyan-300 text-white text-[10px] font-bold rounded-md shadow-[0_0_10px_rgba(56,189,248,0.6)]";
+                btn.innerText = "Đang Lái Tàu";
+                spaceshipPos.copy(camera.position);
             } else {
-                btn.className = "w-1/2 py-1.5 bg-purple-950 border border-purple-500 text-purple-200 text-[10px] font-bold rounded-xl hover:bg-purple-900 transition";
-                btn.innerText = "🎬 Cinematic Tour";
+                btn.className = "px-2 py-0.5 bg-rose-900 border border-rose-400 text-rose-100 text-[10px] font-bold rounded-md hover:bg-rose-800 transition";
+                btn.innerText = "Bật Lái Tàu";
             }
         }
 
         function toggleSpaceAudio() {
             const bgAudio = document.getElementById('bgMusic');
-            const btnStatus = document.getElementById('audioStatus');
-            const btnIcon = document.getElementById('audioIcon');
             if (!bgAudio) return;
-            if (bgAudio.paused) {
-                bgAudio.play(); btnStatus.innerText = "Straywav: ON"; btnIcon.innerText = "🔊";
-            } else {
-                bgAudio.pause(); btnStatus.innerText = "Straywav: OFF"; btnIcon.innerText = "🔇";
-            }
+            if (bgAudio.paused) { bgAudio.play(); document.getElementById('audioStatus').innerText = "Straywav: ON"; }
+            else { bgAudio.pause(); document.getElementById('audioStatus').innerText = "Straywav: OFF"; }
         }
 
         function createPhotorealisticTexture(type) {
@@ -224,38 +243,25 @@
                 const grad = ctx.createRadialGradient(512, 256, 20, 512, 256, 500);
                 grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.3, '#fde047'); grad.addColorStop(0.7, '#f97316'); grad.addColorStop(1, '#7c2d12');
                 ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 512);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                for(let i=0; i<80; i++) {
-                    ctx.beginPath(); ctx.arc(Math.random()*1024, Math.random()*512, Math.random()*30+10, 0, Math.PI*2); ctx.fill();
-                }
             } else if (type === 'mercury') {
                 ctx.fillStyle = '#475569'; ctx.fillRect(0, 0, 1024, 512);
                 ctx.fillStyle = '#1e293b';
                 for(let i=0; i<300; i++) { ctx.beginPath(); ctx.arc(Math.random()*1024, Math.random()*512, Math.random()*12+2, 0, Math.PI*2); ctx.fill(); }
             } else if (type === 'venus') {
                 ctx.fillStyle = '#b45309'; ctx.fillRect(0, 0, 1024, 512);
-                ctx.fillStyle = '#fbbf24';
-                for(let i=0; i<80; i++) ctx.fillRect(0, Math.random()*512, 1024, Math.random()*25+5);
+                ctx.fillStyle = '#fbbf24'; for(let i=0; i<80; i++) ctx.fillRect(0, Math.random()*512, 1024, Math.random()*25+5);
             } else if (type === 'earth') {
                 ctx.fillStyle = '#0284c7'; ctx.fillRect(0, 0, 1024, 512);
                 ctx.fillStyle = '#15803d';
-                for(let i=0; i<45; i++) {
-                    ctx.beginPath(); ctx.ellipse(Math.random()*1024, Math.random()*512, Math.random()*130+40, Math.random()*70+20, Math.random()*Math.PI, 0, Math.PI*2); ctx.fill();
-                }
-                // Đèn đêm thành phố (City Night Lights)
-                ctx.fillStyle = '#fef08a';
-                for(let i=0; i<250; i++) { ctx.fillRect(Math.random()*1024, Math.random()*512, 2, 2); }
+                for(let i=0; i<45; i++) { ctx.beginPath(); ctx.ellipse(Math.random()*1024, Math.random()*512, Math.random()*130+40, Math.random()*70+20, Math.random()*Math.PI, 0, Math.PI*2); ctx.fill(); }
+                ctx.fillStyle = '#fef08a'; for(let i=0; i<250; i++) ctx.fillRect(Math.random()*1024, Math.random()*512, 2, 2);
             } else if (type === 'clouds') {
                 ctx.clearRect(0, 0, 1024, 512);
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-                for(let i=0; i<70; i++) {
-                    ctx.beginPath(); ctx.ellipse(Math.random()*1024, Math.random()*512, Math.random()*110+30, Math.random()*30+10, 0, 0, Math.PI*2); ctx.fill();
-                }
+                for(let i=0; i<70; i++) { ctx.beginPath(); ctx.ellipse(Math.random()*1024, Math.random()*512, Math.random()*110+30, Math.random()*30+10, 0, 0, Math.PI*2); ctx.fill(); }
             } else if (type === 'mars') {
                 ctx.fillStyle = '#991b1b'; ctx.fillRect(0, 0, 1024, 512);
-                ctx.fillStyle = '#7f1d1d';
-                for(let i=0; i<180; i++) { ctx.beginPath(); ctx.arc(Math.random()*1024, Math.random()*512, Math.random()*20+5, 0, Math.PI*2); ctx.fill(); }
-                ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, 1024, 35); ctx.fillRect(0, 477, 1024, 35);
+                ctx.fillStyle = '#7f1d1d'; for(let i=0; i<180; i++) { ctx.beginPath(); ctx.arc(Math.random()*1024, Math.random()*512, Math.random()*20+5, 0, Math.PI*2); ctx.fill(); }
             } else if (type === 'jupiter') {
                 const colors = ['#78350f', '#b45309', '#f59e0b', '#fde047', '#d97706', '#92400e'];
                 for(let y=0; y<512; y+=12) { ctx.fillStyle = colors[Math.floor(Math.random()*colors.length)]; ctx.fillRect(0, y, 1024, 12); }
@@ -265,11 +271,8 @@
                 for(let y=0; y<512; y+=10) { ctx.fillStyle = colors[Math.floor(Math.random()*colors.length)]; ctx.fillRect(0, y, 1024, 10); }
             } else if (type === 'uranus') {
                 ctx.fillStyle = '#0891b2'; ctx.fillRect(0, 0, 1024, 512);
-                ctx.fillStyle = '#22d3ee'; for(let y=0; y<512; y+=35) ctx.fillRect(0, y, 1024, 10);
             } else if (type === 'neptune') {
                 ctx.fillStyle = '#312e81'; ctx.fillRect(0, 0, 1024, 512);
-                ctx.fillStyle = '#4f46e5'; for(let y=0; y<512; y+=25) ctx.fillRect(0, y, 1024, 12);
-                ctx.fillStyle = '#1e1b4b'; ctx.beginPath(); ctx.ellipse(300, 350, 65, 42, 0, 0, Math.PI*2); ctx.fill();
             }
             return new THREE.CanvasTexture(canvas);
         }
@@ -278,7 +281,7 @@
             const container = document.getElementById('canvasContainer');
             scene = new THREE.Scene();
 
-            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2500);
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 3000);
             
             renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -286,52 +289,40 @@
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             container.appendChild(renderer.domElement);
 
-            const sunLight = new THREE.PointLight(0xffffff, 4.2, 1800);
+            const sunLight = new THREE.PointLight(0xffffff, 4.5, 2000);
             scene.add(sunLight);
-            scene.add(new THREE.AmbientLight(0x1e293b, 0.75));
+            scene.add(new THREE.AmbientLight(0x1e293b, 0.8));
 
             // Ngàn sao
             const starsGeo = new THREE.BufferGeometry();
-            const starsCnt = 5000;
+            const starsCnt = 6000;
             const starPos = new Float32Array(starsCnt * 3);
-            for(let i=0; i<starsCnt*3; i++) starPos[i] = (Math.random() - 0.5) * 1400;
+            for(let i=0; i<starsCnt*3; i++) starPos[i] = (Math.random() - 0.5) * 1800;
             starsGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
             scene.add(new THREE.Points(starsGeo, new THREE.PointsMaterial({color: 0xffffff, size: 0.9})));
 
-            // MẶT TRỜI CÓ BÃO PLASMA (SOLAR FLARES)
+            // MẶT TRỜI
             const sunMat = new THREE.MeshBasicMaterial({ map: createPhotorealisticTexture('sun') });
             const sun = new THREE.Mesh(new THREE.SphereGeometry(4.8, 48, 48), sunMat);
             const glowMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.35, side: THREE.BackSide });
             sun.add(new THREE.Mesh(new THREE.SphereGeometry(6.4, 32, 32), glowMat));
-            
-            // Thêm đốm bão lửa Plasma
-            for(let i=0; i<6; i++) {
-                const flare = new THREE.Mesh(new THREE.TorusGeometry(5.2 + Math.random()*0.4, 0.1, 8, 24), new THREE.MeshBasicMaterial({color: 0xef4444, transparent: true, opacity: 0.6}));
-                flare.rotation.x = Math.random() * Math.PI;
-                flare.rotation.y = Math.random() * Math.PI;
-                sun.add(flare);
-                solarFlares.push(flare);
-            }
             scene.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0, baseSize: 4.8, realSize: 10.0 };
 
-            // ĐAI TIỂU HÀNH TINH (ASTEROID BELT GIỮA MARS & JUPITER)
-            const astGeo = new THREE.DodecahedronGeometry(0.12, 1);
-            const astMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.9 });
-            for(let i=0; i<400; i++) {
-                const ast = new THREE.Mesh(astGeo, astMat);
-                const radius = 27 + Math.random() * 4;
-                const angle = Math.random() * Math.PI * 2;
+            // ĐAI TIỂU HÀNH TINH
+            for(let i=0; i<450; i++) {
+                const ast = new THREE.Mesh(new THREE.DodecahedronGeometry(0.12, 1), new THREE.MeshStandardMaterial({ color: 0x64748b }));
+                const radius = 27 + Math.random() * 4, angle = Math.random() * Math.PI * 2;
                 ast.position.set(Math.cos(angle)*radius, (Math.random()-0.5)*1.5, Math.sin(angle)*radius);
                 scene.add(ast);
                 asteroidBelt.push({ mesh: ast, angle: angle, speed: 0.002 + Math.random()*0.003, radius: radius });
             }
 
-            // 8 HÀNH TINH
+            // 8 HÀNH TINH & HIỆU ỨNG KHÍ QUYỂN (ATMOSPHERIC GLOW)
             const planetData = [
                 { id: 'mercury', baseSize: 0.55, realSize: 0.4, distance: 9, speed: 0.022, texture: 'mercury' },
                 { id: 'venus', baseSize: 0.95, realSize: 0.95, distance: 13, speed: 0.016, texture: 'venus' },
-                { id: 'earth', baseSize: 1.15, realSize: 1.0, distance: 18, speed: 0.012, texture: 'earth', hasClouds: true, hasMoon: true, hasISS: true },
+                { id: 'earth', baseSize: 1.15, realSize: 1.0, distance: 18, speed: 0.012, texture: 'earth', hasClouds: true, hasMoon: true, hasAtmosphere: true },
                 { id: 'mars', baseSize: 0.75, realSize: 0.53, distance: 23, speed: 0.009, texture: 'mars' },
                 { id: 'jupiter', baseSize: 2.7, realSize: 5.5, distance: 34, speed: 0.006, texture: 'jupiter' },
                 { id: 'saturn', baseSize: 2.2, realSize: 4.5, distance: 44, speed: 0.004, texture: 'saturn', hasRings: true },
@@ -343,62 +334,57 @@
                 const orbitGroup = new THREE.Group();
                 scene.add(orbitGroup);
 
-                const orbitGeo = new THREE.RingGeometry(data.distance - 0.06, data.distance + 0.06, 128);
-                const orbitMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.12 });
-                const orbitLine = new THREE.Mesh(orbitGeo, orbitMat);
-                orbitLine.rotation.x = Math.PI / 2;
+                // Quỹ đạo elip chuẩn Kepler (tâm sai nhẹ)
+                const orbitCurve = new THREE.EllipseCurve(0, 0, data.distance, data.distance * 0.95, 0, 2 * Math.PI, false, 0);
+                const points = orbitCurve.getPoints(128);
+                const orbitGeo = new THREE.BufferGeometry().setFromPoints(points.map(p => new THREE.Vector3(p.x, 0, p.y)));
+                const orbitLine = new THREE.Line(orbitGeo, new THREE.LineBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.15 }));
                 scene.add(orbitLine);
 
-                const pMat = new THREE.MeshStandardMaterial({
-                    roughness: 0.7, metalness: 0.1,
-                    map: createPhotorealisticTexture(data.texture)
-                });
+                const pMat = new THREE.MeshStandardMaterial({ roughness: 0.7, metalness: 0.1, map: createPhotorealisticTexture(data.texture) });
                 const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(data.baseSize, 48, 48), pMat);
                 planetMesh.position.x = data.distance;
                 orbitGroup.add(planetMesh);
 
+                // Khí quyển phát sáng (Atmospheric Glow Shader look)
+                if (data.hasAtmosphere) {
+                    const atmosMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.25, side: THREE.BackSide });
+                    const atmos = new THREE.Mesh(new THREE.SphereGeometry(data.baseSize * 1.15, 32, 32), atmosMat);
+                    planetMesh.add(atmos);
+                }
+
                 if (data.hasClouds) {
-                    const cloudMat = new THREE.MeshStandardMaterial({
-                        map: createPhotorealisticTexture('clouds'), transparent: true, blending: THREE.AdditiveBlending, opacity: 0.65
-                    });
+                    const cloudMat = new THREE.MeshStandardMaterial({ map: createPhotorealisticTexture('clouds'), transparent: true, blending: THREE.AdditiveBlending, opacity: 0.65 });
                     const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(data.baseSize * 1.02, 32, 32), cloudMat);
                     planetMesh.add(cloudMesh);
                     planetMesh.userData.cloudMesh = cloudMesh;
                 }
 
                 if (data.hasMoon) {
-                    const moonMesh = new THREE.Mesh(new THREE.SphereGeometry(0.3, 24, 24), new THREE.MeshStandardMaterial({ color: 0xcbd5e1, roughness: 0.9 }));
+                    const moonMesh = new THREE.Mesh(new THREE.SphereGeometry(0.3, 24, 24), new THREE.MeshStandardMaterial({ color: 0xcbd5e1 }));
                     moonMesh.position.x = 2.4;
                     planetMesh.add(moonMesh);
                     planetMesh.userData.moonMesh = moonMesh;
                 }
 
-                // Trạm Vũ Trụ ISS
-                if (data.hasISS) {
-                    const issMesh = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.05, 0.3), new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
-                    issMesh.position.x = 1.6;
-                    planetMesh.add(issMesh);
-                    planetMesh.userData.issMesh = issMesh;
-                }
-
                 if (data.hasRings) {
                     const ringGeo = new THREE.RingGeometry(2.9, 5.2, 64);
-                    const ringMat = new THREE.MeshStandardMaterial({ color: 0xfef08a, side: THREE.DoubleSide, transparent: true, opacity: 0.85, roughness: 0.5 });
+                    const ringMat = new THREE.MeshStandardMaterial({ color: 0xfef08a, side: THREE.DoubleSide, transparent: true, opacity: 0.85 });
                     const ring = new THREE.Mesh(ringGeo, ringMat);
                     ring.rotation.x = Math.PI / 2.2;
                     planetMesh.add(ring);
-                    planetMesh.userData.ringMesh = ring;
                 }
 
-                planets[data.id] = {
-                    mesh: planetMesh, distance: data.distance, speed: data.speed,
-                    angle: Math.random() * Math.PI * 2, baseSize: data.baseSize, realSize: data.realSize
-                };
+                planets[data.id] = { mesh: planetMesh, distance: data.distance, speed: data.speed, angle: Math.random() * Math.PI * 2, baseSize: data.baseSize, realSize: data.realSize };
             });
 
-            window.addEventListener('mousedown', (e) => { isDragging = true; previousMousePosition = { x: e.clientX, y: e.clientY }; });
+            // Lắng nghe sự kiện bàn phím cho chế độ lái tàu
+            window.addEventListener('keydown', (e) => { keysPressed[e.key.toLowerCase()] = true; });
+            window.addEventListener('keyup', (e) => { keysPressed[e.key.toLowerCase()] = false; });
+
+            window.addEventListener('mousedown', (e) => { if (!isSpaceshipMode) { isDragging = true; previousMousePosition = { x: e.clientX, y: e.clientY }; } });
             window.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
+                if (!isDragging || isSpaceshipMode) return;
                 const deltaX = e.clientX - previousMousePosition.x;
                 const deltaY = e.clientY - previousMousePosition.y;
                 cameraAngleY -= deltaX * 0.005;
@@ -406,9 +392,8 @@
                 previousMousePosition = { x: e.clientX, y: e.clientY };
             });
             window.addEventListener('mouseup', () => isDragging = false);
-            window.addEventListener('wheel', (e) => {
-                targetCameraDistance = Math.max(3, Math.min(140, targetCameraDistance + e.deltaY * 0.04));
-            });
+            window.addEventListener('wheel', (e) => { if (!isSpaceshipMode) targetCameraDistance = Math.max(3, Math.min(140, targetCameraDistance + e.deltaY * 0.04)); });
+
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight);
             });
@@ -416,16 +401,30 @@
             animate();
         }
 
-        function updatePlanetScales() {
-            Object.keys(planets).forEach(id => {
-                const p = planets[id];
-                const targetSize = isRealScale ? p.realSize : p.baseSize;
-                p.mesh.scale.set(targetSize / p.baseSize, targetSize / p.baseSize, targetSize / p.baseSize);
-            });
-        }
-
         function updateCameraPosition() {
-            // TỰ ĐỘNG CHUYỂN HÀNH TINH TRONG CHẾ ĐỘ CINEMATIC
+            if (isSpaceshipMode) {
+                // Điều khiển tàu vũ trụ tự do bằng W, A, S, D, R, F
+                const speed = 0.5;
+                let dir = new THREE.Vector3();
+                camera.getWorldDirection(dir);
+                
+                if (keysPressed['w']) spaceshipPos.addScaledVector(dir, speed);
+                if (keysPressed['s']) spaceshipPos.addScaledVector(dir, -speed);
+                if (keysPressed['a']) {
+                    const sideDir = new THREE.Vector3(-dir.z, 0, dir.x).normalize();
+                    spaceshipPos.addScaledVector(sideDir, speed);
+                }
+                if (keysPressed['d']) {
+                    const sideDir = new THREE.Vector3(-dir.z, 0, dir.x).normalize();
+                    spaceshipPos.addScaledVector(sideDir, -speed);
+                }
+                if (keysPressed['r']) spaceshipPos.y += speed;
+                if (keysPressed['f']) spaceshipPos.y -= speed;
+
+                camera.position.copy(spaceshipPos);
+                return;
+            }
+
             if (isCinematic) {
                 cinematicTimer += 0.016;
                 if (cinematicTimer > 5) {
@@ -466,38 +465,30 @@
                 document.getElementById('statTemp').innerText = info.temp;
                 document.getElementById('statRadius').innerText = info.radius;
                 document.getElementById('statMoons').innerText = info.moons;
-                
-                const zooms = { sun: 65, mercury: 6, venus: 7, earth: 8, mars: 7, jupiter: 14, saturn: 16, uranus: 11, neptune: 11 };
-                targetCameraDistance = zooms[id] || 10;
+                targetCameraDistance = info.zoomDist;
             }
         }
 
         function animate() {
             requestAnimationFrame(animate);
 
-            // Xoay bão lửa mặt trời
-            solarFlares.forEach(flare => { flare.rotation.z += 0.01 * timeSpeed; });
-
-            // Xoay đai tiểu hành tinh
             asteroidBelt.forEach(ast => {
                 ast.angle += ast.speed * timeSpeed;
                 ast.mesh.position.x = Math.cos(ast.angle) * ast.radius;
-                ast.mesh.position.z = Math.sin(ast.angle) * ast.radius;
-                ast.mesh.rotation.y += 0.01;
+                ast.mesh.position.z = Math.sin(ast.angle) * ast.radius * 0.95;
             });
 
-            // Cập nhật vị trí các hành tinh
             Object.keys(planets).forEach(id => {
                 const p = planets[id];
                 if (p.speed > 0) {
                     p.angle += p.speed * timeSpeed;
+                    // Quỹ đạo elip chuẩn
                     p.mesh.position.x = Math.cos(p.angle) * p.distance;
-                    p.mesh.position.z = Math.sin(p.angle) * p.distance;
+                    p.mesh.position.z = Math.sin(p.angle) * p.distance * 0.95;
                     p.mesh.rotation.y += 0.015 * timeSpeed;
 
                     if (p.mesh.userData.cloudMesh) p.mesh.userData.cloudMesh.rotation.y += 0.008 * timeSpeed;
                     if (p.mesh.userData.moonMesh) p.mesh.userData.moonMesh.rotation.y += 0.02 * timeSpeed;
-                    if (p.mesh.userData.issMesh) p.mesh.userData.issMesh.rotation.y += 0.04 * timeSpeed;
                 }
             });
 
