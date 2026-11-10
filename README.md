@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA 3D Solar System - Galactic Vortex Motion Edition</title>
+    <title>NASA 3D Solar System - Photorealistic Static Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
@@ -30,18 +30,18 @@
     <div id="startOverlay" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative flex items-center justify-center">
             <div class="w-32 h-32 rounded-full border-2 border-cyan-500/50 animate-ping absolute"></div>
-            <div class="text-7xl">🌀</div>
+            <div class="text-7xl">🪐</div>
         </div>
         <div class="space-y-2">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-cyan-400 to-indigo-400 tracking-wider">
-                GALACTIC VORTEX SIMULATION
+                NASA TRUE-SCALE 3D SOLAR SYSTEM
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-                Mô phỏng Hệ Mặt Trời vừa tự quay vừa di chuyển theo đường xoắn ốc với tốc độ 828.000 km/h qua Ngân Hà.
+                Hệ thống cố định chuẩn xác, đồ họa hành tinh sắc nét kết hợp quy mô vũ trụ Ngân Hà & Siêu cụm thiên hà.
             </p>
         </div>
         <button onclick="startExperience()" class="px-8 py-4 bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 font-orbitron font-bold text-xs sm:text-sm rounded-2xl text-white cinematic-glow transition active:scale-95 border border-rose-400 flex items-center gap-3">
-            <span>🚀</span> BẮT ĐẦU CHUYẾN BAY XOẮN ỐC VŨ TRỤ
+            <span>🚀</span> KHỞI ĐỘNG TRẢI NGHIỆM CHUẨN XÁC
         </button>
     </div>
 
@@ -54,7 +54,7 @@
     <header id="mainHud" class="absolute top-4 left-4 z-20 transition-all duration-300 pointer-events-auto">
         <div class="hud-panel p-4 rounded-2xl max-w-sm space-y-3 relative">
             <div class="flex justify-between items-center gap-3">
-                <span class="text-[10px] font-bold tracking-widest text-slate-400">VORTEX COMMAND CENTER</span>
+                <span class="text-[10px] font-bold tracking-widest text-slate-400">NASA OBSERVATORY COMMAND</span>
                 <div class="flex items-center gap-2">
                     <button onclick="toggleSpaceAudio()" id="audioToggleBtn" class="px-2.5 py-1 bg-rose-950/80 border border-rose-400 text-rose-300 rounded-lg text-[11px] font-bold hover:bg-rose-900 transition flex items-center gap-1.5 shadow-[0_0_12px_rgba(244,63,94,0.4)]">
                         <span id="audioIcon">🔊</span> <span id="audioStatus">Straywav: ON</span>
@@ -65,27 +65,20 @@
                 </div>
             </div>
 
-            <!-- CHẾ ĐỘ CHUYỂN ĐỘNG VORTEX TỊNH TIẾN -->
+            <!-- CHẾ ĐỘ ZOOM QUY MÔ VŨ TRỤ -->
             <div class="bg-indigo-950/50 p-2.5 rounded-xl border border-indigo-500/40 space-y-2">
-                <div class="flex justify-between items-center">
-                    <span class="text-[10px] text-indigo-300 font-bold uppercase tracking-wider">🌀 Chế độ Bay Xoắn Ốc (Vortex):</span>
-                    <button onclick="toggleVortexMode()" id="vortexBtn" class="px-2.5 py-1 bg-indigo-900 border border-indigo-400 text-indigo-100 font-bold text-[10px] rounded-lg hover:bg-indigo-800 transition">
-                        Bật Bay Xoắn Ốc
+                <div class="text-[10px] text-indigo-300 font-bold uppercase tracking-wider">🌌 Tầm Nhìn Vũ Trụ (Zoom Out):</div>
+                <div class="grid grid-cols-3 gap-1.5 text-[9px]">
+                    <button onclick="setCosmicView('system')" id="viewSysBtn" class="py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition">
+                        ☀️ Hệ Mặt Trời
+                    </button>
+                    <button onclick="setCosmicView('galaxy')" id="viewGalBtn" class="py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition">
+                        🌀 Ngân Hà
+                    </button>
+                    <button onclick="setCosmicView('supercluster')" id="viewClusBtn" class="py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition">
+                        🌌 Siêu Cụm
                     </button>
                 </div>
-            </div>
-
-            <!-- CHẾ ĐỘ ZOOOM QUY MÔ -->
-            <div class="grid grid-cols-3 gap-1.5 text-[9px]">
-                <button onclick="setCosmicView('system')" id="viewSysBtn" class="py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition">
-                    ☀️ Hệ Mặt Trời
-                </button>
-                <button onclick="setCosmicView('galaxy')" id="viewGalBtn" class="py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition">
-                    🌀 Ngân Hà
-                </button>
-                <button onclick="setCosmicView('supercluster')" id="viewClusBtn" class="py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition">
-                    🌌 Siêu Cụm
-                </button>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-[10px]">
@@ -94,7 +87,7 @@
                     <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.75" onchange="changeVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
                 </div>
                 <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 space-y-1">
-                    <span class="text-cyan-300 font-bold">⏳ Tốc độ thời gian:</span>
+                    <span class="text-cyan-300 font-bold">⏳ Tốc độ quay:</span>
                     <input type="range" id="timeSpeedSlider" min="0" max="5" step="0.1" value="1" onchange="changeTimeSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
                 </div>
             </div>
@@ -103,7 +96,7 @@
                 <div class="border-t border-slate-800 pt-2">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300">TOÀN CẢNH HỆ MẶT TRỜI</div>
                     <p id="planetDesc" class="text-xs text-slate-300 leading-relaxed mt-1">
-                        Bấm nút "Bật Bay Xoắn Ốc" để quan sát Hệ Mặt Trời lao xuyên qua không gian vũ trụ!
+                        Hệ thống cố định chuẩn xác, mượt mà và trực quan.
                     </p>
                 </div>
             </div>
@@ -128,7 +121,6 @@
 
     <script>
         let scene, camera, renderer;
-        let solarSystemGroup;
         let planets = {};
         let milkyWayPoints, superclusterGroup;
         let focusedObject = 'sun';
@@ -137,14 +129,13 @@
         let cameraAngleX = 0.4, cameraAngleY = 0.0;
         let currentLookAt = new THREE.Vector3(0, 0, 0);
         let timeSpeed = 1.0;
-        let isVortexMode = false;
         let currentViewLevel = 'system';
 
         const planetDatabase = {
-            sun: { name: "MẶT TRỜI (SUN)", desc: "Ngôi sao trung tâm kéo toàn bộ hệ thống bay qua Ngân Hà.", dist: "0 AU", temp: "5,500 °C", radius: "696,340 km", moons: "0", zoomDist: 65 },
+            sun: { name: "MẶT TRỜI (SUN)", desc: "Ngôi sao trung tâm Hệ Mặt Trời.", dist: "0 AU", temp: "5,500 °C", radius: "696,340 km", moons: "0", zoomDist: 65 },
             mercury: { name: "SAO THỦY (MERCURY)", desc: "Hành tinh đá nhỏ nhất gần Mặt Trời.", dist: "0.39 AU", temp: "-180 đến 430 °C", radius: "2,439 km", moons: "0", zoomDist: 6 },
             venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển CO2 cực kỳ nóng cháy.", dist: "0.72 AU", temp: "462 °C", radius: "6,051 km", moons: "0", zoomDist: 7 },
-            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Di chuyển theo hình lò xo với tốc độ 230 km/s.", dist: "1.00 AU", temp: "15 °C", radius: "6,371 km", moons: "1", zoomDist: 8 },
+            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Ngôi nhà duy nhất có sự sống.", dist: "1.00 AU", temp: "15 °C", radius: "6,371 km", moons: "1", zoomDist: 8 },
             mars: { name: "SAO HỎA (MARS)", desc: "Hành tinh Đỏ phủ oxit sắt.", dist: "1.52 AU", temp: "-63 °C", radius: "3,389 km", moons: "2", zoomDist: 7 },
             jupiter: { name: "SAO MỘC (JUPITER)", desc: "Gã khổng lồ khí lớn nhất.", dist: "5.20 AU", temp: "-110 °C", radius: "69,911 km", moons: "95", zoomDist: 14 },
             saturn: { name: "SAO THỔ (SATURN)", desc: "Vành đai băng hoành tráng nhất.", dist: "9.58 AU", temp: "-140 °C", radius: "58,232 km", moons: "146", zoomDist: 16 },
@@ -175,22 +166,8 @@
 
         function changeTimeSpeed(val) { timeSpeed = parseFloat(val); }
 
-        function toggleVortexMode() {
-            isVortexMode = !isVortexMode;
-            const btn = document.getElementById("vortexBtn");
-            if (isVortexMode) {
-                btn.className = "px-2.5 py-1 bg-cyan-600 border border-cyan-300 text-white font-bold text-[10px] rounded-lg shadow-[0_0_12px_rgba(56,189,248,0.6)] animate-pulse";
-                btn.innerText = "Đang Bay Vortex";
-            } else {
-                btn.className = "px-2.5 py-1 bg-indigo-900 border border-indigo-400 text-indigo-100 font-bold text-[10px] rounded-lg hover:bg-indigo-800 transition";
-                btn.innerText = "Bật Bay Xoắn Ốc";
-                solarSystemGroup.position.set(0, 0, 0); // Reset vị trí
-            }
-        }
-
         function setCosmicView(level) {
             currentViewLevel = level;
-            
             document.getElementById('viewSysBtn').className = level === 'system' ? "py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition" : "py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition";
             document.getElementById('viewGalBtn').className = level === 'galaxy' ? "py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition" : "py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition";
             document.getElementById('viewClusBtn').className = level === 'supercluster' ? "py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition" : "py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition";
@@ -207,13 +184,56 @@
             else { bgAudio.pause(); document.getElementById('audioStatus').innerText = "Straywav: OFF"; }
         }
 
+        function createPlanetTexture(type) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024; canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            if (type === 'sun') {
+                const grad = ctx.createRadialGradient(512, 256, 20, 512, 256, 500);
+                grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.3, '#fde047'); grad.addColorStop(0.7, '#f97316'); grad.addColorStop(1, '#7c2d12');
+                ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 512);
+            } else if (type === 'mercury') {
+                ctx.fillStyle = '#475569'; ctx.fillRect(0, 0, 1024, 512);
+                ctx.fillStyle = '#1e293b';
+                for(let i=0; i<300; i++) { ctx.beginPath(); ctx.arc(Math.random()*1024, Math.random()*512, Math.random()*12+2, 0, Math.PI*2); ctx.fill(); }
+            } else if (type === 'venus') {
+                ctx.fillStyle = '#b45309'; ctx.fillRect(0, 0, 1024, 512);
+                ctx.fillStyle = '#fbbf24'; for(let i=0; i<80; i++) ctx.fillRect(0, Math.random()*512, 1024, Math.random()*25+5);
+            } else if (type === 'earth') {
+                ctx.fillStyle = '#0284c7'; ctx.fillRect(0, 0, 1024, 512);
+                ctx.fillStyle = '#15803d';
+                for(let i=0; i<45; i++) { ctx.beginPath(); ctx.ellipse(Math.random()*1024, Math.random()*512, Math.random()*130+40, Math.random()*70+20, Math.random()*Math.PI, 0, Math.PI*2); ctx.fill(); }
+                ctx.fillStyle = '#fef08a'; for(let i=0; i<250; i++) ctx.fillRect(Math.random()*1024, Math.random()*512, 2, 2);
+            } else if (type === 'clouds') {
+                ctx.clearRect(0, 0, 1024, 512);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+                for(let i=0; i<70; i++) { ctx.beginPath(); ctx.ellipse(Math.random()*1024, Math.random()*512, Math.random()*110+30, Math.random()*30+10, 0, 0, Math.PI*2); ctx.fill(); }
+            } else if (type === 'mars') {
+                ctx.fillStyle = '#991b1b'; ctx.fillRect(0, 0, 1024, 512);
+                ctx.fillStyle = '#7f1d1d'; for(let i=0; i<180; i++) { ctx.beginPath(); ctx.arc(Math.random()*1024, Math.random()*512, Math.random()*20+5, 0, Math.PI*2); ctx.fill(); }
+            } else if (type === 'jupiter') {
+                const colors = ['#78350f', '#b45309', '#f59e0b', '#fde047', '#d97706', '#92400e'];
+                for(let y=0; y<512; y+=12) { ctx.fillStyle = colors[Math.floor(Math.random()*colors.length)]; ctx.fillRect(0, y, 1024, 12); }
+                ctx.fillStyle = '#dc2626'; ctx.beginPath(); ctx.ellipse(650, 320, 75, 48, 0, 0, Math.PI*2); ctx.fill();
+            } else if (type === 'saturn') {
+                const colors = ['#ca8a04', '#eab308', '#fef08a', '#a16207', '#713f12'];
+                for(let y=0; y<512; y+=10) { ctx.fillStyle = colors[Math.floor(Math.random()*colors.length)]; ctx.fillRect(0, y, 1024, 10); }
+            } else if (type === 'uranus') {
+                ctx.fillStyle = '#0891b2'; ctx.fillRect(0, 0, 1024, 512);
+            } else if (type === 'neptune') {
+                ctx.fillStyle = '#312e81'; ctx.fillRect(0, 0, 1024, 512);
+            }
+            return new THREE.CanvasTexture(canvas);
+        }
+
         function createMilkyWayGalaxy() {
             const particleCount = 25000;
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
             const colors = new Float32Array(particleCount * 3);
-
             const arms = 4, radius = 350;
+
             for (let i = 0; i < particleCount; i++) {
                 const r = Math.pow(Math.random(), 2) * radius;
                 const armAngle = ((i % arms) * 2 * Math.PI) / arms;
@@ -255,26 +275,6 @@
             scene.add(superclusterGroup);
         }
 
-        function createPhotorealisticTexture(type) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 1024; canvas.height = 512;
-            const ctx = canvas.getContext('2d');
-
-            if (type === 'sun') {
-                const grad = ctx.createRadialGradient(512, 256, 20, 512, 256, 500);
-                grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.3, '#fde047'); grad.addColorStop(0.7, '#f97316'); grad.addColorStop(1, '#7c2d12');
-                ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 512);
-            } else if (type === 'earth') {
-                ctx.fillStyle = '#0284c7'; ctx.fillRect(0, 0, 1024, 512);
-                ctx.fillStyle = '#15803d';
-                for(let i=0; i<45; i++) { ctx.beginPath(); ctx.ellipse(Math.random()*1024, Math.random()*512, Math.random()*130+40, Math.random()*70+20, Math.random()*Math.PI, 0, Math.PI*2); ctx.fill(); }
-                ctx.fillStyle = '#fef08a'; for(let i=0; i<250; i++) ctx.fillRect(Math.random()*1024, Math.random()*512, 2, 2);
-            } else {
-                ctx.fillStyle = '#64748b'; ctx.fillRect(0, 0, 1024, 512);
-            }
-            return new THREE.CanvasTexture(canvas);
-        }
-
         function init3D() {
             const container = document.getElementById('canvasContainer');
             scene = new THREE.Scene();
@@ -294,41 +294,49 @@
             createMilkyWayGalaxy();
             createSupercluster();
 
-            // GROUP HỆ MẶT TRỜI ĐỂ TẠO CHUYỂN ĐỘNG VORTEX TỊNH TIẾN
-            solarSystemGroup = new THREE.Group();
-            // Nghiêng Hệ Mặt Trời 60 độ so với mặt phẳng Dải Ngân Hà (Thực tế thiên văn)
-            solarSystemGroup.rotation.z = Math.PI / 3;
-            scene.add(solarSystemGroup);
-
-            // MẶT TRỜI
-            const sunMat = new THREE.MeshBasicMaterial({ map: createPhotorealisticTexture('sun') });
+            // MẶT TRỜI TÂM CỐ ĐỊNH
+            const sunMat = new THREE.MeshBasicMaterial({ map: createPlanetTexture('sun') });
             const sun = new THREE.Mesh(new THREE.SphereGeometry(4.8, 48, 48), sunMat);
             sun.add(new THREE.Mesh(new THREE.SphereGeometry(6.4, 32, 32), new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.35, side: THREE.BackSide })));
-            solarSystemGroup.add(sun);
+            scene.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
 
             const planetData = [
-                { id: 'mercury', size: 0.55, distance: 9, speed: 0.022 },
-                { id: 'venus', size: 0.95, distance: 13, speed: 0.016 },
-                { id: 'earth', size: 1.15, distance: 18, speed: 0.012, texture: 'earth' },
-                { id: 'mars', size: 0.75, distance: 23, speed: 0.009 },
-                { id: 'jupiter', size: 2.7, distance: 34, speed: 0.006 },
-                { id: 'saturn', size: 2.2, distance: 44, speed: 0.004, hasRings: true },
-                { id: 'uranus', size: 1.5, distance: 52, speed: 0.003 },
-                { id: 'neptune', size: 1.4, distance: 60, speed: 0.002 }
+                { id: 'mercury', size: 0.55, distance: 9, speed: 0.022, texture: 'mercury' },
+                { id: 'venus', size: 0.95, distance: 13, speed: 0.016, texture: 'venus' },
+                { id: 'earth', size: 1.15, distance: 18, speed: 0.012, texture: 'earth', hasClouds: true, hasAtmosphere: true },
+                { id: 'mars', size: 0.75, distance: 23, speed: 0.009, texture: 'mars' },
+                { id: 'jupiter', size: 2.7, distance: 34, speed: 0.006, texture: 'jupiter' },
+                { id: 'saturn', size: 2.2, distance: 44, speed: 0.004, texture: 'saturn', hasRings: true },
+                { id: 'uranus', size: 1.5, distance: 52, speed: 0.003, texture: 'uranus' },
+                { id: 'neptune', size: 1.4, distance: 60, speed: 0.002, texture: 'neptune' }
             ];
 
             planetData.forEach(data => {
                 const orbitGroup = new THREE.Group();
-                solarSystemGroup.add(orbitGroup);
+                scene.add(orbitGroup);
 
                 const orbitLine = new THREE.Mesh(new THREE.RingGeometry(data.distance - 0.06, data.distance + 0.06, 128), new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.15 }));
                 orbitLine.rotation.x = Math.PI / 2;
-                orbitGroup.add(orbitLine);
+                scene.add(orbitLine);
 
-                const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(data.size, 48, 48), new THREE.MeshStandardMaterial({ roughness: 0.7, map: data.texture ? createPhotorealisticTexture(data.texture) : null }));
+                const pMat = new THREE.MeshStandardMaterial({ roughness: 0.7, map: createPlanetTexture(data.texture) });
+                const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(data.size, 48, 48), pMat);
                 planetMesh.position.x = data.distance;
                 orbitGroup.add(planetMesh);
+
+                if (data.hasAtmosphere) {
+                    const atmosMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.25, side: THREE.BackSide });
+                    const atmos = new THREE.Mesh(new THREE.SphereGeometry(data.size * 1.15, 32, 32), atmosMat);
+                    planetMesh.add(atmos);
+                }
+
+                if (data.hasClouds) {
+                    const cloudMat = new THREE.MeshStandardMaterial({ map: createPlanetTexture('clouds'), transparent: true, blending: THREE.AdditiveBlending, opacity: 0.65 });
+                    const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(data.size * 1.02, 32, 32), cloudMat);
+                    planetMesh.add(cloudMesh);
+                    planetMesh.userData.cloudMesh = cloudMesh;
+                }
 
                 if (data.hasRings) {
                     const ring = new THREE.Mesh(new THREE.RingGeometry(2.9, 5.2, 64), new THREE.MeshStandardMaterial({ color: 0xfef08a, side: THREE.DoubleSide, transparent: true, opacity: 0.85 }));
@@ -365,9 +373,7 @@
         function updateCameraPosition() {
             let targetPos = new THREE.Vector3(0, 0, 0);
             
-            if (isVortexMode && solarSystemGroup) {
-                targetPos.copy(solarSystemGroup.position);
-            } else if (currentViewLevel === 'system' && focusedObject && planets[focusedObject]) {
+            if (currentViewLevel === 'system' && focusedObject && planets[focusedObject]) {
                 planets[focusedObject].mesh.getWorldPosition(targetPos);
             }
             
@@ -401,15 +407,6 @@
             if (milkyWayPoints) milkyWayPoints.rotation.y += 0.0005 * timeSpeed;
             if (superclusterGroup) superclusterGroup.rotation.y += 0.0001 * timeSpeed;
 
-            // CHUYỂN ĐỘNG VORTEX TỊNH TIẾN LAO VỀ PHÍA TRƯỚC
-            if (isVortexMode && solarSystemGroup) {
-                solarSystemGroup.position.x += 0.3 * timeSpeed;
-                solarSystemGroup.position.z += 0.1 * timeSpeed;
-
-                // Loop vị trí nếu bay quá xa
-                if (solarSystemGroup.position.x > 400) solarSystemGroup.position.set(-400, 0, -100);
-            }
-
             Object.keys(planets).forEach(id => {
                 const p = planets[id];
                 if (p.speed > 0) {
@@ -417,6 +414,8 @@
                     p.mesh.position.x = Math.cos(p.angle) * p.distance;
                     p.mesh.position.z = Math.sin(p.angle) * p.distance;
                     p.mesh.rotation.y += 0.015 * timeSpeed;
+
+                    if (p.mesh.userData.cloudMesh) p.mesh.userData.cloudMesh.rotation.y += 0.008 * timeSpeed;
                 }
             });
 
@@ -425,4 +424,4 @@
         }
     </script>
 </body>
-</html>
+</html> 
