@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA 3D Solar System - Photorealistic Static Edition</title>
+    <title>NASA 3D Ultimate Cosmic Sandbox & Black Hole Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
@@ -29,19 +29,19 @@
     <!-- OVERLAY KHỞI ĐỘNG -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative flex items-center justify-center">
-            <div class="w-32 h-32 rounded-full border-2 border-cyan-500/50 animate-ping absolute"></div>
-            <div class="text-7xl">🪐</div>
+            <div class="w-32 h-32 rounded-full border-2 border-purple-500/50 animate-ping absolute"></div>
+            <div class="text-7xl">🕳️</div>
         </div>
         <div class="space-y-2">
-            <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-cyan-400 to-indigo-400 tracking-wider">
-                NASA TRUE-SCALE 3D SOLAR SYSTEM
+            <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-cyan-400 to-rose-400 tracking-wider">
+                ULTIMATE COSMIC SANDBOX
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-                Hệ thống cố định chuẩn xác, đồ họa hành tinh sắc nét kết hợp quy mô vũ trụ Ngân Hà & Siêu cụm thiên hà.
+                Khám phá Hố Đen siêu lớn, Tàu Voyager 1, Bắn thiên thạch tùy thích kết hợp Dải Ngân Hà & Siêu cụm thiên hà.
             </p>
         </div>
-        <button onclick="startExperience()" class="px-8 py-4 bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 font-orbitron font-bold text-xs sm:text-sm rounded-2xl text-white cinematic-glow transition active:scale-95 border border-rose-400 flex items-center gap-3">
-            <span>🚀</span> KHỞI ĐỘNG TRẢI NGHIỆM CHUẨN XÁC
+        <button onclick="startExperience()" class="px-8 py-4 bg-gradient-to-r from-purple-600 via-rose-600 to-cyan-600 font-orbitron font-bold text-xs sm:text-sm rounded-2xl text-white cinematic-glow transition active:scale-95 border border-purple-400 flex items-center gap-3">
+            <span>⚡</span> BẮT ĐẦU DU HÀNH HỐ ĐEN & VŨ TRỤ
         </button>
     </div>
 
@@ -54,7 +54,7 @@
     <header id="mainHud" class="absolute top-4 left-4 z-20 transition-all duration-300 pointer-events-auto">
         <div class="hud-panel p-4 rounded-2xl max-w-sm space-y-3 relative">
             <div class="flex justify-between items-center gap-3">
-                <span class="text-[10px] font-bold tracking-widest text-slate-400">NASA OBSERVATORY COMMAND</span>
+                <span class="text-[10px] font-bold tracking-widest text-slate-400">COSMIC SANDBOX COMMAND</span>
                 <div class="flex items-center gap-2">
                     <button onclick="toggleSpaceAudio()" id="audioToggleBtn" class="px-2.5 py-1 bg-rose-950/80 border border-rose-400 text-rose-300 rounded-lg text-[11px] font-bold hover:bg-rose-900 transition flex items-center gap-1.5 shadow-[0_0_12px_rgba(244,63,94,0.4)]">
                         <span id="audioIcon">🔊</span> <span id="audioStatus">Straywav: ON</span>
@@ -65,9 +65,22 @@
                 </div>
             </div>
 
-            <!-- CHẾ ĐỘ ZOOM QUY MÔ VŨ TRỤ -->
+            <!-- CHỨC NĂNG ĐẶC BIỆT: BẮN THIÊN THẠCH & HỐ ĐEN -->
+            <div class="bg-purple-950/40 p-2.5 rounded-xl border border-purple-500/40 space-y-2">
+                <div class="text-[10px] text-purple-300 font-bold uppercase tracking-wider">☄️ Tính Năng Sandbox:</div>
+                <div class="grid grid-cols-2 gap-2 text-[10px]">
+                    <button onclick="spawnComet()" class="py-1.5 bg-purple-900 border border-purple-400 text-purple-100 font-bold rounded-lg hover:bg-purple-800 transition">
+                        ☄️ Bắn Thiên Thạch
+                    </button>
+                    <button onclick="setCosmicView('blackhole')" id="viewBhBtn" class="py-1.5 bg-rose-950 border border-rose-500 text-rose-200 font-bold rounded-lg transition">
+                        🕳️ Xem Hố Đen
+                    </button>
+                </div>
+            </div>
+
+            <!-- ZOOM QUY MÔ VŨ TRỤ -->
             <div class="bg-indigo-950/50 p-2.5 rounded-xl border border-indigo-500/40 space-y-2">
-                <div class="text-[10px] text-indigo-300 font-bold uppercase tracking-wider">🌌 Tầm Nhìn Vũ Trụ (Zoom Out):</div>
+                <div class="text-[10px] text-indigo-300 font-bold uppercase tracking-wider">🌌 Tầm Nhìn Vũ Trụ:</div>
                 <div class="grid grid-cols-3 gap-1.5 text-[9px]">
                     <button onclick="setCosmicView('system')" id="viewSysBtn" class="py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition">
                         ☀️ Hệ Mặt Trời
@@ -96,7 +109,7 @@
                 <div class="border-t border-slate-800 pt-2">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300">TOÀN CẢNH HỆ MẶT TRỜI</div>
                     <p id="planetDesc" class="text-xs text-slate-300 leading-relaxed mt-1">
-                        Hệ thống cố định chuẩn xác, mượt mà và trực quan.
+                        Khám phá hệ mặt trời, bấm nút bắn thiên thạch hoặc dịch chuyển camera ra hố đen ngoài rìa!
                     </p>
                 </div>
             </div>
@@ -123,6 +136,8 @@
         let scene, camera, renderer;
         let planets = {};
         let milkyWayPoints, superclusterGroup;
+        let blackHoleMesh, voyagerMesh;
+        let customMeteors = [];
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, previousMousePosition = { x: 0, y: 0 };
         let cameraDistance = 65, targetCameraDistance = 65;
@@ -140,7 +155,8 @@
             jupiter: { name: "SAO MỘC (JUPITER)", desc: "Gã khổng lồ khí lớn nhất.", dist: "5.20 AU", temp: "-110 °C", radius: "69,911 km", moons: "95", zoomDist: 14 },
             saturn: { name: "SAO THỔ (SATURN)", desc: "Vành đai băng hoành tráng nhất.", dist: "9.58 AU", temp: "-140 °C", radius: "58,232 km", moons: "146", zoomDist: 16 },
             uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng xoay nghiêng.", dist: "19.22 AU", temp: "-195 °C", radius: "25,362 km", moons: "28", zoomDist: 11 },
-            neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Hành tinh gió bão xa nhất.", dist: "30.05 AU", temp: "-200 °C", radius: "24,622 km", moons: "16", zoomDist: 11 }
+            neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Hành tinh gió bão xa nhất.", dist: "30.05 AU", temp: "-200 °C", radius: "24,622 km", moons: "16", zoomDist: 11 },
+            blackhole: { name: "HỐ ĐEN SIÊU TRỌNG (BLACK HOLE)", desc: "Nơi trọng lực lớn đến mức không gì thoát ra được.", dist: "Rìa Ngân Hà", temp: "0 °C", radius: "Vô cực", moons: "0", zoomDist: 25 }
         };
 
         function toggleHudInfo() {
@@ -171,10 +187,38 @@
             document.getElementById('viewSysBtn').className = level === 'system' ? "py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition" : "py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition";
             document.getElementById('viewGalBtn').className = level === 'galaxy' ? "py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition" : "py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition";
             document.getElementById('viewClusBtn').className = level === 'supercluster' ? "py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition" : "py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition";
+            document.getElementById('viewBhBtn').className = level === 'blackhole' ? "py-1.5 bg-rose-600 border border-rose-300 text-white font-bold rounded-lg shadow-[0_0_10px_rgba(244,63,94,0.6)]" : "py-1.5 bg-rose-950 border border-rose-500 text-rose-200 font-bold rounded-lg transition";
 
-            if (level === 'system') targetCameraDistance = 65;
-            else if (level === 'galaxy') targetCameraDistance = 800;
-            else if (level === 'supercluster') targetCameraDistance = 3500;
+            if (level === 'system') {
+                targetCameraDistance = 65;
+            } else if (level === 'galaxy') {
+                targetCameraDistance = 800;
+            } else if (level === 'supercluster') {
+                targetCameraDistance = 3500;
+            } else if (level === 'blackhole') {
+                targetCameraDistance = 35;
+                focusedObject = 'blackhole';
+            }
+
+            const info = planetDatabase[level === 'blackhole' ? 'blackhole' : 'sun'];
+            if (info && level === 'blackhole') {
+                document.getElementById('planetTitle').innerText = info.name;
+                document.getElementById('planetDesc').innerText = info.desc;
+            }
+        }
+
+        function spawnComet() {
+            const meteorGeo = new THREE.DodecahedronGeometry(0.3, 1);
+            const meteorMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e });
+            const meteor = new THREE.Mesh(meteorGeo, meteorMat);
+
+            meteor.position.set((Math.random() - 0.5) * 60, (Math.random() - 0.5) * 20, -80);
+            scene.add(meteor);
+
+            customMeteors.push({
+                mesh: meteor,
+                velocity: new THREE.Vector3((Math.random() - 0.5) * 0.8, (Math.random() - 0.5) * 0.2, 0.8 + Math.random() * 0.5)
+            });
         }
 
         function toggleSpaceAudio() {
@@ -294,6 +338,26 @@
             createMilkyWayGalaxy();
             createSupercluster();
 
+            // TẠO HỐ ĐEN NGOÀI RÌA (BLACK HOLE)
+            const bhGroup = new THREE.Group();
+            bhGroup.position.set(250, 40, -150);
+            const bhCore = new THREE.Mesh(new THREE.SphereGeometry(3, 32, 32), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+            const bhAccretion = new THREE.Mesh(new THREE.RingGeometry(3.5, 8, 64), new THREE.MeshBasicMaterial({ color: 0xf97316, side: THREE.DoubleSide, transparent: true, opacity: 0.9 }));
+            bhAccretion.rotation.x = Math.PI / 2.2;
+            bhGroup.add(bhCore); bhGroup.add(bhAccretion);
+            scene.add(bhGroup);
+            blackHoleMesh = bhGroup;
+
+            // TẠO TÀU VOYAGER 1
+            const voyagerGroup = new THREE.Group();
+            voyagerGroup.position.set(75, 10, 20);
+            const body = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.8), new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.8 }));
+            const dish = new THREE.Mesh(new THREE.ConeGeometry(0.8, 0.4, 16), new THREE.MeshStandardMaterial({ color: 0xf8fafc, metalness: 0.5 }));
+            dish.rotation.x = Math.PI / 2; dish.position.z = 0.6;
+            voyagerGroup.add(body); voyagerGroup.add(dish);
+            scene.add(voyagerGroup);
+            voyagerMesh = voyagerGroup;
+
             // MẶT TRỜI TÂM CỐ ĐỊNH
             const sunMat = new THREE.MeshBasicMaterial({ map: createPlanetTexture('sun') });
             const sun = new THREE.Mesh(new THREE.SphereGeometry(4.8, 48, 48), sunMat);
@@ -373,7 +437,9 @@
         function updateCameraPosition() {
             let targetPos = new THREE.Vector3(0, 0, 0);
             
-            if (currentViewLevel === 'system' && focusedObject && planets[focusedObject]) {
+            if (currentViewLevel === 'blackhole' && blackHoleMesh) {
+                blackHoleMesh.getWorldPosition(targetPos);
+            } else if (currentViewLevel === 'system' && focusedObject && planets[focusedObject]) {
                 planets[focusedObject].mesh.getWorldPosition(targetPos);
             }
             
@@ -406,6 +472,18 @@
 
             if (milkyWayPoints) milkyWayPoints.rotation.y += 0.0005 * timeSpeed;
             if (superclusterGroup) superclusterGroup.rotation.y += 0.0001 * timeSpeed;
+            if (blackHoleMesh) blackHoleMesh.rotation.z += 0.02 * timeSpeed;
+            if (voyagerMesh) voyagerMesh.position.x += 0.02 * timeSpeed;
+
+            // Cập nhật thiên thạch tùy chỉnh do người dùng bắn
+            for (let i = customMeteors.length - 1; i >= 0; i--) {
+                const m = customMeteors[i];
+                m.mesh.position.addScaledVector(m.velocity, timeSpeed);
+                if (m.mesh.position.length() > 500) {
+                    scene.remove(m.mesh);
+                    customMeteors.splice(i, 1);
+                }
+            }
 
             Object.keys(planets).forEach(id => {
                 const p = planets[id];
@@ -424,4 +502,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
