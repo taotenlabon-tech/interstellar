@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA True-Scale 3D Solar System - Stray.wav Phonk Edition</title>
+    <title>NASA True 3D Solar System - Straywav Audio Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
@@ -26,7 +26,7 @@
 </head>
 <body class="w-screen h-screen flex flex-col justify-between select-none">
 
-    <!-- OVERLAY KHỞI ĐỘNG VỚI STRAY.WAV PHONK AUDIO -->
+    <!-- OVERLAY KHỞI ĐỘNG VỚI REAL STRAYWAV AUDIO -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative flex items-center justify-center">
             <div class="w-28 h-28 rounded-full border-2 border-rose-500/40 animate-ping absolute"></div>
@@ -34,16 +34,21 @@
         </div>
         <div class="space-y-2">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-sky-400 to-cyan-300 tracking-wider">
-                STRAY.WAV // SOLAR SYSTEM 3D
+                STRAYWAV // SOLAR SYSTEM 3D
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-                Đồ họa Procedural HD (Lục địa, Khí quyển, Vành đai băng, Mây 3D) & Âm nhạc Phonk Drift sôi động.
+                Trải nghiệm Mô Phỏng Hệ Mặt Trời 3D kết hợp Âm Nhạc Straywav Phonk thực tế.
             </p>
         </div>
         <button onclick="startExperience()" class="px-8 py-4 bg-gradient-to-r from-rose-600 to-cyan-600 hover:from-rose-500 hover:to-cyan-500 font-orbitron font-bold text-xs sm:text-sm rounded-2xl text-white cinematic-glow transition active:scale-95 border border-rose-400 flex items-center gap-3">
-            <span>⚡</span> KHỞI ĐỘNG SIMULATION & NHẠC STRAY.WAV
+            <span>⚡</span> KHỞI ĐỘNG SIMULATION & NHẠC STRAYWAV
         </button>
     </div>
+
+    <!-- AUDIO PLAYER THỰC TẾ -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_febc508520.mp3?filename=drift-phonk-126548.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- HUD THÔNG TIN BÊN TRÁI -->
     <header id="mainHud" class="absolute top-4 left-4 z-20 transition-all duration-300 pointer-events-auto">
@@ -52,7 +57,7 @@
                 <span class="text-[10px] font-bold tracking-widest text-slate-400">NASA PHOTO-REAL SYSTEM</span>
                 <div class="flex items-center gap-2">
                     <button onclick="toggleSpaceAudio()" id="audioToggleBtn" class="px-2.5 py-1 bg-rose-950/80 border border-rose-400 text-rose-300 rounded-lg text-[11px] font-bold hover:bg-rose-900 transition flex items-center gap-1.5 shadow-[0_0_12px_rgba(244,63,94,0.4)]">
-                        <span id="audioIcon">🔊</span> <span id="audioStatus">Phonk: ON</span>
+                        <span id="audioIcon">🔊</span> <span id="audioStatus">Straywav: ON</span>
                     </button>
                     <button onclick="toggleHudInfo()" id="toggleHudBtn" class="px-2 py-1 bg-slate-800 border border-slate-600 text-slate-200 rounded-lg text-[11px] font-bold hover:bg-slate-700 transition" title="Ẩn/Hiện Chi Tiết">
                         👁️ Ẩn
@@ -62,7 +67,7 @@
 
             <!-- THANH ĐIỀU CHỈNH ÂM LƯỢNG -->
             <div class="flex items-center gap-2 bg-slate-900/80 p-2 rounded-xl border border-slate-800">
-                <span class="text-[10px] text-rose-300 font-bold">🎧 Phonk Vol:</span>
+                <span class="text-[10px] text-rose-300 font-bold">🎧 Nhạc Vol:</span>
                 <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.75" onchange="changeVolume(this.value)" oninput="changeVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
             </div>
 
@@ -72,7 +77,7 @@
                 <input type="range" id="timeSpeedSlider" min="0" max="5" step="0.1" value="1" onchange="changeTimeSpeed(this.value)" oninput="changeTimeSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
             </div>
 
-            <!-- TÍNH NĂNG CHẾ ĐỘ QUY CHUẨN TỶ LỆ KÍCH THƯỚC (REAL SCALE TOGGLE) -->
+            <!-- TÍNH NĂNG CHẾ ĐỘ TỶ LỆ KÍCH THƯỚC REAL SCALE -->
             <div class="flex items-center justify-between bg-slate-900/80 p-2 rounded-xl border border-slate-800">
                 <span class="text-[10px] text-amber-300 font-bold">🌌 Tỷ lệ thực tế (Real Scale):</span>
                 <button onclick="toggleScaleMode()" id="scaleModeBtn" class="px-2.5 py-1 bg-amber-950 border border-amber-500 text-amber-200 text-[10px] font-bold rounded-lg hover:bg-amber-900 transition">
@@ -86,7 +91,7 @@
                 <div class="border-t border-slate-800 pt-2">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300">TOÀN CẢNH HỆ MẶT TRỜI</div>
                     <p id="planetDesc" class="text-xs text-slate-300 leading-relaxed mt-1">
-                        Mô phỏng 3D chuẩn xác với lớp mây khí quyển chuyển động, hiệu ứng đốm lửa plasma Mặt Trời & vành đai băng lấp lánh.
+                        Mô phỏng 3D vật lý với hiệu ứng bề mặt chi tiết, dải mây Trái Đất xoay lập thể & vành đai Sao Thổ lấp lánh.
                     </p>
                 </div>
 
@@ -140,13 +145,6 @@
         let timeSpeed = 1.0;
         let isRealScale = false;
 
-        // ÂM NHẠC DRIFT PHONK STRAY.WAV SYNTH ENGINE
-        let audioCtx = null;
-        let mainMasterGain = null;
-        let isAudioPlaying = false;
-        let phonkBeatTimer = null, basslineTimer = null;
-        let beatStep = 0;
-
         const planetDatabase = {
             sun: { name: "MẶT TRỜI (SUN)", desc: "Ngôi sao trung tâm, cấu tạo từ plasma hydro và heli cực nóng với các đợt bùng nổ năng lượng.", dist: "0 AU", temp: "5,500 °C", radius: "696,340 km", moons: "0", zoomDist: 65 },
             mercury: { name: "SAO THỦY (MERCURY)", desc: "Hành tinh đá với bề mặt chi chít hố va chạm thiên thạch khắc sâu tương tự Mặt Trăng.", dist: "0.39 AU", temp: "-180 đến 430 °C", radius: "2,439 km", moons: "0", zoomDist: 6 },
@@ -173,21 +171,16 @@
         function startExperience() {
             document.getElementById('startOverlay').style.display = 'none';
             init3D();
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                mainMasterGain = audioCtx.createGain();
-                mainMasterGain.gain.setValueAtTime(0.75, audioCtx.currentTime);
-                mainMasterGain.connect(audioCtx.destination);
-                isAudioPlaying = true;
-                startStrayWavPhonk();
-            } catch(e) {}
+            const bgAudio = document.getElementById('bgMusic');
+            if (bgAudio) {
+                bgAudio.volume = 0.75;
+                bgAudio.play().catch(() => {});
+            }
         }
 
         function changeVolume(val) {
-            if (mainMasterGain && audioCtx) {
-                mainMasterGain.gain.setValueAtTime(parseFloat(val), audioCtx.currentTime);
-            }
+            const bgAudio = document.getElementById('bgMusic');
+            if (bgAudio) bgAudio.volume = parseFloat(val);
         }
 
         function changeTimeSpeed(val) {
@@ -208,119 +201,21 @@
         }
 
         function toggleSpaceAudio() {
-            if (!audioCtx) return;
-            isAudioPlaying = !isAudioPlaying;
+            const bgAudio = document.getElementById('bgMusic');
             const btnStatus = document.getElementById('audioStatus');
             const btnIcon = document.getElementById('audioIcon');
-            if (isAudioPlaying) {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                btnStatus.innerText = "Phonk: ON"; btnIcon.innerText = "🔊";
-                startStrayWavPhonk();
+            if (!bgAudio) return;
+
+            if (bgAudio.paused) {
+                bgAudio.play();
+                btnStatus.innerText = "Straywav: ON"; btnIcon.innerText = "🔊";
             } else {
-                audioCtx.suspend();
-                btnStatus.innerText = "Phonk: OFF"; btnIcon.innerText = "🔇";
-                stopStrayWavPhonk();
+                bgAudio.pause();
+                btnStatus.innerText = "Straywav: OFF"; btnIcon.innerText = "🔇";
             }
         }
 
-        // TẠO ÂM NHẠC DRIFT PHONK KHÔNG GIAN BẰNG WEB AUDIO API
-        function startStrayWavPhonk() {
-            stopStrayWavPhonk();
-            const phonkNotes = [440, 440, 523.25, 440, 392, 349.23, 392, 440];
-
-            phonkBeatTimer = setInterval(() => {
-                if (!isAudioPlaying || !audioCtx) return;
-                playPhonkCowbell(phonkNotes[beatStep % phonkNotes.length]);
-                if (beatStep % 4 === 0) playPhonkKick();
-                if (beatStep % 8 === 4) playPhonkSnare();
-                beatStep++;
-            }, 180);
-
-            basslineTimer = setInterval(() => {
-                if (!isAudioPlaying || !audioCtx) return;
-                playPhonkSubBass(110);
-            }, 720);
-        }
-
-        function playPhonkCowbell(freq) {
-            const now = audioCtx.currentTime;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(freq * 1.5, now);
-
-            gain.gain.setValueAtTime(0.12, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-
-            osc.connect(gain);
-            gain.connect(mainMasterGain);
-
-            osc.start(now);
-            osc.stop(now + 0.13);
-        }
-
-        function playPhonkKick() {
-            const now = audioCtx.currentTime;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(140, now);
-            osc.frequency.exponentialRampToValueAtTime(35, now + 0.15);
-
-            gain.gain.setValueAtTime(0.4, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
-
-            osc.connect(gain);
-            gain.connect(mainMasterGain);
-
-            osc.start(now);
-            osc.stop(now + 0.17);
-        }
-
-        function playPhonkSnare() {
-            const now = audioCtx.currentTime;
-            const bufferSize = audioCtx.sampleRate * 0.1;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'highpass'; filter.frequency.value = 1000;
-
-            const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.2, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-
-            noise.connect(filter); filter.connect(gain); gain.connect(mainMasterGain);
-            noise.start(now);
-        }
-
-        function playPhonkSubBass(freq) {
-            const now = audioCtx.currentTime;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(freq, now);
-
-            gain.gain.setValueAtTime(0.25, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-
-            osc.connect(gain); gain.connect(mainMasterGain);
-            osc.start(now); osc.stop(now + 0.55);
-        }
-
-        function stopStrayWavPhonk() {
-            if (phonkBeatTimer) clearInterval(phonkBeatTimer);
-            if (basslineTimer) clearInterval(basslineTimer);
-        }
-
-        // TẠO THIẾT KẾ ĐỒ HỌA HD TEXTURE VÀ BUMP MAP CHÂN THỰC
+        // TẠO THIẾT KẾ ĐỒ HỌA HD TEXTURE BỀ MẶT CHÂN THỰC
         function createPhotorealisticTexture(type) {
             const canvas = document.createElement('canvas');
             canvas.width = 1024; canvas.height = 512;
@@ -416,7 +311,7 @@
             scene.add(sunLight);
             scene.add(new THREE.AmbientLight(0x1e293b, 0.75));
 
-            // Vũ trụ ngàn sao
+            // Nền sao
             const starsGeo = new THREE.BufferGeometry();
             const starsCnt = 5000;
             const starPos = new Float32Array(starsCnt * 3);
@@ -425,7 +320,7 @@
             const starsMat = new THREE.PointsMaterial({color: 0xffffff, size: 0.9});
             scene.add(new THREE.Points(starsGeo, starsMat));
 
-            // MẶT TRỜI CHÂN THỰC
+            // MẶT TRỜI
             const sunMat = new THREE.MeshBasicMaterial({ map: createPhotorealisticTexture('sun') });
             const sun = new THREE.Mesh(new THREE.SphereGeometry(4.8, 48, 48), sunMat);
             const glowMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.35, side: THREE.BackSide });
