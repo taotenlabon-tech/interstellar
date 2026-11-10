@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA 3D Cosmic Sandbox - Exoplanets & Andromeda Edition</title>
+    <title>NASA 3D Cosmic Sandbox - Time Travel & Exoplanets</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
@@ -29,19 +29,19 @@
     <!-- OVERLAY KHỞI ĐỘNG -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative flex items-center justify-center">
-            <div class="w-32 h-32 rounded-full border-2 border-emerald-500/50 animate-ping absolute"></div>
-            <div class="text-7xl">🪐</div>
+            <div class="w-32 h-32 rounded-full border-2 border-cyan-500/50 animate-ping absolute"></div>
+            <div class="text-7xl">⏳</div>
         </div>
         <div class="space-y-2">
-            <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-400 tracking-wider">
-                EXOPLANET & ANDROMEDA EXPANSION
+            <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400 tracking-wider">
+                COSMIC TIME MACHINE & EXOPLANETS
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-                Khám phá các ngoại hành tinh ngoài hệ mặt trời (Kepler-186f, TRAPPIST-1e) và Thiên hà Tiên Nữ (Andromeda).
+                Khám phá vị trí Hệ Mặt Trời 1,000 năm trước & 1,000 năm sau, du hành ngoại hành tinh và Thiên hà Andromeda.
             </p>
         </div>
-        <button onclick="startExperience()" class="px-8 py-4 bg-gradient-to-r from-emerald-600 via-cyan-600 to-indigo-600 font-orbitron font-bold text-xs sm:text-sm rounded-2xl text-white cinematic-glow transition active:scale-95 border border-emerald-400 flex items-center gap-3">
-            <span>⚡</span> KHÁM PHÁ NGOẠI HÀNH TINH & THIÊN HÀ MỚI
+        <button onclick="startExperience()" class="px-8 py-4 bg-gradient-to-r from-cyan-600 via-indigo-600 to-rose-600 font-orbitron font-bold text-xs sm:text-sm rounded-2xl text-white cinematic-glow transition active:scale-95 border border-cyan-400 flex items-center gap-3">
+            <span>⚡</span> KÍCH HOẠT CỖ MÁY THỜI GIAN VŨ TRỤ
         </button>
     </div>
 
@@ -54,7 +54,7 @@
     <header id="mainHud" class="absolute top-4 left-4 z-20 transition-all duration-300 pointer-events-auto">
         <div class="hud-panel p-4 rounded-2xl max-w-sm space-y-3 relative">
             <div class="flex justify-between items-center gap-3">
-                <span class="text-[10px] font-bold tracking-widest text-slate-400">EXOPLANET COMMAND</span>
+                <span class="text-[10px] font-bold tracking-widest text-slate-400">CHRONOS COMMAND CENTER</span>
                 <div class="flex items-center gap-2">
                     <button onclick="toggleSpaceAudio()" id="audioToggleBtn" class="px-2.5 py-1 bg-rose-950/80 border border-rose-400 text-rose-300 rounded-lg text-[11px] font-bold hover:bg-rose-900 transition flex items-center gap-1.5 shadow-[0_0_12px_rgba(244,63,94,0.4)]">
                         <span id="audioIcon">🔊</span> <span id="audioStatus">Straywav: ON</span>
@@ -65,9 +65,25 @@
                 </div>
             </div>
 
-            <!-- CHỨC NĂNG SANDBOX -->
+            <!-- CỖ MÁY THỜI GIAN (TIME TRAVEL 1000 NĂM) -->
+            <div class="bg-cyan-950/40 p-2.5 rounded-xl border border-cyan-500/40 space-y-2">
+                <div class="text-[10px] text-cyan-300 font-bold uppercase tracking-wider">⏳ Cỗ Máy Thời Gian (1,000 Năm):</div>
+                <div class="grid grid-cols-3 gap-1.5 text-[9px]">
+                    <button onclick="travelTime(-1000)" class="py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-100 font-bold rounded-lg hover:bg-cyan-800 transition">
+                        ⏪ 1k Năm Trước
+                    </button>
+                    <button onclick="resetTime()" class="py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg hover:bg-slate-800 transition">
+                        ⏹️ Hiện Tại
+                    </button>
+                    <button onclick="travelTime(1000)" class="py-1.5 bg-rose-950 border border-rose-500 text-rose-200 font-bold rounded-lg hover:bg-rose-900 transition">
+                        ⏩ 1k Năm Sau
+                    </button>
+                </div>
+            </div>
+
+            <!-- TƯƠNG TÁC SANDBOX -->
             <div class="bg-purple-950/40 p-2.5 rounded-xl border border-purple-500/40 space-y-2">
-                <div class="text-[10px] text-purple-300 font-bold uppercase tracking-wider">☄️ Tương Tác:</div>
+                <div class="text-[10px] text-purple-300 font-bold uppercase tracking-wider">☄️ Tương Tác Vũ Trụ:</div>
                 <div class="grid grid-cols-2 gap-2 text-[10px]">
                     <button onclick="spawnComet()" class="py-1.5 bg-purple-900 border border-purple-400 text-purple-100 font-bold rounded-lg hover:bg-purple-800 transition">
                         ☄️ Bắn Thiên Thạch
@@ -78,7 +94,7 @@
                 </div>
             </div>
 
-            <!-- TẦM NHÌN VŨ TRỤ & THIÊN HÀ MỚI -->
+            <!-- QUY MÔ & THIÊN HÀ -->
             <div class="bg-indigo-950/50 p-2.5 rounded-xl border border-indigo-500/40 space-y-2">
                 <div class="text-[10px] text-indigo-300 font-bold uppercase tracking-wider">🌌 Quy Mô & Thiên Hà:</div>
                 <div class="grid grid-cols-2 gap-1.5 text-[9px]">
@@ -112,14 +128,14 @@
                 <div class="border-t border-slate-800 pt-2">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300">TOÀN CẢNH HỆ MẶT TRỜI</div>
                     <p id="planetDesc" class="text-xs text-slate-300 leading-relaxed mt-1">
-                        Khám phá thêm Kepler-186f, TRAPPIST-1e và Thiên hà Tiên Nữ (Andromeda) mới được thêm vào.
+                        Sử dụng Cỗ Máy Thời Gian để tua nhanh vị trí các hành tinh sau 1,000 năm!
                     </p>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- THANH CHỌN HÀNH TINH (BAO GỒM CẢ NGOẠI HÀNH TINH) -->
+    <!-- THANH CHỌN HÀNH TINH -->
     <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 hud-panel px-4 py-3 rounded-2xl flex gap-2 overflow-x-auto max-w-[95vw] custom-scrollbar">
         <button id="btn-sun" onclick="selectPlanet('sun')" class="planet-btn active px-3 py-1.5 text-amber-300 rounded-xl text-xs font-bold whitespace-nowrap">☀️ Mặt Trời</button>
         <button id="btn-mercury" onclick="selectPlanet('mercury')" class="planet-btn px-3 py-1.5 text-slate-300 rounded-xl text-xs font-bold whitespace-nowrap">🪨 Sao Thủy</button>
@@ -141,7 +157,7 @@
         let scene, camera, renderer;
         let planets = {};
         let milkyWayPoints, andromedaGalaxy, superclusterGroup;
-        let blackHoleMesh, voyagerMesh;
+        let blackHoleMesh;
         let customMeteors = [];
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, previousMousePosition = { x: 0, y: 0 };
@@ -149,6 +165,7 @@
         let cameraAngleX = 0.4, cameraAngleY = 0.0;
         let currentLookAt = new THREE.Vector3(0, 0, 0);
         let timeSpeed = 1.0;
+        let timeOffset = 0;
         let currentViewLevel = 'system';
 
         const planetDatabase = {
@@ -161,10 +178,10 @@
             saturn: { name: "SAO THỔ (SATURN)", desc: "Vành đai băng hoành tráng nhất.", dist: "9.58 AU", temp: "-140 °C", radius: "58,232 km", moons: "146", zoomDist: 16 },
             uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng xoay nghiêng.", dist: "19.22 AU", temp: "-195 °C", radius: "25,362 km", moons: "28", zoomDist: 11 },
             neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Hành tinh gió bão xa nhất.", dist: "30.05 AU", temp: "-200 °C", radius: "24,622 km", moons: "16", zoomDist: 11 },
-            kepler186f: { name: "KEPLER-186F (NGOẠI HÀNH TINH)", desc: "Ngoại hành tinh có kích thước tương đương Trái Đất nằm trong vùng có thể sống được (cách 582 năm ánh sáng).", dist: "69 AU (Giả lập)", temp: "-50 °C", radius: "7,000 km", moons: "0", zoomDist: 8 },
-            trappist1e: { name: "TRAPPIST-1E (NGOẠI HÀNH TINH)", desc: "Hành tinh đá có tiềm năng chứa nước lỏng tuyệt vời trong hệ sao TRAPPIST-1.", dist: "77 AU (Giả lập)", temp: "-20 °C", radius: "5,800 km", moons: "0", zoomDist: 7 },
+            kepler186f: { name: "KEPLER-186F (NGOẠI HÀNH TINH)", desc: "Ngoại hành tinh nằm ở hệ sao khác (cách 582 năm ánh sáng).", dist: "69 AU (Giả lập)", temp: "-50 °C", radius: "7,000 km", moons: "0", zoomDist: 8 },
+            trappist1e: { name: "TRAPPIST-1E (NGOẠI HÀNH TINH)", desc: "Ngoại hành tinh đá tiềm năng sống ở hệ sao TRAPPIST-1.", dist: "77 AU (Giả lập)", temp: "-20 °C", radius: "5,800 km", moons: "0", zoomDist: 7 },
             blackhole: { name: "HỐ ĐEN SIÊU TRỌNG (BLACK HOLE)", desc: "Nơi trọng lực lớn đến mức không gì thoát ra được.", dist: "Rìa Ngân Hà", temp: "0 °C", radius: "Vô cực", moons: "0", zoomDist: 25 },
-            andromeda: { name: "THIÊN HÀ TIÊN NỮ (ANDROMEDA)", desc: "Thiên hà xoắn ốc lớn gần Dải Ngân Hà nhất (cách 2.5 triệu năm ánh sáng).", dist: "4,500 Đơn vị", temp: "Vũ trụ", radius: "110,000 NĂM ÁNH SÁNG", moons: "Nhiều thiên hà lùn", zoomDist: 1200 }
+            andromeda: { name: "THIÊN HÀ TIÊN NỮ (ANDROMEDA)", desc: "Thiên hà xoắn ốc lớn gần Dải Ngân Hà nhất.", dist: "4,500 Đơn vị", temp: "Vũ trụ", radius: "110,000 NĂM ÁNH SÁNG", moons: "Nhiều thiên hà lùn", zoomDist: 1200 }
         };
 
         function toggleHudInfo() {
@@ -189,6 +206,18 @@
         }
 
         function changeTimeSpeed(val) { timeSpeed = parseFloat(val); }
+
+        function travelTime(years) {
+            timeOffset += years * 0.05; // Mỗi 1000 năm tương ứng với bước dịch chuyển góc quỹ đạo
+            document.getElementById('planetTitle').innerText = `MỐC THỜI GIAN: ${years > 0 ? '+' : ''}${years} NĂM`;
+            document.getElementById('planetDesc').innerText = `Đã dịch chuyển quỹ đạo các hành tinh tới mốc thời gian ${years > 0.5 ? 'tương lai' : 'quá khứ'} 1,000 năm.`;
+        }
+
+        function resetTime() {
+            timeOffset = 0;
+            document.getElementById('planetTitle').innerText = "MỐC THỜI GIAN: HIỆN TẠI (2026)";
+            document.getElementById('planetDesc').innerText = "Đã đưa hệ thống trở về thời gian thực.";
+        }
 
         function setCosmicView(level) {
             currentViewLevel = level;
@@ -277,7 +306,6 @@
             scene.add(milkyWayPoints);
         }
 
-        // TẠO THIÊN HÀ TIÊN NỮ (ANDROMEDA GALAXY)
         function createAndromedaGalaxy() {
             const count = 18000;
             const geo = new THREE.BufferGeometry();
@@ -286,7 +314,7 @@
             for (let i = 0; i < count; i++) {
                 const r = Math.pow(Math.random(), 2) * 280;
                 const angle = i * 0.05;
-                pos[i * 3] = Math.cos(angle) * r + 800; // Đặt lệch sang phải hệ mặt trời
+                pos[i * 3] = Math.cos(angle) * r + 800;
                 pos[i * 3 + 1] = (Math.random() - 0.5) * (r * 0.1);
                 pos[i * 3 + 2] = Math.sin(angle) * r - 600;
                 col[i * 3] = 0.8; col[i * 3 + 1] = 0.8; col[i * 3 + 2] = 1.0;
@@ -331,7 +359,6 @@
             createAndromedaGalaxy();
             createSupercluster();
 
-            // HỐ ĐEN
             const bhGroup = new THREE.Group();
             bhGroup.position.set(250, 40, -150);
             bhGroup.add(new THREE.Mesh(new THREE.SphereGeometry(3, 32, 32), new THREE.MeshBasicMaterial({ color: 0x000000 })));
@@ -341,13 +368,11 @@
             scene.add(bhGroup);
             blackHoleMesh = bhGroup;
 
-            // MẶT TRỜI
             const sun = new THREE.Mesh(new THREE.SphereGeometry(4.8, 48, 48), new THREE.MeshBasicMaterial({ map: createPlanetTexture('sun') }));
             sun.add(new THREE.Mesh(new THREE.SphereGeometry(6.4, 32, 32), new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.35, side: THREE.BackSide })));
             scene.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
 
-            // 8 HÀNH TINH GỐC + 2 NGOẠI HÀNH TINH (KEPLER-186F & TRAPPIST-1E)
             const planetData = [
                 { id: 'mercury', size: 0.55, distance: 9, speed: 0.022, texture: 'mercury' },
                 { id: 'venus', size: 0.95, distance: 13, speed: 0.016, texture: 'venus' },
@@ -462,7 +487,7 @@
             Object.keys(planets).forEach(id => {
                 const p = planets[id];
                 if (p.speed > 0) {
-                    p.angle += p.speed * timeSpeed;
+                    p.angle += (p.speed * timeSpeed) + (timeOffset * 0.001);
                     p.mesh.position.x = Math.cos(p.angle) * p.distance;
                     p.mesh.position.z = Math.sin(p.angle) * p.distance;
                     p.mesh.rotation.y += 0.015 * timeSpeed;
