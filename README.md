@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -69,13 +69,13 @@
             <div class="bg-indigo-950/50 p-2.5 rounded-xl border border-indigo-500/40 space-y-2">
                 <div class="text-[10px] text-indigo-300 font-bold uppercase tracking-wider">🌌 Tầm Nhìn Vũ Trụ (Zoom Out):</div>
                 <div class="grid grid-cols-3 gap-1.5 text-[9px]">
-                    <button onclick="setCosmicView('system')" id="viewSysBtn" class="py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg hover:bg-cyan-800 transition">
+                    <button onclick="setCosmicView('system')" id="viewSysBtn" class="py-1.5 bg-cyan-900 border border-cyan-400 text-cyan-200 font-bold rounded-lg transition">
                         ☀️ Hệ Mặt Trời
                     </button>
-                    <button onclick="setCosmicView('galaxy')" id="viewGalBtn" class="py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg hover:bg-slate-800 transition">
+                    <button onclick="setCosmicView('galaxy')" id="viewGalBtn" class="py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition">
                         🌀 Ngân Hà
                     </button>
-                    <button onclick="setCosmicView('supercluster')" id="viewClusBtn" class="py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg hover:bg-slate-800 transition">
+                    <button onclick="setCosmicView('supercluster')" id="viewClusBtn" class="py-1.5 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-lg transition">
                         🌌 Siêu Cụm
                     </button>
                 </div>
@@ -129,7 +129,7 @@
 
     <script>
         let scene, camera, renderer;
-        let planets = {}, asteroidBelt = [];
+        let planets = {};
         let milkyWayPoints, superclusterGroup;
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, previousMousePosition = { x: 0, y: 0 };
@@ -139,7 +139,7 @@
         let timeSpeed = 1.0, isSpaceshipMode = false;
         let spaceshipPos = new THREE.Vector3(0, 15, 80);
         let keysPressed = {};
-        let currentViewLevel = 'system'; // 'system' | 'galaxy' | 'supercluster'
+        let currentViewLevel = 'system';
 
         const planetDatabase = {
             sun: { name: "MẶT TRỜI (SUN)", desc: "Ngôi sao trung tâm Hệ Mặt Trời.", dist: "0 AU", temp: "5,500 °C", radius: "696,340 km", moons: "0", zoomDist: 65 },
@@ -219,7 +219,6 @@
             else { bgAudio.pause(); document.getElementById('audioStatus').innerText = "Straywav: OFF"; }
         }
 
-        // TẠO DẢI NGÂN HÀ 3D XOẮN ỐC (SPIRAL GALAXY)
         function createMilkyWayGalaxy() {
             const particleCount = 25000;
             const geometry = new THREE.BufferGeometry();
@@ -243,29 +242,25 @@
                 positions[i * 3 + 1] = spreadY;
                 positions[i * 3 + 2] = Math.sin(angle) * r + spreadZ;
 
-                // Màu sắc từ nhân vàng da cam tới các nhánh xanh lam
                 const mixRatio = r / radius;
-                colors[i * 3] = 1.0 - mixRatio * 0.6; // R
-                colors[i * 3 + 1] = 0.7 + mixRatio * 0.3; // G
-                colors[i * 3 + 2] = 0.3 + mixRatio * 0.7; // B
+                colors[i * 3] = 1.0 - mixRatio * 0.6;
+                colors[i * 3 + 1] = 0.7 + mixRatio * 0.3;
+                colors[i * 3 + 2] = 0.3 + mixRatio * 0.7;
             }
 
             geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-            const material = new THREE.PointsMaterial({
+            milkyWayPoints = new THREE.Points(geometry, new THREE.PointsMaterial({
                 size: 1.2,
                 vertexColors: true,
                 transparent: true,
                 opacity: 0.85,
                 blending: THREE.AdditiveBlending
-            });
-
-            milkyWayPoints = new THREE.Points(geometry, material);
+            }));
             scene.add(milkyWayPoints);
         }
 
-        // TẠO SIÊU CỤM THIÊN HÀ 3D (SUPERCLUSTER OF GALAXIES)
         function createSupercluster() {
             superclusterGroup = new THREE.Group();
             const galaxyCount = 350;
@@ -328,18 +323,15 @@
             scene.add(sunLight);
             scene.add(new THREE.AmbientLight(0x1e293b, 0.8));
 
-            // Khởi tạo Dải Ngân Hà & Siêu Cụm Thiên Hà
             createMilkyWayGalaxy();
             createSupercluster();
 
-            // MẶT TRỜI
             const sunMat = new THREE.MeshBasicMaterial({ map: createPhotorealisticTexture('sun') });
             const sun = new THREE.Mesh(new THREE.SphereGeometry(4.8, 48, 48), sunMat);
             sun.add(new THREE.Mesh(new THREE.SphereGeometry(6.4, 32, 32), new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.35, side: THREE.BackSide })));
             scene.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
 
-            // 8 HÀNH TINH
             const planetData = [
                 { id: 'mercury', size: 0.55, distance: 9, speed: 0.022 },
                 { id: 'venus', size: 0.95, distance: 13, speed: 0.016 },
@@ -452,7 +444,6 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            // Xoay Dải Ngân Hà chậm rãi
             if (milkyWayPoints) milkyWayPoints.rotation.y += 0.0005 * timeSpeed;
             if (superclusterGroup) superclusterGroup.rotation.y += 0.0001 * timeSpeed;
 
