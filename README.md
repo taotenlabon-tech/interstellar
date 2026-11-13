@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - IMAX Cinematic & Stray.wav Original</title>
+    <title>NASA Eyes 3D - Ultimate Cosmic Cinematic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -18,58 +18,58 @@
         body { font-family: 'Share Tech Mono', monospace; background: #000; color: #38bdf8; overflow: hidden; margin: 0; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .hud-glass {
-            background: rgba(4, 9, 20, 0.82);
-            backdrop-filter: blur(22px);
-            border: 1px solid rgba(56, 189, 248, 0.35);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.9), inset 0 0 24px rgba(56, 189, 248, 0.1);
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95), inset 0 0 30px rgba(56, 189, 248, 0.12);
         }
         .planet-pill {
-            background: rgba(15, 23, 42, 0.65);
-            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.25);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .planet-pill:hover, .planet-pill.active {
             border-color: #38bdf8;
-            background: rgba(14, 165, 233, 0.22);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.45);
+            background: rgba(14, 165, 233, 0.28);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
             transform: translateY(-2px);
         }
         .custom-scrollbar::-webkit-scrollbar { height: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.5); border-radius: 99px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.6); border-radius: 99px; }
     </style>
 </head>
 <body class="w-screen h-screen select-none">
 
     <!-- MÀN HÌNH KHỞI ĐỘNG -->
-    <div id="startOverlay" class="fixed inset-0 z-50 bg-[#02040a] flex flex-col items-center justify-center p-6 text-center space-y-6">
-        <div class="relative w-28 h-28 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full border border-cyan-400/40 animate-ping"></div>
-            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 via-orange-400 to-cyan-200 shadow-[0_0_65px_rgba(251,191,36,0.85)]"></div>
+    <div id="startOverlay" class="fixed inset-0 z-50 bg-[#010206] flex flex-col items-center justify-center p-6 text-center space-y-6">
+        <div class="relative w-32 h-32 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full border-2 border-cyan-400/50 animate-ping"></div>
+            <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-cyan-300 shadow-[0_0_80px_rgba(56,189,248,0.9)]"></div>
         </div>
         <div class="space-y-2 max-w-lg">
-            <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                STRAY.WAV <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">IMAX 3D</span>
+            <h1 class="font-orbitron font-black text-2xl sm:text-5xl text-white tracking-widest">
+                ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Đồ họa điện ảnh đỉnh cao kết hợp bản nhạc Drift Phonk chuẩn gốc, âm lượng tối đa cực căng!
+                Đồ họa đỉnh cao, bụi không gian lơ lửng, quỹ đạo phát sáng Neon & nhạc Drift Phonk cực căng.
             </p>
         </div>
-        <button onclick="startExperience()" class="px-8 py-3.5 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_40px_rgba(56,189,248,0.7)] transition active:scale-95">
-            ⚡ KHỞI CHẠY VŨ TRỤ & BẬT NHẠC CĂNG ĐÉT
+        <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_50px_rgba(56,189,248,0.8)] transition active:scale-95">
+            ⚡ KHỞI ĐỘNG TRẢI NGHIỆM ĐỈNH CAO
         </button>
     </div>
 
-    <!-- AUDIO GỐC STRAY.WAV ($undown) -->
+    <!-- AUDIO GỐC STRAY.WAV -->
     <audio id="bgMusic" loop preload="auto">
         <source src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_febc508520.mp3?filename=drift-phonk-126548.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- HUD GÓC TRÁI -->
+    <!-- HUD ĐIỀU KHIỂN -->
     <header class="absolute top-4 left-4 z-20 hud-glass p-4 rounded-2xl w-80 space-y-3">
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span class="text-[10px] font-bold tracking-widest text-slate-300">STRAY.WAV PHONK RENDER</span>
+                <span class="text-[10px] font-bold tracking-widest text-slate-300">GOD-TIER RENDER ENGINE</span>
             </div>
             <div class="flex gap-1.5">
                 <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
@@ -82,7 +82,6 @@
         </div>
 
         <div id="hudBody" class="space-y-3 transition-all duration-300 overflow-hidden">
-            <!-- ĐIỀU KHIỂN ÂM LƯỢNG TO & HIỆU ỨNG -->
             <div class="grid grid-cols-2 gap-2 text-[10px]">
                 <button onclick="toggleSpacetimeGrid()" id="gridBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
                     🕸️ Lưới Không Gian: OFF
@@ -106,7 +105,7 @@
             <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
                 <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                 <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                    Trải nghiệm không gian IMAX kết hợp bản phối Drift Phonk Stray.wav cực căng.
+                    Khám phá toàn cảnh vũ trụ với hiệu ứng hạt bụi lơ lửng và âm thanh Drift Phonk cực đỉnh.
                 </p>
                 <div class="grid grid-cols-2 gap-1 pt-1.5 text-[10px] text-slate-400">
                     <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -134,7 +133,7 @@
     <script>
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
-        let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid;
+        let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid, cosmicDust;
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, prevMouse = { x: 0, y: 0 };
         let camDist = 72, targetCamDist = 72;
@@ -149,7 +148,7 @@
             earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Tán xạ khí quyển xanh ngọc, mây 3D tách lớp & ánh đèn đô thị ban đêm.", dist: "1.00 AU", temp: "15 °C", zoom: 6.5 },
             mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực và hẻm núi sâu.", dist: "1.52 AU", temp: "-63 °C", zoom: 5.5 },
             jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng khí động học & cơn bão Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 13 },
-            saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống andnh đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 16 },
+            saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 16 },
             uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng khí metan xanh ngọc bích với vành đai dọc mờ ảo.", dist: "19.22 AU", temp: "-195 °C", zoom: 10 },
             neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Thế giới băng giá xanh thẫm với những luồng gió siêu thanh.", dist: "30.05 AU", temp: "-200 °C", zoom: 10 }
         };
@@ -417,7 +416,7 @@
             milkyWayGroup = new THREE.Group();
             milkyWayGroup.rotation.z = Math.PI / 5;
 
-            const bandCount = 24000;
+            const bandCount = 28000;
             const bandGeo = new THREE.BufferGeometry();
             const bandPos = new Float32Array(bandCount * 3);
             const bandCol = new Float32Array(bandCount * 3);
@@ -451,48 +450,29 @@
                 size: 3.2,
                 vertexColors: true,
                 transparent: true,
-                opacity: 0.78,
+                opacity: 0.82,
                 blending: THREE.AdditiveBlending,
                 depthWrite: false
             })));
 
-            const bgCount = 6000;
-            const bgGeo = new THREE.BufferGeometry();
-            const bgPos = new Float32Array(bgCount * 3);
-            for (let i = 0; i < bgCount; i++) {
-                const r = 1200 + Math.random() * 1800;
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos(2 * Math.random() - 1);
-                bgPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-                bgPos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-                bgPos[i * 3 + 2] = r * Math.cos(phi);
+            // BỤI VŨ TRỤ LƠ LỬNG (COSMIC DUST)
+            const dustCount = 4000;
+            const dustGeo = new THREE.BufferGeometry();
+            const dustPos = new Float32Array(dustCount * 3);
+            for (let i = 0; i < dustCount; i++) {
+                dustPos[i * 3] = (Math.random() - 0.5) * 350;
+                dustPos[i * 3 + 1] = (Math.random() - 0.5) * 120;
+                dustPos[i * 3 + 2] = (Math.random() - 0.5) * 350;
             }
-            bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
-            milkyWayGroup.add(new THREE.Points(bgGeo, new THREE.PointsMaterial({ color: 0xe2e8f0, size: 2.0, transparent: true, opacity: 0.85 })));
-
-            const nebCanvas = document.createElement('canvas');
-            nebCanvas.width = 512; nebCanvas.height = 512;
-            const nCtx = nebCanvas.getContext('2d');
-            const nGrad = nCtx.createRadialGradient(256, 256, 10, 256, 256, 250);
-            nGrad.addColorStop(0, 'rgba(99, 102, 241, 0.22)');
-            nGrad.addColorStop(0.45, 'rgba(56, 189, 248, 0.12)');
-            nGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            nCtx.fillStyle = nGrad; nCtx.fillRect(0, 0, 512, 512);
-            const nebTex = new THREE.CanvasTexture(nebCanvas);
-
-            for (let i = 0; i < 24; i++) {
-                const a = (i / 24) * Math.PI * 2;
-                const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: nebTex, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.55, depthWrite: false }));
-                sprite.position.set(Math.cos(a) * 1650, (Math.random() - 0.5) * 140, Math.sin(a) * 1650);
-                sprite.scale.set(950, 550, 1);
-                milkyWayGroup.add(sprite);
-            }
+            dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+            cosmicDust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0x7dd3fc, size: 0.8, transparent: true, opacity: 0.65, blending: THREE.AdditiveBlending }));
+            scene.add(cosmicDust);
 
             scene.add(milkyWayGroup);
         }
 
         function createAsteroidBelt() {
-            const count = 1800;
+            const count = 2200;
             const geo = new THREE.DodecahedronGeometry(0.11, 0);
             const mat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.85, metalness: 0.2 });
             asteroidBelt = new THREE.InstancedMesh(geo, mat, count);
@@ -533,7 +513,7 @@
                 color: 0x0ea5e9,
                 wireframe: true,
                 transparent: true,
-                opacity: 0.14
+                opacity: 0.16
             });
             spacetimeGrid = new THREE.Mesh(geo, mat);
             spacetimeGrid.visible = false;
@@ -550,26 +530,26 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.toneMapping = THREE.ReinhardToneMapping;
-            renderer.toneMappingExposure = 1.15;
+            renderer.toneMappingExposure = 1.2;
             container.appendChild(renderer.domElement);
 
             const renderScene = new THREE.RenderPass(scene, camera);
-            bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.15, 0.65, 0.35);
+            bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.25, 0.7, 0.3);
             composer = new THREE.EffectComposer(renderer);
             composer.addPass(renderScene);
             composer.addPass(bloomPass);
 
-            const sunLight = new THREE.PointLight(0xfff5e4, 3.2, 2000, 0.25);
+            const sunLight = new THREE.PointLight(0xfff5e4, 3.5, 2000, 0.25);
             scene.add(sunLight);
-            scene.add(new THREE.AmbientLight(0x0f172a, 0.38));
+            scene.add(new THREE.AmbientLight(0x0f172a, 0.42));
 
             const flareTex = createFlareTextures();
             const lensflare = new THREE.Lensflare();
-            lensflare.addElement(new THREE.LensflareElement(flareTex.streak, 680, 0, new THREE.Color(0x7dd3fc)));
-            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 140, 0, new THREE.Color(0xfef08a)));
-            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 60, 0.35, new THREE.Color(0x38bdf8)));
-            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 90, 0.6, new THREE.Color(0x818cf8)));
-            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 45, 0.85, new THREE.Color(0xf472b6)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.streak, 720, 0, new THREE.Color(0x7dd3fc)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 150, 0, new THREE.Color(0xfef08a)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 65, 0.35, new THREE.Color(0x38bdf8)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 95, 0.6, new THREE.Color(0x818cf8)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 50, 0.85, new THREE.Color(0xf472b6)));
             sunLight.add(lensflare);
 
             createMilkyWayBackdrop();
@@ -583,7 +563,7 @@
                 fragmentShader: sunFragmentShader
             });
             const sun = new THREE.Mesh(new THREE.SphereGeometry(5.2, 64, 64), sunMat);
-            const corona = new THREE.Mesh(new THREE.SphereGeometry(6.8, 64, 64), createAtmosphereMaterial(0xff8c00, 1.35, 3.2));
+            const corona = new THREE.Mesh(new THREE.SphereGeometry(6.8, 64, 64), createAtmosphereMaterial(0xff8c00, 1.4, 3.0));
             sun.add(corona);
             scene.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
@@ -600,8 +580,9 @@
             ];
 
             planetConfigs.forEach(cfg => {
-                const orbitGeo = new THREE.RingGeometry(cfg.dist - 0.04, cfg.dist + 0.04, 180);
-                const orbitMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.14 });
+                // QUỸ ĐẠO PHÁT SÁNG NEON MƯỢT MÀ
+                const orbitGeo = new THREE.RingGeometry(cfg.dist - 0.06, cfg.dist + 0.06, 220);
+                const orbitMat = new THREE.MeshBasicMaterial({ color: cfg.atmos || 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending });
                 const orbitRing = new THREE.Mesh(orbitGeo, orbitMat);
                 orbitRing.rotation.x = Math.PI / 2;
                 scene.add(orbitRing);
@@ -620,7 +601,7 @@
                 scene.add(mesh);
 
                 if (cfg.atmos) {
-                    const atmosMesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.12, 48, 48), createAtmosphereMaterial(cfg.atmos, 1.15, 3.8));
+                    const atmosMesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.12, 48, 48), createAtmosphereMaterial(cfg.atmos, 1.2, 3.6));
                     mesh.add(atmosMesh);
                 }
 
@@ -629,7 +610,7 @@
                     const cloudMat = new THREE.MeshStandardMaterial({
                         map: cloudMaps.map,
                         transparent: true,
-                        opacity: 0.85,
+                        opacity: 0.88,
                         depthWrite: false
                     });
                     const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.022, 64, 64), cloudMat);
@@ -663,7 +644,7 @@
                         map: createSaturnRingTexture(),
                         side: THREE.DoubleSide,
                         transparent: true,
-                        opacity: 0.92,
+                        opacity: 0.95,
                         roughness: 0.5
                     });
                     const ringMesh = new THREE.Mesh(rGeo, rMat);
@@ -700,7 +681,7 @@
             init3D();
             const bg = document.getElementById('bgMusic');
             if (bg) { 
-                bg.volume = 1.0; // Đặt âm lượng tối đa 100% cực to và căng
+                bg.volume = 1.0; 
                 bg.play().catch(() => {}); 
             }
         }
@@ -772,6 +753,7 @@
 
             if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
             if (milkyWayGroup) milkyWayGroup.rotation.y += 0.00012 * timeSpeed;
+            if (cosmicDust) cosmicDust.rotation.y += 0.0003 * timeSpeed;
             if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
 
             Object.keys(planets).forEach(id => {
