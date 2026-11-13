@@ -1,11 +1,11 @@
-
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - Cinematic Unreal Bloom Edition</title>
+    <title>NASA Eyes 3D - IMAX Cinematic Cosmic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Three.js Core + Post-Processing Bloom -->
+    <!-- Three.js Core + Post-Processing Bloom + Lensflare -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
@@ -13,15 +13,16 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Lensflare.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap');
         body { font-family: 'Share Tech Mono', monospace; background: #000; color: #38bdf8; overflow: hidden; margin: 0; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .hud-glass {
-            background: rgba(5, 10, 22, 0.72);
-            backdrop-filter: blur(20px);
+            background: rgba(4, 9, 20, 0.76);
+            backdrop-filter: blur(22px);
             border: 1px solid rgba(56, 189, 248, 0.28);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(56, 189, 248, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.85), inset 0 0 24px rgba(56, 189, 248, 0.08);
         }
         .planet-pill {
             background: rgba(15, 23, 42, 0.65);
@@ -43,19 +44,19 @@
     <!-- MÀN HÌNH KHỞI ĐỘNG -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-[#02040a] flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative w-28 h-28 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full border border-amber-400/40 animate-ping"></div>
-            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-600 via-orange-400 to-yellow-200 shadow-[0_0_60px_rgba(251,191,36,0.8)]"></div>
+            <div class="absolute inset-0 rounded-full border border-cyan-400/40 animate-ping"></div>
+            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 via-orange-400 to-cyan-200 shadow-[0_0_65px_rgba(251,191,36,0.85)]"></div>
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                SOLAR SYSTEM <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-cyan-400">IMAX 3D</span>
+                COSMIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-sky-300 to-indigo-400">IMAX 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Tích hợp Shader dung nham Mặt Trời, tán xạ khí quyển Rayleigh, vành đai băng đa tầng & hiệu ứng tỏa sáng điện ảnh Unreal Bloom.
+                Tích hợp Tia lóe sáng Anamorphic Lens Flare, Dải Ngân Hà bụi sao, Vành đai tiểu hành tinh & Lưới không-thời gian.
             </p>
         </div>
-        <button onclick="startExperience()" class="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 font-orbitron font-bold text-xs sm:text-sm rounded-full text-slate-950 shadow-[0_0_30px_rgba(245,158,11,0.6)] transition active:scale-95">
-            KHỞI CHẠY ĐỒ HỌA ĐIỆN ẢNH
+        <button onclick="startExperience()" class="px-8 py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-slate-950 shadow-[0_0_35px_rgba(56,189,248,0.6)] transition active:scale-95">
+            KHỞI CHẠY VŨ TRỤ ĐIỆN ẢNH
         </button>
     </div>
 
@@ -68,8 +69,8 @@
     <header class="absolute top-4 left-4 z-20 hud-glass p-4 rounded-2xl w-80 space-y-3">
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-[10px] font-bold tracking-widest text-slate-300">IMAX RENDER ENGINE</span>
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span class="text-[10px] font-bold tracking-widest text-slate-300">IMAX CINEMATIC ENGINE</span>
             </div>
             <div class="flex gap-1.5">
                 <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
@@ -82,21 +83,31 @@
         </div>
 
         <div id="hudBody" class="space-y-3 transition-all duration-300 overflow-hidden">
+            <!-- NÚT BẬT/TẮT HIỆU ỨNG VŨ TRỤ -->
+            <div class="grid grid-cols-2 gap-2 text-[10px]">
+                <button onclick="toggleSpacetimeGrid()" id="gridBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
+                    🕸️ Lưới Không Gian: OFF
+                </button>
+                <button onclick="toggleAsteroidBelt()" id="beltBtn" class="py-1.5 px-2 bg-cyan-950/80 border border-cyan-500/60 text-cyan-200 rounded-xl font-bold hover:border-cyan-300 transition">
+                    🪨 Tiểu Hành Tinh: ON
+                </button>
+            </div>
+
             <div class="grid grid-cols-2 gap-2 text-[10px]">
                 <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
                     <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
                     <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
                 </div>
                 <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="flex justify-between text-slate-400 mb-1"><span>✨ Ánh sáng</span><span id="bloomVal" class="text-amber-300">1.2</span></div>
-                    <input type="range" min="0" max="2.5" step="0.1" value="1.2" oninput="setBloom(this.value)" class="w-full accent-amber-400 h-1 cursor-pointer">
+                    <div class="flex justify-between text-slate-400 mb-1"><span>✨ Bloom</span><span id="bloomVal" class="text-amber-300">1.15</span></div>
+                    <input type="range" min="0" max="2.5" step="0.05" value="1.15" oninput="setBloom(this.value)" class="w-full accent-amber-400 h-1 cursor-pointer">
                 </div>
             </div>
 
             <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
                 <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                 <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                    Khối cầu plasma sôi sục với các dòng đối lưu nhiệt động lực học thời gian thực. Kéo chuột để xoay, lăn chuột để phóng to.
+                    Khối cầu plasma sôi sục với tia lóe sáng Anamorphic Lens Flare & Dải Ngân Hà vắt ngang bầu trời đêm.
                 </p>
                 <div class="grid grid-cols-2 gap-1 pt-1.5 text-[10px] text-slate-400">
                     <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -124,16 +135,16 @@
     <script>
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
-        let sunUniforms;
+        let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid;
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, prevMouse = { x: 0, y: 0 };
-        let camDist = 68, targetCamDist = 68;
-        let camAngleX = 0.35, camAngleY = 0.2;
+        let camDist = 72, targetCamDist = 72;
+        let camAngleX = 0.35, camAngleY = 0.25;
         let currentLookAt = new THREE.Vector3(0, 0, 0);
         let timeSpeed = 1.0;
 
         const planetDB = {
-            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục với dòng đối lưu nhiệt động lực học GLSL thời gian thực.", dist: "0 AU", temp: "5,500 °C", zoom: 68 },
+            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục với tia lóe sáng Anamorphic Lens Flare & Dải Ngân Hà bao quanh.", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
             mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 4.5 },
             venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 6 },
             earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Tán xạ khí quyển xanh ngọc, mây 3D tách lớp & ánh đèn đô thị ban đêm.", dist: "1.00 AU", temp: "15 °C", zoom: 6.5 },
@@ -144,7 +155,7 @@
             neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Thế giới băng giá xanh thẫm với những luồng gió siêu thanh.", dist: "30.05 AU", temp: "-200 °C", zoom: 10 }
         };
 
-        // SHADER DUNG NHAM MẶT TRỜI CHUYỂN ĐỘNG 3D (SIMPLEX NOISE)
+        // SHADER DUNG NHAM MẶT TRỜI CHUYỂN ĐỘNG 3D
         const sunVertexShader = `
             varying vec3 vNormal;
             varying vec3 vPosition;
@@ -195,12 +206,11 @@
 
                 vec3 darkSpot = vec3(0.55, 0.08, 0.01);
                 vec3 midOrange = vec3(1.0, 0.38, 0.02);
-                vec3 hotYellow = vec3(1.5, 1.25, 0.65);
+                vec3 hotYellow = vec3(1.45, 1.2, 0.6);
 
                 vec3 col = mix(darkSpot, midOrange, smoothstep(0.1, 0.55, plasma));
                 col = mix(col, hotYellow, smoothstep(0.5, 0.9, plasma));
 
-                // Hiệu ứng viền sáng rực (Limb brightening)
                 float fresnel = pow(1.0 - max(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0), 2.5);
                 col += vec3(1.2, 0.5, 0.1) * fresnel * 0.8;
 
@@ -208,7 +218,7 @@
             }
         `;
 
-        // SHADER TÁN XẠ KHÍ QUYỂN HÀNH TINH (ATMOSPHERIC FRESNEL GLOW)
+        // SHADER TÁN XẠ KHÍ QUYỂN HÀNH TINH
         function createAtmosphereMaterial(colorHex, intensity = 1.1, power = 3.5) {
             return new THREE.ShaderMaterial({
                 uniforms: {
@@ -240,7 +250,39 @@
             });
         }
 
-        // TẠO TEXTURE CHI TIẾT CAO + BUMP MAP TẠO ĐỘ LỒI LÕM 3D
+        // TẠO TEXTURE ANAMORPHIC LENS FLARE (VỆT SÁNG NGANG + ĐỐM QUANG HỌC)
+        function createFlareTextures() {
+            // 1. Vệt sáng ngang Anamorphic (Xanh ngọc + Vàng ấm)
+            const streakCanvas = document.createElement('canvas');
+            streakCanvas.width = 512; streakCanvas.height = 64;
+            const sCtx = streakCanvas.getContext('2d');
+            const sGrad = sCtx.createLinearGradient(0, 32, 512, 32);
+            sGrad.addColorStop(0.0, 'rgba(56, 189, 248, 0)');
+            sGrad.addColorStop(0.35, 'rgba(56, 189, 248, 0.45)');
+            sGrad.addColorStop(0.5, 'rgba(255, 251, 235, 0.95)');
+            sGrad.addColorStop(0.65, 'rgba(56, 189, 248, 0.45)');
+            sGrad.addColorStop(1.0, 'rgba(56, 189, 248, 0)');
+            sCtx.fillStyle = sGrad;
+            sCtx.fillRect(0, 26, 512, 12);
+
+            // 2. Đốm sáng lục giác / tròn quang học
+            const orbCanvas = document.createElement('canvas');
+            orbCanvas.width = 128; orbCanvas.height = 128;
+            const oCtx = orbCanvas.getContext('2d');
+            const oGrad = oCtx.createRadialGradient(64, 64, 4, 64, 64, 60);
+            oGrad.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+            oGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.35)');
+            oGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            oCtx.fillStyle = oGrad;
+            oCtx.fillRect(0, 0, 128, 128);
+
+            return {
+                streak: new THREE.CanvasTexture(streakCanvas),
+                orb: new THREE.CanvasTexture(orbCanvas)
+            };
+        }
+
+        // TẠO TEXTURE CHI TIẾT CAO + BUMP MAP + NIGHT LIGHTS
         function generatePlanetMaps(type) {
             const w = 2048, h = 1024;
             const diffCanvas = document.createElement('canvas');
@@ -273,22 +315,26 @@
                     ctx.fill();
                 }
             } else if (type === 'earth') {
-                // Đại dương sâu thẳm đa sắc
                 const seaGrad = ctx.createLinearGradient(0, 0, 0, h);
-                seaGrad.addColorStop(0, '#e0f2fe'); // Băng cực Bắc
+                seaGrad.addColorStop(0, '#e0f2fe');
                 seaGrad.addColorStop(0.12, '#0369a1');
                 seaGrad.addColorStop(0.5, '#0284c7');
                 seaGrad.addColorStop(0.88, '#0369a1');
-                seaGrad.addColorStop(1, '#e0f2fe'); // Băng cực Nam
+                seaGrad.addColorStop(1, '#e0f2fe');
                 ctx.fillStyle = seaGrad; ctx.fillRect(0, 0, w, h);
 
-                // Lục địa + Dãy núi nổi khối (Bump)
                 for (let i = 0; i < 65; i++) {
                     const cx = Math.random() * w, cy = 150 + Math.random() * (h - 300);
                     const rx = Math.random() * 190 + 50, ry = Math.random() * 110 + 30;
                     const rot = Math.random() * Math.PI;
-                    ctx.fillStyle = i % 3 === 0 ? '#a16207' : '#15803d'; // Rừng xanh & sa mạc
+                    ctx.fillStyle = i % 3 === 0 ? '#a16207' : '#15803d';
                     ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, rot, 0, Math.PI * 2); ctx.fill();
+
+                    // Cụm ánh đèn thành phố dọc bờ biển lục địa
+                    ctx.fillStyle = '#fef08a';
+                    for (let k = 0; k < 14; k++) {
+                        ctx.fillRect(cx + (Math.random() - 0.5) * rx, cy + (Math.random() - 0.5) * ry, 2.5, 2.5);
+                    }
 
                     bCtx.fillStyle = 'rgba(240, 240, 240, 0.75)';
                     bCtx.beginPath(); bCtx.ellipse(cx, cy, rx * 0.85, ry * 0.85, rot, 0, Math.PI * 2); bCtx.fill();
@@ -310,7 +356,6 @@
                     bCtx.fillStyle = i % 2 === 0 ? 'rgba(40,40,40,0.5)' : 'rgba(210,210,210,0.5)';
                     bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); bCtx.fill();
                 }
-                // Chỏm băng 2 cực
                 ctx.fillStyle = '#f8fafc';
                 ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
             } else if (type === 'jupiter') {
@@ -320,7 +365,6 @@
                     const bandH = Math.random() * 28 + 8;
                     ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
                     ctx.fillRect(0, y, w, bandH);
-                    // Sóng nhiễu loạn biên giới các dải khí
                     for (let x = 0; x < w; x += 24) {
                         ctx.beginPath();
                         ctx.arc(x, y, Math.random() * 12 + 4, 0, Math.PI * 2);
@@ -328,7 +372,6 @@
                     }
                     y += bandH;
                 }
-                // Cơn bão Vết Đỏ Lớn (Great Red Spot)
                 const grsGrad = ctx.createRadialGradient(1350, 640, 10, 1350, 640, 125);
                 grsGrad.addColorStop(0, '#7f1d1d'); grsGrad.addColorStop(0.6, '#dc2626'); grsGrad.addColorStop(1, 'rgba(217,119,6,0)');
                 ctx.fillStyle = grsGrad;
@@ -360,7 +403,6 @@
             };
         }
 
-        // TEXTURE VÀNH ĐAI SAO THỔ ĐA TẦNG CÓ KHE HỞ CASSINI
         function createSaturnRingTexture() {
             const canvas = document.createElement('canvas');
             canvas.width = 1024; canvas.height = 64;
@@ -370,7 +412,7 @@
             grad.addColorStop(0.15, 'rgba(180, 150, 90, 0.35)');
             grad.addColorStop(0.35, 'rgba(254, 243, 199, 0.92)');
             grad.addColorStop(0.58, 'rgba(234, 179, 8, 0.85)');
-            grad.addColorStop(0.63, 'rgba(0, 0, 0, 0.05)'); // Khe hở Cassini
+            grad.addColorStop(0.63, 'rgba(0, 0, 0, 0.05)');
             grad.addColorStop(0.68, 'rgba(253, 224, 71, 0.8)');
             grad.addColorStop(0.92, 'rgba(202, 138, 4, 0.45)');
             grad.addColorStop(1.0, 'rgba(254, 240, 138, 0.0)');
@@ -379,47 +421,139 @@
             return new THREE.CanvasTexture(canvas);
         }
 
-        // TẠO NỀN VŨ TRỤ NGÀN SAO + TINH VÂN ĐA SẮC (NEBULA)
-        function createDeepSpaceBackdrop() {
-            // 1. Ngàn sao nhiều kích cỡ & nhiệt độ màu
-            const starCount = 9000;
-            const geo = new THREE.BufferGeometry();
-            const pos = new Float32Array(starCount * 3);
-            const cols = new Float32Array(starCount * 3);
-            const starPalette = [new THREE.Color(0xffffff), new THREE.Color(0xbae6fd), new THREE.Color(0xfef08a), new THREE.Color(0xfecdd3)];
+        // 1. DẢI NGÂN HÀ BỤI SAO VẮT NGANG BẦU TRỜI + TINH VÂN
+        function createMilkyWayBackdrop() {
+            milkyWayGroup = new THREE.Group();
+            milkyWayGroup.rotation.z = Math.PI / 5; // Nghiêng dải Ngân Hà chéo bầu trời cho nghệ thuật
 
-            for (let i = 0; i < starCount; i++) {
-                const r = 600 + Math.random() * 2400;
+            // Dải bụi sao đậm đặc của Ngân Hà
+            const bandCount = 24000;
+            const bandGeo = new THREE.BufferGeometry();
+            const bandPos = new Float32Array(bandCount * 3);
+            const bandCol = new Float32Array(bandCount * 3);
+
+            const milkyColors = [
+                new THREE.Color(0x38bdf8), // Xanh lam trẻ
+                new THREE.Color(0xa855f7), // Tím tinh vân
+                new THREE.Color(0xfde047), // Vàng lõi thiên hà
+                new THREE.Color(0xf472b6), // Hồng bụi khí
+                new THREE.Color(0xffffff)
+            ];
+
+            for (let i = 0; i < bandCount; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 1400 + Math.random() * 1200;
+                // Phân bố tập trung dọc theo mặt phẳng xích đạo Ngân Hà (Gauss spread)
+                const spread = (Math.random() - 0.5) * (Math.random() - 0.5) * 650;
+
+                bandPos[i * 3] = Math.cos(angle) * radius;
+                bandPos[i * 3 + 1] = spread;
+                bandPos[i * 3 + 2] = Math.sin(angle) * radius;
+
+                const c = milkyColors[Math.floor(Math.random() * milkyColors.length)];
+                const brightness = 0.4 + Math.random() * 0.6;
+                bandCol[i * 3] = c.r * brightness;
+                bandCol[i * 3 + 1] = c.g * brightness;
+                bandCol[i * 3 + 2] = c.b * brightness;
+            }
+            bandGeo.setAttribute('position', new THREE.BufferAttribute(bandPos, 3));
+            bandGeo.setAttribute('color', new THREE.BufferAttribute(bandCol, 3));
+            milkyWayGroup.add(new THREE.Points(bandGeo, new THREE.PointsMaterial({
+                size: 3.2,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.78,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            })));
+
+            // Sao nền toàn cầu
+            const bgCount = 6000;
+            const bgGeo = new THREE.BufferGeometry();
+            const bgPos = new Float32Array(bgCount * 3);
+            for (let i = 0; i < bgCount; i++) {
+                const r = 1200 + Math.random() * 1800;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos(2 * Math.random() - 1);
-                pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-                pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-                pos[i * 3 + 2] = r * Math.cos(phi);
-
-                const c = starPalette[i % starPalette.length];
-                cols[i * 3] = c.r; cols[i * 3 + 1] = c.g; cols[i * 3 + 2] = c.b;
+                bgPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                bgPos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                bgPos[i * 3 + 2] = r * Math.cos(phi);
             }
-            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-            geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
-            scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ size: 2.2, vertexColors: true, transparent: true, opacity: 0.9 })));
+            bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
+            milkyWayGroup.add(new THREE.Points(bgGeo, new THREE.PointsMaterial({ color: 0xe2e8f0, size: 2.0, transparent: true, opacity: 0.85 })));
 
-            // 2. Tinh vân Nebula mờ ảo
+            // Đám mây tinh vân phát sáng dọc dải Ngân Hà
             const nebCanvas = document.createElement('canvas');
             nebCanvas.width = 512; nebCanvas.height = 512;
             const nCtx = nebCanvas.getContext('2d');
             const nGrad = nCtx.createRadialGradient(256, 256, 10, 256, 256, 250);
-            nGrad.addColorStop(0, 'rgba(56, 189, 248, 0.16)');
-            nGrad.addColorStop(0.5, 'rgba(139, 92, 246, 0.08)');
+            nGrad.addColorStop(0, 'rgba(99, 102, 241, 0.22)');
+            nGrad.addColorStop(0.45, 'rgba(56, 189, 248, 0.12)');
             nGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
             nCtx.fillStyle = nGrad; nCtx.fillRect(0, 0, 512, 512);
             const nebTex = new THREE.CanvasTexture(nebCanvas);
 
-            for (let i = 0; i < 18; i++) {
-                const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: nebTex, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.55 }));
-                sprite.position.set((Math.random() - 0.5) * 1800, (Math.random() - 0.5) * 900, (Math.random() - 0.5) * 1800);
-                sprite.scale.set(900, 900, 1);
-                scene.add(sprite);
+            for (let i = 0; i < 24; i++) {
+                const a = (i / 24) * Math.PI * 2;
+                const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: nebTex, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.55, depthWrite: false }));
+                sprite.position.set(Math.cos(a) * 1650, (Math.random() - 0.5) * 140, Math.sin(a) * 1650);
+                sprite.scale.set(950, 550, 1);
+                milkyWayGroup.add(sprite);
             }
+
+            scene.add(milkyWayGroup);
+        }
+
+        // 2. VÀNH ĐAI TIỂU HÀNH TINH GIỮA SAO HỎA VÀ SAO MỘC
+        function createAsteroidBelt() {
+            const count = 1800;
+            const geo = new THREE.DodecahedronGeometry(0.11, 0);
+            const mat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.85, metalness: 0.2 });
+            asteroidBelt = new THREE.InstancedMesh(geo, mat, count);
+
+            const dummy = new THREE.Object3D();
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 30.2 + Math.random() * 3.6; // Nằm giữa Mars (26) và Jupiter (38)
+                const y = (Math.random() - 0.5) * 1.1;
+
+                dummy.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+                dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+                const scale = 0.4 + Math.random() * 1.4;
+                dummy.scale.set(scale, scale * 0.7, scale);
+                dummy.updateMatrix();
+                asteroidBelt.setMatrixAt(i, dummy.matrix);
+            }
+            scene.add(asteroidBelt);
+        }
+
+        // 3. LƯỚI KHÔNG-THỜI GIAN BỊ BẺ CONG BỞI TRỌNG LỰC (SPACETIME CURVATURE GRID)
+        function createSpacetimeGrid() {
+            const size = 160;
+            const divisions = 48;
+            const geo = new THREE.PlaneGeometry(size, size, divisions, divisions);
+            geo.rotateX(-Math.PI / 2);
+
+            const pos = geo.attributes.position;
+            for (let i = 0; i < pos.count; i++) {
+                const x = pos.getX(i);
+                const z = pos.getZ(i);
+                const dist = Math.sqrt(x * x + z * z);
+                // Hố trũng hấp dẫn tại tâm Mặt Trời
+                const dip = -18.0 / (Math.sqrt(dist * 0.35 + 1.2));
+                pos.setY(i, dip - 3.5);
+            }
+            geo.computeVertexNormals();
+
+            const mat = new THREE.MeshBasicMaterial({
+                color: 0x0ea5e9,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.14
+            });
+            spacetimeGrid = new THREE.Mesh(geo, mat);
+            spacetimeGrid.visible = false;
+            scene.add(spacetimeGrid);
         }
 
         function init3D() {
@@ -435,19 +569,30 @@
             renderer.toneMappingExposure = 1.15;
             container.appendChild(renderer.domElement);
 
-            // CẤU HÌNH UNREAL BLOOM POST-PROCESSING (TỎA SÁNG ĐIỆN ẢNH)
+            // UNREAL BLOOM POST-PROCESSING
             const renderScene = new THREE.RenderPass(scene, camera);
-            bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.65, 0.35);
+            bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.15, 0.65, 0.35);
             composer = new THREE.EffectComposer(renderer);
             composer.addPass(renderScene);
             composer.addPass(bloomPass);
 
-            // ÁNH SÁNG MẶT TRỜI VẬT LÝ (ĐỔ BÓNG ĐÊM SÂU THẲM)
+            // NGUỒN SÁNG MẶT TRỜI + ANAMORPHIC LENS FLARE
             const sunLight = new THREE.PointLight(0xfff5e4, 3.2, 2000, 0.25);
             scene.add(sunLight);
-            scene.add(new THREE.AmbientLight(0x0f172a, 0.35)); // Bóng tối mặt khuất sâu có chiều sâu
+            scene.add(new THREE.AmbientLight(0x0f172a, 0.38));
 
-            createDeepSpaceBackdrop();
+            const flareTex = createFlareTextures();
+            const lensflare = new THREE.Lensflare();
+            lensflare.addElement(new THREE.LensflareElement(flareTex.streak, 680, 0, new THREE.Color(0x7dd3fc)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 140, 0, new THREE.Color(0xfef08a)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 60, 0.35, new THREE.Color(0x38bdf8)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 90, 0.6, new THREE.Color(0x818cf8)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 45, 0.85, new THREE.Color(0xf472b6)));
+            sunLight.add(lensflare);
+
+            createMilkyWayBackdrop();
+            createAsteroidBelt();
+            createSpacetimeGrid();
 
             // MẶT TRỜI GLSL SHADER
             sunUniforms = { uTime: { value: 0 } };
@@ -457,7 +602,6 @@
                 fragmentShader: sunFragmentShader
             });
             const sun = new THREE.Mesh(new THREE.SphereGeometry(5.2, 64, 64), sunMat);
-            // Hào quang nhật hoa bao quanh Mặt Trời
             const corona = new THREE.Mesh(new THREE.SphereGeometry(6.8, 64, 64), createAtmosphereMaterial(0xff8c00, 1.35, 3.2));
             sun.add(corona);
             scene.add(sun);
@@ -476,7 +620,6 @@
             ];
 
             planetConfigs.forEach(cfg => {
-                // Đường quỹ đạo thanh mảnh sang trọng
                 const orbitGeo = new THREE.RingGeometry(cfg.dist - 0.04, cfg.dist + 0.04, 180);
                 const orbitMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.14 });
                 const orbitRing = new THREE.Mesh(orbitGeo, orbitMat);
@@ -496,13 +639,11 @@
                 mesh.rotation.z = cfg.tilt;
                 scene.add(mesh);
 
-                // Tán xạ khí quyển Rayleigh
                 if (cfg.atmos) {
                     const atmosMesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.12, 48, 48), createAtmosphereMaterial(cfg.atmos, 1.15, 3.8));
                     mesh.add(atmosMesh);
                 }
 
-                // Lớp mây 3D Trái Đất
                 if (cfg.clouds) {
                     const cloudMaps = generatePlanetMaps('clouds');
                     const cloudMat = new THREE.MeshStandardMaterial({
@@ -516,7 +657,6 @@
                     mesh.userData.cloudMesh = cloudMesh;
                 }
 
-                // Mặt Trăng quay quanh Trái Đất
                 if (cfg.moon) {
                     const moonPivot = new THREE.Group();
                     const moonMesh = new THREE.Mesh(
@@ -529,10 +669,8 @@
                     mesh.userData.moonPivot = moonPivot;
                 }
 
-                // Vành đai Sao Thổ UV Radial chuẩn xác
                 if (cfg.rings) {
                     const rGeo = new THREE.RingGeometry(cfg.size * 1.35, cfg.size * 2.45, 128);
-                    // Chỉnh lại UV để texture vành đai trải đều từ trong ra ngoài
                     const posAttr = rGeo.attributes.position;
                     const uvAttr = rGeo.attributes.uv;
                     const v3 = new THREE.Vector3();
@@ -556,7 +694,7 @@
                 planets[cfg.id] = { mesh, distance: cfg.dist, speed: cfg.speed, angle: Math.random() * Math.PI * 2 };
             });
 
-            // ĐIỀU KHIỂN CAMERA MƯỢT MÀ
+            // ĐIỀU KHIỂN CAMERA
             window.addEventListener('mousedown', e => { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; });
             window.addEventListener('mousemove', e => {
                 if (!isDragging) return;
@@ -566,7 +704,7 @@
             });
             window.addEventListener('mouseup', () => isDragging = false);
             window.addEventListener('wheel', e => {
-                targetCamDist = Math.max(2.5, Math.min(400, targetCamDist + e.deltaY * 0.06));
+                targetCamDist = Math.max(2.5, Math.min(450, targetCamDist + e.deltaY * 0.06));
             });
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -585,6 +723,26 @@
             if (bg) { bg.volume = 0.7; bg.play().catch(() => {}); }
         }
 
+        function toggleSpacetimeGrid() {
+            if (!spacetimeGrid) return;
+            spacetimeGrid.visible = !spacetimeGrid.visible;
+            const btn = document.getElementById('gridBtn');
+            btn.innerText = spacetimeGrid.visible ? '🕸️ Lưới Không Gian: ON' : '🕸️ Lưới Không Gian: OFF';
+            btn.className = spacetimeGrid.visible
+                ? 'py-1.5 px-2 bg-cyan-950/80 border border-cyan-500/60 text-cyan-200 rounded-xl font-bold transition'
+                : 'py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition';
+        }
+
+        function toggleAsteroidBelt() {
+            if (!asteroidBelt) return;
+            asteroidBelt.visible = !asteroidBelt.visible;
+            const btn = document.getElementById('beltBtn');
+            btn.innerText = asteroidBelt.visible ? '🪨 Tiểu Hành Tinh: ON' : '🪨 Tiểu Hành Tinh: OFF';
+            btn.className = asteroidBelt.visible
+                ? 'py-1.5 px-2 bg-cyan-950/80 border border-cyan-500/60 text-cyan-200 rounded-xl font-bold transition'
+                : 'py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition';
+        }
+
         function setSpeed(v) {
             timeSpeed = parseFloat(v);
             document.getElementById('speedVal').innerText = timeSpeed.toFixed(1) + 'x';
@@ -592,13 +750,13 @@
 
         function setBloom(v) {
             if (bloomPass) bloomPass.strength = parseFloat(v);
-            document.getElementById('bloomVal').innerText = parseFloat(v).toFixed(1);
+            document.getElementById('bloomVal').innerText = parseFloat(v).toFixed(2);
         }
 
         function toggleHud() {
             isHudVisible = !isHudVisible;
             const body = document.getElementById('hudBody');
-            body.style.maxHeight = isHudVisible ? '260px' : '0px';
+            body.style.maxHeight = isHudVisible ? '320px' : '0px';
             body.style.opacity = isHudVisible ? '1' : '0';
             document.getElementById('hudToggleBtn').innerText = isHudVisible ? '👁️ Ẩn' : '👁️ Hiện';
         }
@@ -630,6 +788,8 @@
             requestAnimationFrame(animate);
 
             if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
+            if (milkyWayGroup) milkyWayGroup.rotation.y += 0.00012 * timeSpeed;
+            if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
 
             Object.keys(planets).forEach(id => {
                 const p = planets[id];
@@ -644,7 +804,6 @@
                 }
             });
 
-            // Camera theo tiêu điểm mượt
             const targetPos = new THREE.Vector3();
             if (planets[focusedObject]) planets[focusedObject].mesh.getWorldPosition(targetPos);
             currentLookAt.lerp(targetPos, 0.08);
