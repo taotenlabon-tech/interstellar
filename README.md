@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - Ultimate Cosmic Cinematic Edition v3</title>
+    <title>NASA Eyes 3D - Epic Space Cinematic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -48,20 +48,20 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-5xl text-white tracking-widest">
-                ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
+                EPIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">SPACE CINEMATIC</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Trải nghiệm góc nhìn Free-Fly Cinematic, quỹ đạo phát sáng Neon & nhạc Drift Phonk cực căng.
+                Đã thay đổi nhạc nền Ambient Space hoành tráng, tĩnh lặng và hùng vĩ đúng chất phim Interstellar.
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_50px_rgba(56,189,248,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG TRẢI NGHIỆM ĐỈNH CAO
+            🌌 KHÁM PHÁ VŨ TRỤ HÙNG VĨ
         </button>
     </div>
 
-    <!-- AUDIO GỐC STRAY.WAV -->
+    <!-- NHẠC NỀN AMBIENT SPACE HOÀNH TRÁNG -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_febc508520.mp3?filename=drift-phonk-126548.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=space-chillout-11197.mp3" type="audio/mpeg">
     </audio>
 
     <!-- HUD ĐIỀU KHIỂN -->
@@ -69,11 +69,11 @@
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span class="text-[10px] font-bold tracking-widest text-slate-300">GOD-TIER RENDER ENGINE</span>
+                <span class="text-[10px] font-bold tracking-widest text-slate-300">EPIC SPACE AUDIO ENGINE</span>
             </div>
             <div class="flex gap-1.5">
-                <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
-                    🔊 Phonk: ON
+                <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-cyan-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
+                    🪐 Nhạc: ON
                 </button>
                 <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
                     👁️ Ẩn
@@ -93,8 +93,8 @@
 
             <div class="grid grid-cols-2 gap-2 text-[10px]">
                 <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-rose-400 font-bold">100%</span></div>
-                    <input type="range" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
+                    <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-cyan-400 font-bold">100%</span></div>
+                    <input type="range" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
                 </div>
                 <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
                     <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
@@ -105,7 +105,7 @@
             <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
                 <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                 <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                    Bật chế độ Free-Fly để camera tự do bay lượn điện ảnh qua hệ mặt trời.
+                    Tận hưởng không gian tĩnh lặng, bao la cùng âm thanh vũ trụ hoành tráng.
                 </p>
                 <div class="grid grid-cols-2 gap-1 pt-1.5 text-[10px] text-slate-400">
                     <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -143,7 +143,7 @@
         let isFreeFly = false, freeFlyAngle = 0;
 
         const planetDB = {
-            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục với nhạc Stray.wav Phonk cực căng.", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
+            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục giữa không gian bao la.", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
             mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 4.5 },
             venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 6 },
             earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Tán xạ khí quyển xanh ngọc, mây 3D tách lớp & ánh đèn đô thị ban đêm.", dist: "1.00 AU", temp: "15 °C", zoom: 6.5 },
@@ -346,7 +346,7 @@
                     ctx.fillStyle = i % 2 === 0 ? 'rgba(67, 20, 7, 0.4)' : 'rgba(234, 88, 12, 0.35)';
                     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                     bCtx.fillStyle = i % 2 === 0 ? 'rgba(40,40,40,0.5)' : 'rgba(210,210,210,0.5)';
-                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); bCtx.fill();
+                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                 }
                 ctx.fillStyle = '#f8fafc';
                 ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
@@ -369,7 +369,7 @@
                 ctx.fillStyle = grsGrad;
                 ctx.beginPath(); ctx.ellipse(1350, 640, 130, 80, 0, 0, Math.PI * 2); ctx.fill();
             } else if (type === 'saturn') {
-                const palette = ['#713f12', '#a16207', '#eab308', '#fef08a', '#ca8a04', '#fde68a'];
+                const palette = ['#713f12', '#a16207', '#eab308', '#fef08a', '#ca8a04', '#fde047'];
                 let y = 0;
                 while (y < h) {
                     const bandH = Math.random() * 22 + 6;
@@ -726,13 +726,13 @@
         function toggleSpaceAudio() {
             const bg = document.getElementById('bgMusic');
             if (!bg) return;
-            if (bg.paused) { bg.play(); document.getElementById('audioBtn').innerText = '🔊 Phonk: ON'; }
+            if (bg.paused) { bg.play(); document.getElementById('audioBtn').innerText = '🪐 Nhạc: ON'; }
             else { bg.pause(); document.getElementById('audioBtn').innerText = '🔇 Muted'; }
         }
 
         function selectPlanet(id) {
             focusedObject = id;
-            isFreeFly = false; // Tắt free-fly khi chọn hành tinh cụ thể
+            isFreeFly = false;
             document.getElementById('flyBtn').innerText = '🛸 Free-Fly: OFF';
             document.getElementById('flyBtn').className = 'py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition';
 
@@ -758,7 +758,6 @@
             if (cosmicDust) cosmicDust.rotation.y += 0.0003 * timeSpeed;
             if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
 
-            // Xử lý chế độ Free-Fly camera bay điện ảnh lượn lờ
             if (isFreeFly) {
                 freeFlyAngle += 0.003 * timeSpeed;
                 currentLookAt.set(0, 0, 0);
