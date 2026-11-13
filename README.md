@@ -40,7 +40,7 @@
 </head>
 <body class="w-screen h-screen select-none">
 
-    <!-- MÀN HÌNH KHỞI ĐỘNG & CHỌN NHẠC -->
+    <!-- MÀN HÌNH KHỞI ĐỘNG & TẢI NHẠC -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-[#010206] flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative w-32 h-32 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full border-2 border-cyan-400/50 animate-ping"></div>
@@ -51,7 +51,7 @@
                 ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Đồ họa IMAX 3D, bụi vũ trụ, quỹ đạo neon & nhạc Stray.wav. Bấm chọn file nhạc từ máy tính bên dưới để bắt đầu!
+                Đồ họa IMAX 3D, Free-Fly Cinematic & Trình phát nhạc Stray.wav tích hợp sẵn.
             </p>
         </div>
         <div class="flex flex-col sm:flex-row gap-3 items-center">
@@ -65,29 +65,39 @@
         </div>
     </div>
 
-    <!-- AUDIO ELEMENT -->
+    <!-- AUDIO ELEMENT MẶC ĐỊNH -->
     <audio id="bgMusic" loop preload="auto">
         <source src="Stray.wav" type="audio/wav">
     </audio>
 
-    <!-- HUD ĐIỀU KHIỂN -->
+    <!-- HUD ĐIỀU KHIỂN & KHU VỰC NHẠC -->
     <header class="absolute top-4 left-4 z-20 hud-glass p-4 rounded-2xl w-80 space-y-3">
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                 <span class="text-[10px] font-bold tracking-widest text-slate-300">GOD-TIER RENDER ENGINE</span>
             </div>
-            <div class="flex gap-1.5">
-                <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
-                    🔊 Stray.wav: ON
-                </button>
-                <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
-                    👁️ Ẩn
-                </button>
-            </div>
+            <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
+                👁️ Ẩn
+            </button>
         </div>
 
         <div id="hudBody" class="space-y-3 transition-all duration-300 overflow-hidden">
+            <!-- BẢNG ĐIỀU KHIỂN NHẠC (MUSIC PANEL) -->
+            <div class="bg-slate-950/80 p-2.5 rounded-xl border border-rose-500/40 space-y-2 shadow-[0_0_15px_rgba(244,63,94,0.15)]">
+                <div class="flex justify-between items-center text-[10px]">
+                    <span class="text-rose-300 font-bold flex items-center gap-1.5">🎵 MUSIC: <span id="currentSongName" class="text-white">Stray.wav</span></span>
+                    <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-rose-950/80 border border-rose-500/60 text-rose-200 rounded-lg font-bold hover:bg-rose-900 transition">
+                        ▶ Phát
+                    </button>
+                </div>
+                <div class="flex items-center gap-2 text-[10px] text-slate-400">
+                    <span>🔊 Vol:</span>
+                    <input type="range" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
+                    <span id="volVal" class="text-rose-400 font-bold w-7 text-right">100%</span>
+                </div>
+            </div>
+
             <div class="grid grid-cols-2 gap-2 text-[10px]">
                 <button onclick="toggleFreeFly()" id="flyBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
                     🛸 Free-Fly: OFF
@@ -97,15 +107,9 @@
                 </button>
             </div>
 
-            <div class="grid grid-cols-2 gap-2 text-[10px]">
-                <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-rose-400 font-bold">100%</span></div>
-                    <input type="range" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
-                </div>
-                <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
-                    <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
-                </div>
+            <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80 text-[10px]">
+                <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ thời gian</span><span id="speedVal" class="text-cyan-300 font-bold">1.0x</span></div>
+                <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
             </div>
 
             <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
@@ -352,7 +356,7 @@
                     ctx.fillStyle = i % 2 === 0 ? 'rgba(67, 20, 7, 0.4)' : 'rgba(234, 88, 12, 0.35)';
                     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                     bCtx.fillStyle = i % 2 === 0 ? 'rgba(40,40,40,0.5)' : 'rgba(210,210,210,0.5)';
-                    bCtx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                 }
                 ctx.fillStyle = '#f8fafc';
                 ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
@@ -687,7 +691,9 @@
             const bg = document.getElementById('bgMusic');
             if (bg) { 
                 bg.volume = 1.0; 
-                bg.play().catch(err => {
+                bg.play().then(() => {
+                    document.getElementById('audioBtn').innerText = '⏸ Dừng';
+                }).catch(err => {
                     console.log("Cần tương tác để phát nhạc:", err);
                 }); 
             }
@@ -700,6 +706,8 @@
                 const bg = document.getElementById('bgMusic');
                 bg.src = fileURL;
                 bg.play();
+                document.getElementById('currentSongName').innerText = file.name;
+                document.getElementById('audioBtn').innerText = '⏸ Dừng';
                 document.getElementById('startOverlay').style.display = 'none';
                 init3D();
             }
@@ -716,10 +724,10 @@
             if (!bg) return;
             if (bg.paused) { 
                 bg.play(); 
-                document.getElementById('audioBtn').innerText = '🔊 Stray.wav: ON'; 
+                document.getElementById('audioBtn').innerText = '⏸ Dừng'; 
             } else { 
                 bg.pause(); 
-                document.getElementById('audioBtn').innerText = '🔇 Muted'; 
+                document.getElementById('audioBtn').innerText = '▶ Phát'; 
             }
         }
 
