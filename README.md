@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - Ultimate Cosmic Cinematic Edition</title>
+    <title>NASA Eyes 3D - Ultimate Cosmic Cinematic Edition v2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -51,7 +51,7 @@
                 ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Đồ họa đỉnh cao, bụi không gian lơ lửng, quỹ đạo phát sáng Neon & nhạc Drift Phonk cực căng.
+                Click chuột bắn sao chổi, bật chế độ Auto-Tour điện ảnh & thưởng thức nhạc Drift Phonk cực căng.
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_50px_rgba(56,189,248,0.8)] transition active:scale-95">
@@ -83,11 +83,11 @@
 
         <div id="hudBody" class="space-y-3 transition-all duration-300 overflow-hidden">
             <div class="grid grid-cols-2 gap-2 text-[10px]">
-                <button onclick="toggleSpacetimeGrid()" id="gridBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
-                    🕸️ Lưới Không Gian: OFF
+                <button onclick="toggleAutoTour()" id="tourBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
+                    🎥 Auto-Tour: OFF
                 </button>
-                <button onclick="toggleAsteroidBelt()" id="beltBtn" class="py-1.5 px-2 bg-cyan-950/80 border border-cyan-500/60 text-cyan-200 rounded-xl font-bold hover:border-cyan-300 transition">
-                    🪨 Tiểu Hành Tinh: ON
+                <button onclick="toggleSpacetimeGrid()" id="gridBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
+                    🕸️ Lưới KG: OFF
                 </button>
             </div>
 
@@ -105,7 +105,7 @@
             <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
                 <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                 <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                    Khám phá toàn cảnh vũ trụ với hiệu ứng hạt bụi lơ lửng và âm thanh Drift Phonk cực đỉnh.
+                    Click chuột bất kỳ đâu để bắn sao chổi lửa. Bật Auto-Tour để camera tự động thám hiểm vũ trụ!
                 </p>
                 <div class="grid grid-cols-2 gap-1 pt-1.5 text-[10px] text-slate-400">
                     <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -134,12 +134,17 @@
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
         let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid, cosmicDust;
+        let activeComets = [];
+        let raycaster = new THREE.Raycaster();
+        let mouse = new THREE.Vector2();
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, prevMouse = { x: 0, y: 0 };
         let camDist = 72, targetCamDist = 72;
         let camAngleX = 0.35, camAngleY = 0.25;
         let currentLookAt = new THREE.Vector3(0, 0, 0);
         let timeSpeed = 1.0;
+        let isAutoTour = false, tourTimer = 0;
+        const planetKeys = ['sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'];
 
         const planetDB = {
             sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục với nhạc Stray.wav Phonk cực căng.", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
@@ -455,7 +460,6 @@
                 depthWrite: false
             })));
 
-            // BỤI VŨ TRỤ LƠ LỬNG (COSMIC DUST)
             const dustCount = 4000;
             const dustGeo = new THREE.BufferGeometry();
             const dustPos = new Float32Array(dustCount * 3);
@@ -520,6 +524,27 @@
             scene.add(spacetimeGrid);
         }
 
+        function spawnShootingComet(e) {
+            if (e.clientY < 280 && e.clientX < 380) return; // Tránh bấm nhầm HUD
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+
+            const cometGeo = new THREE.SphereGeometry(0.35, 16, 16);
+            const cometMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+            const comet = new THREE.Mesh(cometGeo, cometMat);
+
+            const spawnPos = new THREE.Vector3();
+            raycaster.ray.at(45, spawnPos);
+            comet.position.copy(spawnPos);
+            scene.add(comet);
+
+            activeComets.push({
+                mesh: comet,
+                dir: new THREE.Vector3((Math.random() - 0.5) * 1.5, -0.6, (Math.random() - 0.5) * 1.5).normalize()
+            });
+        }
+
         function init3D() {
             const container = document.getElementById('canvasContainer');
             scene = new THREE.Scene();
@@ -580,7 +605,6 @@
             ];
 
             planetConfigs.forEach(cfg => {
-                // QUỸ ĐẠO PHÁT SÁNG NEON MƯỢT MÀ
                 const orbitGeo = new THREE.RingGeometry(cfg.dist - 0.06, cfg.dist + 0.06, 220);
                 const orbitMat = new THREE.MeshBasicMaterial({ color: cfg.atmos || 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending });
                 const orbitRing = new THREE.Mesh(orbitGeo, orbitMat);
@@ -655,7 +679,11 @@
                 planets[cfg.id] = { mesh, distance: cfg.dist, speed: cfg.speed, angle: Math.random() * Math.PI * 2 };
             });
 
-            window.addEventListener('mousedown', e => { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; });
+            window.addEventListener('mousedown', e => {
+                isDragging = true;
+                prevMouse = { x: e.clientX, y: e.clientY };
+                spawnShootingComet(e);
+            });
             window.addEventListener('mousemove', e => {
                 if (!isDragging) return;
                 camAngleY -= (e.clientX - prevMouse.x) * 0.005;
@@ -692,22 +720,21 @@
             document.getElementById('volVal').innerText = Math.round(v * 100) + '%';
         }
 
-        function toggleSpacetimeGrid() {
-            if (!spacetimeGrid) return;
-            spacetimeGrid.visible = !spacetimeGrid.visible;
-            const btn = document.getElementById('gridBtn');
-            btn.innerText = spacetimeGrid.visible ? '🕸️ Lưới Không Gian: ON' : '🕸️ Lưới Không Gian: OFF';
-            btn.className = spacetimeGrid.visible
+        function toggleAutoTour() {
+            isAutoTour = !isAutoTour;
+            const btn = document.getElementById('tourBtn');
+            btn.innerText = isAutoTour ? '🎥 Auto-Tour: ON' : '🎥 Auto-Tour: OFF';
+            btn.className = isAutoTour
                 ? 'py-1.5 px-2 bg-cyan-950/80 border border-cyan-500/60 text-cyan-200 rounded-xl font-bold transition'
                 : 'py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition';
         }
 
-        function toggleAsteroidBelt() {
-            if (!asteroidBelt) return;
-            asteroidBelt.visible = !asteroidBelt.visible;
-            const btn = document.getElementById('beltBtn');
-            btn.innerText = asteroidBelt.visible ? '🪨 Tiểu Hành Tinh: ON' : '🪨 Tiểu Hành Tinh: OFF';
-            btn.className = asteroidBelt.visible
+        function toggleSpacetimeGrid() {
+            if (!spacetimeGrid) return;
+            spacetimeGrid.visible = !spacetimeGrid.visible;
+            const btn = document.getElementById('gridBtn');
+            btn.innerText = spacetimeGrid.visible ? '🕸️ Lưới KG: ON' : '🕸️ Lưới KG: OFF';
+            btn.className = spacetimeGrid.visible
                 ? 'py-1.5 px-2 bg-cyan-950/80 border border-cyan-500/60 text-cyan-200 rounded-xl font-bold transition'
                 : 'py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition';
         }
@@ -756,6 +783,26 @@
             if (cosmicDust) cosmicDust.rotation.y += 0.0003 * timeSpeed;
             if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
 
+            // Xử lý Auto-Tour đổi góc nhìn tự động
+            if (isAutoTour) {
+                tourTimer += 0.005 * timeSpeed;
+                if (tourTimer > 6.0) {
+                    tourTimer = 0;
+                    const nextIndex = (planetKeys.indexOf(focusedObject) + 1) % planetKeys.length;
+                    selectPlanet(planetKeys[nextIndex]);
+                }
+            }
+
+            // Xử lý sao chổi bay
+            for (let i = activeComets.length - 1; i >= 0; i--) {
+                const c = activeComets[i];
+                c.mesh.position.addScaledVector(c.dir, 1.5 * timeSpeed);
+                if (c.mesh.position.length() > 350) {
+                    scene.remove(c.mesh);
+                    activeComets.splice(i, 1);
+                }
+            }
+
             Object.keys(planets).forEach(id => {
                 const p = planets[id];
                 if (p.speed > 0) {
@@ -773,6 +820,10 @@
             if (planets[focusedObject]) planets[focusedObject].mesh.getWorldPosition(targetPos);
             currentLookAt.lerp(targetPos, 0.08);
             camDist += (targetCamDist - camDist) * 0.08;
+
+            if (isAutoTour) {
+                camAngleY += 0.002 * timeSpeed; // Camera tự xoay tròn khi tour
+            }
 
             camera.position.x = currentLookAt.x + camDist * Math.sin(camAngleY) * Math.cos(camAngleX);
             camera.position.y = currentLookAt.y + camDist * Math.sin(camAngleX);
