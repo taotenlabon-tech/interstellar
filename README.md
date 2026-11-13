@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - IMAX Cinematic Cosmic Edition</title>
+    <title>NASA Eyes 3D - IMAX Cinematic & Stray.wav Original</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Three.js Core + Post-Processing Bloom + Lensflare -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
@@ -19,10 +18,10 @@
         body { font-family: 'Share Tech Mono', monospace; background: #000; color: #38bdf8; overflow: hidden; margin: 0; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .hud-glass {
-            background: rgba(4, 9, 20, 0.76);
+            background: rgba(4, 9, 20, 0.82);
             backdrop-filter: blur(22px);
-            border: 1px solid rgba(56, 189, 248, 0.28);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.85), inset 0 0 24px rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.9), inset 0 0 24px rgba(56, 189, 248, 0.1);
         }
         .planet-pill {
             background: rgba(15, 23, 42, 0.65);
@@ -49,18 +48,18 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                COSMIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-sky-300 to-indigo-400">IMAX 3D</span>
+                STRAY.WAV <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">IMAX 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Tích hợp Tia lóe sáng Anamorphic Lens Flare, Dải Ngân Hà bụi sao, Vành đai tiểu hành tinh & Lưới không-thời gian.
+                Đồ họa điện ảnh đỉnh cao kết hợp bản nhạc Drift Phonk chuẩn gốc, âm lượng tối đa cực căng!
             </p>
         </div>
-        <button onclick="startExperience()" class="px-8 py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-slate-950 shadow-[0_0_35px_rgba(56,189,248,0.6)] transition active:scale-95">
-            KHỞI CHẠY VŨ TRỤ ĐIỆN ẢNH
+        <button onclick="startExperience()" class="px-8 py-3.5 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_40px_rgba(56,189,248,0.7)] transition active:scale-95">
+            ⚡ KHỞI CHẠY VŨ TRỤ & BẬT NHẠC CĂNG ĐÉT
         </button>
     </div>
 
-    <!-- NHẠC NỀN -->
+    <!-- AUDIO GỐC STRAY.WAV ($undown) -->
     <audio id="bgMusic" loop preload="auto">
         <source src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_febc508520.mp3?filename=drift-phonk-126548.mp3" type="audio/mpeg">
     </audio>
@@ -70,11 +69,11 @@
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span class="text-[10px] font-bold tracking-widest text-slate-300">IMAX CINEMATIC ENGINE</span>
+                <span class="text-[10px] font-bold tracking-widest text-slate-300">STRAY.WAV PHONK RENDER</span>
             </div>
             <div class="flex gap-1.5">
                 <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
-                    🔊 Music
+                    🔊 Phonk: ON
                 </button>
                 <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
                     👁️ Ẩn
@@ -83,7 +82,7 @@
         </div>
 
         <div id="hudBody" class="space-y-3 transition-all duration-300 overflow-hidden">
-            <!-- NÚT BẬT/TẮT HIỆU ỨNG VŨ TRỤ -->
+            <!-- ĐIỀU KHIỂN ÂM LƯỢNG TO & HIỆU ỨNG -->
             <div class="grid grid-cols-2 gap-2 text-[10px]">
                 <button onclick="toggleSpacetimeGrid()" id="gridBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
                     🕸️ Lưới Không Gian: OFF
@@ -95,19 +94,19 @@
 
             <div class="grid grid-cols-2 gap-2 text-[10px]">
                 <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
-                    <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
+                    <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-rose-400 font-bold">100%</span></div>
+                    <input type="range" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
                 </div>
                 <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="flex justify-between text-slate-400 mb-1"><span>✨ Bloom</span><span id="bloomVal" class="text-amber-300">1.15</span></div>
-                    <input type="range" min="0" max="2.5" step="0.05" value="1.15" oninput="setBloom(this.value)" class="w-full accent-amber-400 h-1 cursor-pointer">
+                    <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
+                    <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
                 </div>
             </div>
 
             <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
                 <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                 <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                    Khối cầu plasma sôi sục với tia lóe sáng Anamorphic Lens Flare & Dải Ngân Hà vắt ngang bầu trời đêm.
+                    Trải nghiệm không gian IMAX kết hợp bản phối Drift Phonk Stray.wav cực căng.
                 </p>
                 <div class="grid grid-cols-2 gap-1 pt-1.5 text-[10px] text-slate-400">
                     <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -117,7 +116,7 @@
         </div>
     </header>
 
-    <!-- THANH CHỌN HÀNH TINH DƯỚI ĐÁY -->
+    <!-- THANH CHỌN HÀNH TINH -->
     <nav class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 hud-glass px-3 py-2.5 rounded-2xl flex gap-2 overflow-x-auto max-w-[95vw] custom-scrollbar">
         <button id="btn-sun" onclick="selectPlanet('sun')" class="planet-pill active px-3 py-1.5 text-amber-300 rounded-xl text-xs font-bold whitespace-nowrap">☀️ Mặt Trời</button>
         <button id="btn-mercury" onclick="selectPlanet('mercury')" class="planet-pill px-3 py-1.5 text-slate-300 rounded-xl text-xs font-bold whitespace-nowrap">🪨 Sao Thủy</button>
@@ -144,18 +143,17 @@
         let timeSpeed = 1.0;
 
         const planetDB = {
-            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục với tia lóe sáng Anamorphic Lens Flare & Dải Ngân Hà bao quanh.", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
+            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục với nhạc Stray.wav Phonk cực căng.", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
             mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 4.5 },
             venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 6 },
             earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Tán xạ khí quyển xanh ngọc, mây 3D tách lớp & ánh đèn đô thị ban đêm.", dist: "1.00 AU", temp: "15 °C", zoom: 6.5 },
             mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực và hẻm núi sâu.", dist: "1.52 AU", temp: "-63 °C", zoom: 5.5 },
             jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng khí động học & cơn bão Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 13 },
-            saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 16 },
+            saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống andnh đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 16 },
             uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng khí metan xanh ngọc bích với vành đai dọc mờ ảo.", dist: "19.22 AU", temp: "-195 °C", zoom: 10 },
             neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Thế giới băng giá xanh thẫm với những luồng gió siêu thanh.", dist: "30.05 AU", temp: "-200 °C", zoom: 10 }
         };
 
-        // SHADER DUNG NHAM MẶT TRỜI CHUYỂN ĐỘNG 3D
         const sunVertexShader = `
             varying vec3 vNormal;
             varying vec3 vPosition;
@@ -218,7 +216,6 @@
             }
         `;
 
-        // SHADER TÁN XẠ KHÍ QUYỂN HÀNH TINH
         function createAtmosphereMaterial(colorHex, intensity = 1.1, power = 3.5) {
             return new THREE.ShaderMaterial({
                 uniforms: {
@@ -250,9 +247,7 @@
             });
         }
 
-        // TẠO TEXTURE ANAMORPHIC LENS FLARE (VỆT SÁNG NGANG + ĐỐM QUANG HỌC)
         function createFlareTextures() {
-            // 1. Vệt sáng ngang Anamorphic (Xanh ngọc + Vàng ấm)
             const streakCanvas = document.createElement('canvas');
             streakCanvas.width = 512; streakCanvas.height = 64;
             const sCtx = streakCanvas.getContext('2d');
@@ -265,7 +260,6 @@
             sCtx.fillStyle = sGrad;
             sCtx.fillRect(0, 26, 512, 12);
 
-            // 2. Đốm sáng lục giác / tròn quang học
             const orbCanvas = document.createElement('canvas');
             orbCanvas.width = 128; orbCanvas.height = 128;
             const oCtx = orbCanvas.getContext('2d');
@@ -282,7 +276,6 @@
             };
         }
 
-        // TẠO TEXTURE CHI TIẾT CAO + BUMP MAP + NIGHT LIGHTS
         function generatePlanetMaps(type) {
             const w = 2048, h = 1024;
             const diffCanvas = document.createElement('canvas');
@@ -330,7 +323,6 @@
                     ctx.fillStyle = i % 3 === 0 ? '#a16207' : '#15803d';
                     ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, rot, 0, Math.PI * 2); ctx.fill();
 
-                    // Cụm ánh đèn thành phố dọc bờ biển lục địa
                     ctx.fillStyle = '#fef08a';
                     for (let k = 0; k < 14; k++) {
                         ctx.fillRect(cx + (Math.random() - 0.5) * rx, cy + (Math.random() - 0.5) * ry, 2.5, 2.5);
@@ -421,29 +413,26 @@
             return new THREE.CanvasTexture(canvas);
         }
 
-        // 1. DẢI NGÂN HÀ BỤI SAO VẮT NGANG BẦU TRỜI + TINH VÂN
         function createMilkyWayBackdrop() {
             milkyWayGroup = new THREE.Group();
-            milkyWayGroup.rotation.z = Math.PI / 5; // Nghiêng dải Ngân Hà chéo bầu trời cho nghệ thuật
+            milkyWayGroup.rotation.z = Math.PI / 5;
 
-            // Dải bụi sao đậm đặc của Ngân Hà
             const bandCount = 24000;
             const bandGeo = new THREE.BufferGeometry();
             const bandPos = new Float32Array(bandCount * 3);
             const bandCol = new Float32Array(bandCount * 3);
 
             const milkyColors = [
-                new THREE.Color(0x38bdf8), // Xanh lam trẻ
-                new THREE.Color(0xa855f7), // Tím tinh vân
-                new THREE.Color(0xfde047), // Vàng lõi thiên hà
-                new THREE.Color(0xf472b6), // Hồng bụi khí
+                new THREE.Color(0x38bdf8),
+                new THREE.Color(0xa855f7),
+                new THREE.Color(0xfde047),
+                new THREE.Color(0xf472b6),
                 new THREE.Color(0xffffff)
             ];
 
             for (let i = 0; i < bandCount; i++) {
                 const angle = Math.random() * Math.PI * 2;
                 const radius = 1400 + Math.random() * 1200;
-                // Phân bố tập trung dọc theo mặt phẳng xích đạo Ngân Hà (Gauss spread)
                 const spread = (Math.random() - 0.5) * (Math.random() - 0.5) * 650;
 
                 bandPos[i * 3] = Math.cos(angle) * radius;
@@ -467,7 +456,6 @@
                 depthWrite: false
             })));
 
-            // Sao nền toàn cầu
             const bgCount = 6000;
             const bgGeo = new THREE.BufferGeometry();
             const bgPos = new Float32Array(bgCount * 3);
@@ -482,7 +470,6 @@
             bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
             milkyWayGroup.add(new THREE.Points(bgGeo, new THREE.PointsMaterial({ color: 0xe2e8f0, size: 2.0, transparent: true, opacity: 0.85 })));
 
-            // Đám mây tinh vân phát sáng dọc dải Ngân Hà
             const nebCanvas = document.createElement('canvas');
             nebCanvas.width = 512; nebCanvas.height = 512;
             const nCtx = nebCanvas.getContext('2d');
@@ -504,7 +491,6 @@
             scene.add(milkyWayGroup);
         }
 
-        // 2. VÀNH ĐAI TIỂU HÀNH TINH GIỮA SAO HỎA VÀ SAO MỘC
         function createAsteroidBelt() {
             const count = 1800;
             const geo = new THREE.DodecahedronGeometry(0.11, 0);
@@ -514,7 +500,7 @@
             const dummy = new THREE.Object3D();
             for (let i = 0; i < count; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const radius = 30.2 + Math.random() * 3.6; // Nằm giữa Mars (26) và Jupiter (38)
+                const radius = 30.2 + Math.random() * 3.6;
                 const y = (Math.random() - 0.5) * 1.1;
 
                 dummy.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
@@ -527,7 +513,6 @@
             scene.add(asteroidBelt);
         }
 
-        // 3. LƯỚI KHÔNG-THỜI GIAN BỊ BẺ CONG BỞI TRỌNG LỰC (SPACETIME CURVATURE GRID)
         function createSpacetimeGrid() {
             const size = 160;
             const divisions = 48;
@@ -539,7 +524,6 @@
                 const x = pos.getX(i);
                 const z = pos.getZ(i);
                 const dist = Math.sqrt(x * x + z * z);
-                // Hố trũng hấp dẫn tại tâm Mặt Trời
                 const dip = -18.0 / (Math.sqrt(dist * 0.35 + 1.2));
                 pos.setY(i, dip - 3.5);
             }
@@ -569,14 +553,12 @@
             renderer.toneMappingExposure = 1.15;
             container.appendChild(renderer.domElement);
 
-            // UNREAL BLOOM POST-PROCESSING
             const renderScene = new THREE.RenderPass(scene, camera);
             bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.15, 0.65, 0.35);
             composer = new THREE.EffectComposer(renderer);
             composer.addPass(renderScene);
             composer.addPass(bloomPass);
 
-            // NGUỒN SÁNG MẶT TRỜI + ANAMORPHIC LENS FLARE
             const sunLight = new THREE.PointLight(0xfff5e4, 3.2, 2000, 0.25);
             scene.add(sunLight);
             scene.add(new THREE.AmbientLight(0x0f172a, 0.38));
@@ -594,7 +576,6 @@
             createAsteroidBelt();
             createSpacetimeGrid();
 
-            // MẶT TRỜI GLSL SHADER
             sunUniforms = { uTime: { value: 0 } };
             const sunMat = new THREE.ShaderMaterial({
                 uniforms: sunUniforms,
@@ -607,7 +588,6 @@
             scene.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
 
-            // CẤU HÌNH 8 HÀNH TINH
             const planetConfigs = [
                 { id: 'mercury', size: 0.55, dist: 10, speed: 0.022, tilt: 0.03, atmos: null },
                 { id: 'venus', size: 0.95, dist: 14.5, speed: 0.016, tilt: 3.09, atmos: 0xfbbf24 },
@@ -694,7 +674,6 @@
                 planets[cfg.id] = { mesh, distance: cfg.dist, speed: cfg.speed, angle: Math.random() * Math.PI * 2 };
             });
 
-            // ĐIỀU KHIỂN CAMERA
             window.addEventListener('mousedown', e => { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; });
             window.addEventListener('mousemove', e => {
                 if (!isDragging) return;
@@ -720,7 +699,16 @@
             document.getElementById('startOverlay').style.display = 'none';
             init3D();
             const bg = document.getElementById('bgMusic');
-            if (bg) { bg.volume = 0.7; bg.play().catch(() => {}); }
+            if (bg) { 
+                bg.volume = 1.0; // Đặt âm lượng tối đa 100% cực to và căng
+                bg.play().catch(() => {}); 
+            }
+        }
+
+        function setVolume(v) {
+            const bg = document.getElementById('bgMusic');
+            if (bg) bg.volume = parseFloat(v);
+            document.getElementById('volVal').innerText = Math.round(v * 100) + '%';
         }
 
         function toggleSpacetimeGrid() {
@@ -748,11 +736,6 @@
             document.getElementById('speedVal').innerText = timeSpeed.toFixed(1) + 'x';
         }
 
-        function setBloom(v) {
-            if (bloomPass) bloomPass.strength = parseFloat(v);
-            document.getElementById('bloomVal').innerText = parseFloat(v).toFixed(2);
-        }
-
         function toggleHud() {
             isHudVisible = !isHudVisible;
             const body = document.getElementById('hudBody');
@@ -764,7 +747,7 @@
         function toggleSpaceAudio() {
             const bg = document.getElementById('bgMusic');
             if (!bg) return;
-            if (bg.paused) { bg.play(); document.getElementById('audioBtn').innerText = '🔊 Music'; }
+            if (bg.paused) { bg.play(); document.getElementById('audioBtn').innerText = '🔊 Phonk: ON'; }
             else { bg.pause(); document.getElementById('audioBtn').innerText = '🔇 Muted'; }
         }
 
