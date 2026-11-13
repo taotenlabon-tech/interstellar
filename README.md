@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -40,7 +40,7 @@
 </head>
 <body class="w-screen h-screen select-none">
 
-    <!-- MÀN HÌNH KHỞI ĐỘNG -->
+    <!-- MÀN HÌNH KHỞI ĐỘNG & KÉO THẢ NHẠC -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-[#010206] flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative w-32 h-32 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full border-2 border-cyan-400/50 animate-ping"></div>
@@ -51,15 +51,21 @@
                 ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Đồ họa đỉnh cao IMAX, góc nhìn Free-Fly Cinematic & phát nhạc gốc Stray.wav.
+                Nếu mở file trực tiếp bị chặn nhạc, bạn có thể <span class="text-cyan-400 font-bold">kéo thả file Stray.wav</span> trực tiếp vào màn hình này để phát!
             </p>
         </div>
-        <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_50px_rgba(56,189,248,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG & PHÁT STRAY.WAV
-        </button>
+        <div class="flex flex-col sm:flex-row gap-3 items-center">
+            <button onclick="startExperience()" class="px-8 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_50px_rgba(56,189,248,0.8)] transition active:scale-95">
+                ⚡ KHỞI ĐỘNG TRẢI NGHIỆM
+            </button>
+            <label class="px-6 py-4 bg-slate-900 border border-cyan-500/60 hover:bg-slate-800 font-orbitron font-bold text-xs sm:text-sm rounded-full text-cyan-300 shadow-lg cursor-pointer transition">
+                📁 Chọn file Stray.wav
+                <input type="file" id="audioFileInput" accept="audio/*" class="hidden" onchange="loadCustomAudio(this)">
+            </label>
+        </div>
     </div>
 
-    <!-- FILE NHẠC GỐC STRAY.WAV CỤC BỘ -->
+    <!-- AUDIO ELEMENT -->
     <audio id="bgMusic" loop preload="auto">
         <source src="Stray.wav" type="audio/wav">
     </audio>
@@ -105,7 +111,7 @@
             <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
                 <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                 <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                    Bật chế độ Free-Fly để camera tự do bay lượn điện ảnh qua hệ mặt trời cùng nhạc Stray.wav.
+                    Bật chế độ Free-Fly để camera tự do bay lượn điện ảnh qua hệ mặt trời.
                 </p>
                 <div class="grid grid-cols-2 gap-1 pt-1.5 text-[10px] text-slate-400">
                     <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -346,7 +352,7 @@
                     ctx.fillStyle = i % 2 === 0 ? 'rgba(67, 20, 7, 0.4)' : 'rgba(234, 88, 12, 0.35)';
                     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                     bCtx.fillStyle = i % 2 === 0 ? 'rgba(40,40,40,0.5)' : 'rgba(210,210,210,0.5)';
-                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); bCtx.fill();
+                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                 }
                 ctx.fillStyle = '#f8fafc';
                 ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
@@ -684,6 +690,18 @@
                 bg.play().catch(err => {
                     console.log("Cần tương tác để phát nhạc:", err);
                 }); 
+            }
+        }
+
+        function loadCustomAudio(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const fileURL = URL.createObjectURL(file);
+                const bg = document.getElementById('bgMusic');
+                bg.src = fileURL;
+                bg.play();
+                document.getElementById('startOverlay').style.display = 'none';
+                init3D();
             }
         }
 
