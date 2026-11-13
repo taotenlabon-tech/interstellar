@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -51,25 +51,20 @@
                 EPIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">SPACE CINEMATIC</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Đã thay đổi nhạc nền Ambient Space hoành tráng, tĩnh lặng và hùng vĩ đúng chất phim Interstellar.
+                Hệ thống tổng hợp âm thanh vũ trụ Web Audio độc lập — không lo lỗi mạng, ngân vang chuẩn chất điện ảnh!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_50px_rgba(56,189,248,0.8)] transition active:scale-95">
-            🌌 KHÁM PHÁ VŨ TRỤ HÙNG VĨ
+            🌌 KHÁM PHÁ VŨ TRỤ & BẬT ÂM THANH
         </button>
     </div>
-
-    <!-- NHẠC NỀN AMBIENT SPACE HOÀNH TRÁNG -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=space-chillout-11197.mp3" type="audio/mpeg">
-    </audio>
 
     <!-- HUD ĐIỀU KHIỂN -->
     <header class="absolute top-4 left-4 z-20 hud-glass p-4 rounded-2xl w-80 space-y-3">
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span class="text-[10px] font-bold tracking-widest text-slate-300">EPIC SPACE AUDIO ENGINE</span>
+                <span class="text-[10px] font-bold tracking-widest text-slate-300">SPACE SYNTH ENGINE</span>
             </div>
             <div class="flex gap-1.5">
                 <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-cyan-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
@@ -105,7 +100,7 @@
             <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
                 <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                 <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                    Tận hưởng không gian tĩnh lặng, bao la cùng âm thanh vũ trụ hoành tráng.
+                    Âm thanh ngân vang của vũ trụ sâu thẳm kết hợp đồ họa IMAX 3D.
                 </p>
                 <div class="grid grid-cols-2 gap-1 pt-1.5 text-[10px] text-slate-400">
                     <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -131,6 +126,119 @@
     <div id="canvasContainer" class="fixed inset-0 z-0"></div>
 
     <script>
+        // ==========================================
+        // BỘ TỔNG HỢP ÂM THANH VŨ TRỤ (WEB AUDIO API)
+        // ==========================================
+        let audioCtx, masterGain, isAudioPlaying = false, chordTimer;
+
+        function initSpaceSynth() {
+            if (audioCtx) return;
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+
+            masterGain = audioCtx.createGain();
+            masterGain.gain.value = 0.45; // Âm lượng chuẩn ấm áp, dày dặn
+            masterGain.connect(audioCtx.destination);
+
+            // Tạo tiếng trầm vũ trụ (Deep Space Sub-Bass Drone) liên tục
+            const subOsc1 = audioCtx.createOscillator();
+            const subOsc2 = audioCtx.createOscillator();
+            const subFilter = audioCtx.createBiquadFilter();
+            const subGain = audioCtx.createGain();
+
+            subOsc1.type = 'sine';
+            subOsc1.frequency.value = 55; // Nốt A1 trầm sâu
+            subOsc2.type = 'triangle';
+            subOsc2.frequency.value = 110.2; // Nốt A2 tạo độ dày
+
+            subFilter.type = 'lowpass';
+            subFilter.frequency.value = 180;
+            subGain.gain.value = 0.5;
+
+            subOsc1.connect(subFilter);
+            subOsc2.connect(subFilter);
+            subFilter.connect(subGain);
+            subGain.connect(masterGain);
+
+            subOsc1.start();
+            subOsc2.start();
+
+            // Hợp âm Pad không gian kiểu Interstellar (Am9 -> Fmaj7 -> Cmaj9 -> Em7)
+            const chords = [
+                [220.00, 261.63, 329.63, 392.00, 493.88], // Am9
+                [174.61, 220.00, 261.63, 329.63, 392.00], // Fmaj9
+                [130.81, 196.00, 246.94, 293.66, 329.63], // Cmaj9
+                [164.81, 196.00, 246.94, 293.66, 392.00]  // Em7
+            ];
+            let chordIndex = 0;
+
+            function playEpicPad() {
+                if (!isAudioPlaying || audioCtx.state !== 'running') return;
+                const now = audioCtx.currentTime;
+                const freqs = chords[chordIndex % chords.length];
+                chordIndex++;
+
+                freqs.forEach((f, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const noteGain = audioCtx.createGain();
+                    const filter = audioCtx.createBiquadFilter();
+
+                    osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+                    osc.frequency.setValueAtTime(f, now);
+                    // Detune nhẹ tạo hiệu ứng dàn giao hưởng không gian rộng mở
+                    osc.detune.setValueAtTime((idx - 2) * 6, now);
+
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(300, now);
+                    filter.frequency.exponentialRampToValueAtTime(950, now + 3.5);
+                    filter.frequency.exponentialRampToValueAtTime(250, now + 7.5);
+
+                    noteGain.gain.setValueAtTime(0.0001, now);
+                    noteGain.gain.linearRampToValueAtTime(0.14, now + 2.8); // Tăng dần mượt mà
+                    noteGain.gain.exponentialRampToValueAtTime(0.0001, now + 7.8); // Ngân dài rồi tan biến
+
+                    osc.connect(filter);
+                    filter.connect(noteGain);
+                    noteGain.connect(masterGain);
+
+                    osc.start(now);
+                    osc.stop(now + 8.0);
+                });
+            }
+
+            isAudioPlaying = true;
+            playEpicPad();
+            chordTimer = setInterval(playEpicPad, 6500);
+        }
+
+        function setVolume(v) {
+            const val = parseFloat(v);
+            document.getElementById('volVal').innerText = Math.round(val * 100) + '%';
+            if (masterGain && audioCtx) {
+                masterGain.gain.setTargetAtTime(val * 0.45, audioCtx.currentTime, 0.05);
+            }
+        }
+
+        function toggleSpaceAudio() {
+            if (!audioCtx) {
+                initSpaceSynth();
+                document.getElementById('audioBtn').innerText = '🪐 Nhạc: ON';
+                return;
+            }
+            if (audioCtx.state === 'running') {
+                audioCtx.suspend();
+                isAudioPlaying = false;
+                document.getElementById('audioBtn').innerText = '🔇 Muted';
+            } else {
+                audioCtx.resume();
+                isAudioPlaying = true;
+                document.getElementById('audioBtn').innerText = '🪐 Nhạc: ON';
+            }
+        }
+
+        // ==========================================
+        // ENGINE ĐỒ HỌA VŨ TRỤ 3D (THREE.JS)
+        // ==========================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
         let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid, cosmicDust;
@@ -346,7 +454,7 @@
                     ctx.fillStyle = i % 2 === 0 ? 'rgba(67, 20, 7, 0.4)' : 'rgba(234, 88, 12, 0.35)';
                     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                     bCtx.fillStyle = i % 2 === 0 ? 'rgba(40,40,40,0.5)' : 'rgba(210,210,210,0.5)';
-                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); bCtx.fill();
                 }
                 ctx.fillStyle = '#f8fafc';
                 ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
@@ -677,18 +785,8 @@
 
         function startExperience() {
             document.getElementById('startOverlay').style.display = 'none';
+            initSpaceSynth(); // Kích hoạt bộ tổng hợp âm thanh vũ trụ ngay lập tức
             init3D();
-            const bg = document.getElementById('bgMusic');
-            if (bg) { 
-                bg.volume = 1.0; 
-                bg.play().catch(() => {}); 
-            }
-        }
-
-        function setVolume(v) {
-            const bg = document.getElementById('bgMusic');
-            if (bg) bg.volume = parseFloat(v);
-            document.getElementById('volVal').innerText = Math.round(v * 100) + '%';
         }
 
         function toggleFreeFly() {
@@ -721,13 +819,6 @@
             body.style.maxHeight = isHudVisible ? '320px' : '0px';
             body.style.opacity = isHudVisible ? '1' : '0';
             document.getElementById('hudToggleBtn').innerText = isHudVisible ? '👁️ Ẩn' : '👁️ Hiện';
-        }
-
-        function toggleSpaceAudio() {
-            const bg = document.getElementById('bgMusic');
-            if (!bg) return;
-            if (bg.paused) { bg.play(); document.getElementById('audioBtn').innerText = '🪐 Nhạc: ON'; }
-            else { bg.pause(); document.getElementById('audioBtn').innerText = '🔇 Muted'; }
         }
 
         function selectPlanet(id) {
