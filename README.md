@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -40,7 +40,7 @@
 </head>
 <body class="w-screen h-screen select-none">
 
-    <!-- MÀN HÌNH KHỞI ĐỘNG & KÉO THẢ NHẠC -->
+    <!-- MÀN HÌNH KHỞI ĐỘNG & CHỌN NHẠC -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-[#010206] flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative w-32 h-32 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full border-2 border-cyan-400/50 animate-ping"></div>
@@ -51,7 +51,7 @@
                 ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Nếu mở file trực tiếp bị chặn nhạc, bạn có thể <span class="text-cyan-400 font-bold">kéo thả file Stray.wav</span> trực tiếp vào màn hình này để phát!
+                Đồ họa IMAX 3D, bụi vũ trụ, quỹ đạo neon & nhạc Stray.wav. Bấm chọn file nhạc từ máy tính bên dưới để bắt đầu!
             </p>
         </div>
         <div class="flex flex-col sm:flex-row gap-3 items-center">
@@ -352,7 +352,7 @@
                     ctx.fillStyle = i % 2 === 0 ? 'rgba(67, 20, 7, 0.4)' : 'rgba(234, 88, 12, 0.35)';
                     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                     bCtx.fillStyle = i % 2 === 0 ? 'rgba(40,40,40,0.5)' : 'rgba(210,210,210,0.5)';
-                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+                    bCtx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                 }
                 ctx.fillStyle = '#f8fafc';
                 ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
