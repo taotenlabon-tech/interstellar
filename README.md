@@ -40,7 +40,7 @@
 </head>
 <body class="w-screen h-screen select-none">
 
-    <!-- MÀN HÌNH CHỜ (START OVERLAY) GỐC -->
+    <!-- MÀN HÌNH CHỜ -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-[#010206] flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative w-32 h-32 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full border-2 border-cyan-400/50 animate-ping"></div>
@@ -51,18 +51,13 @@
                 ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Hệ thống 3D IMAX vũ trụ đỉnh cao cùng âm thanh gốc Stray.wav tích hợp sẵn.
+                Hệ thống 3D vũ trụ với giai điệu Stray Synth được tổng hợp trực tiếp bằng code (0 file ngoài).
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_50px_rgba(56,189,248,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG & PHÁT STRAY.WAV
+            ⚡ KHỞI ĐỘNG & PHÁT NHẠC
         </button>
     </div>
-
-    <!-- AUDIO NHẠC GỐC STRAY.WAV NHÚNG TRỰC TIẾP -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="Stray.wav" type="audio/wav">
-    </audio>
 
     <!-- HUD ĐIỀU KHIỂN -->
     <header class="absolute top-4 left-4 z-20 hud-glass p-4 rounded-2xl w-80 space-y-3">
@@ -73,7 +68,7 @@
             </div>
             <div class="flex gap-1.5">
                 <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
-                    🔊 Stray.wav: ON
+                    🔊 Music: ON
                 </button>
                 <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
                     👁️ Ẩn
@@ -93,8 +88,8 @@
 
             <div class="grid grid-cols-2 gap-2 text-[10px]">
                 <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-rose-400 font-bold">100%</span></div>
-                    <input type="range" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
+                    <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-rose-400 font-bold">85%</span></div>
+                    <input type="range" min="0" max="1" step="0.05" value="0.85" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
                 </div>
                 <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
                     <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
@@ -131,6 +126,155 @@
     <div id="canvasContainer" class="fixed inset-0 z-0"></div>
 
     <script>
+        // =========================================================================
+        // BỘ PHÁT GIAI ĐIỆU STRAY AMBIENT SYNTH BẰNG CODE THUẦN (KHÔNG CẦN FILE)
+        // =========================================================================
+        let audioCtx, masterGain, delayNode, feedbackGain, isMusicPlaying = false, seqInterval;
+
+        function startProceduralStrayMusic() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+
+            masterGain = audioCtx.createGain();
+            masterGain.gain.value = 0.85;
+
+            // Hiệu ứng ngân vang không gian (Stereo Delay / Echo)
+            delayNode = audioCtx.createDelay();
+            delayNode.delayTime.value = 0.45;
+            feedbackGain = audioCtx.createGain();
+            feedbackGain.gain.value = 0.42;
+
+            const delayFilter = audioCtx.createBiquadFilter();
+            delayFilter.type = 'lowpass';
+            delayFilter.frequency.value = 1200;
+
+            delayNode.connect(delayFilter);
+            delayFilter.connect(feedbackGain);
+            feedbackGain.connect(delayNode);
+            delayFilter.connect(masterGain);
+            masterGain.connect(audioCtx.destination);
+
+            // Giai điệu rải nốt trầm buồn & huyền ảo phong cách Stray (Am - F - C - G)
+            const melodySequence = [
+                // Ô nhịp 1: Am (La thứ)
+                { note: 220.00, bass: 110.00, dur: 1.6 }, // A3 + A2
+                { note: 261.63, bass: null,   dur: 1.2 }, // C4
+                { note: 329.63, bass: null,   dur: 1.4 }, // E4
+                { note: 392.00, bass: null,   dur: 1.8 }, // G4
+
+                // Ô nhịp 2: Fmaj7 (Fa trưởng 7)
+                { note: 349.23, bass: 87.31,  dur: 1.6 }, // F4 + F2
+                { note: 329.63, bass: null,   dur: 1.2 }, // E4
+                { note: 261.63, bass: null,   dur: 1.4 }, // C4
+                { note: 220.00, bass: null,   dur: 1.8 }, // A3
+
+                // Ô nhịp 3: C (Đô trưởng)
+                { note: 261.63, bass: 130.81, dur: 1.6 }, // C4 + C3
+                { note: 329.63, bass: null,   dur: 1.2 }, // E4
+                { note: 392.00, bass: null,   dur: 1.4 }, // G4
+                { note: 493.88, bass: null,   dur: 1.8 }, // B4
+
+                // Ô nhịp 4: Em / G (Mi thứ / Sol)
+                { note: 392.00, bass: 98.00,  dur: 1.6 }, // G4 + G2
+                { note: 329.63, bass: null,   dur: 1.2 }, // E4
+                { note: 293.66, bass: null,   dur: 1.4 }, // D4
+                { note: 246.94, bass: null,   dur: 2.0 }  // B3
+            ];
+
+            let step = 0;
+
+            function playSynthNote(freq, isBass, duration) {
+                if (!audioCtx || audioCtx.state !== 'running') return;
+                const now = audioCtx.currentTime;
+
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const env = audioCtx.createGain();
+                const filter = audioCtx.createBiquadFilter();
+
+                if (isBass) {
+                    osc1.type = 'sine';
+                    osc2.type = 'triangle';
+                    osc1.frequency.setValueAtTime(freq, now);
+                    osc2.frequency.setValueAtTime(freq, now);
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(220, now);
+
+                    env.gain.setValueAtTime(0.001, now);
+                    env.gain.linearRampToValueAtTime(0.28, now + 0.15);
+                    env.gain.exponentialRampToValueAtTime(0.0001, now + duration * 2.2);
+                } else {
+                    // Tiếng Electric Piano / Synth Pad ấm áp hơi lệch pha nhẹ (Detune)
+                    osc1.type = 'triangle';
+                    osc2.type = 'sine';
+                    osc1.frequency.setValueAtTime(freq, now);
+                    osc2.frequency.setValueAtTime(freq * 1.003, now); // Tạo độ dày âm thanh
+
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(950, now);
+                    filter.frequency.exponentialRampToValueAtTime(320, now + duration);
+
+                    env.gain.setValueAtTime(0.001, now);
+                    env.gain.linearRampToValueAtTime(0.16, now + 0.08);
+                    env.gain.exponentialRampToValueAtTime(0.0001, now + duration * 1.4);
+                }
+
+                osc1.connect(filter);
+                osc2.connect(filter);
+                filter.connect(env);
+
+                env.connect(masterGain);
+                if (!isBass) env.connect(delayNode); // Gửi tiếng đàn vào bộ tạo tiếng vang
+
+                osc1.start(now);
+                osc2.start(now);
+                const stopTime = now + duration * (isBass ? 2.3 : 1.5);
+                osc1.stop(stopTime);
+                osc2.stop(stopTime);
+            }
+
+            function triggerNextStep() {
+                if (!isMusicPlaying) return;
+                const item = melodySequence[step % melodySequence.length];
+                playSynthNote(item.note, false, item.dur);
+                if (item.bass) {
+                    playSynthNote(item.bass, true, item.dur);
+                }
+                step++;
+            }
+
+            isMusicPlaying = true;
+            triggerNextStep();
+            seqInterval = setInterval(triggerNextStep, 780); // Nhịp độ chậm rãi thư giãn (BPM ~77)
+        }
+
+        function setVolume(v) {
+            const val = parseFloat(v);
+            document.getElementById('volVal').innerText = Math.round(val * 100) + '%';
+            if (masterGain && audioCtx) {
+                masterGain.gain.setTargetAtTime(val, audioCtx.currentTime, 0.05);
+            }
+        }
+
+        function toggleSpaceAudio() {
+            if (!audioCtx) {
+                startProceduralStrayMusic();
+                return;
+            }
+            if (audioCtx.state === 'running') {
+                audioCtx.suspend();
+                isMusicPlaying = false;
+                document.getElementById('audioBtn').innerText = '🔇 Muted';
+            } else {
+                audioCtx.resume();
+                isMusicPlaying = true;
+                document.getElementById('audioBtn').innerText = '🔊 Music: ON';
+            }
+        }
+
+        // =========================================================================
+        // ENGINE 3D VŨ TRỤ THREE.JS
+        // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
         let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid, cosmicDust;
@@ -346,7 +490,7 @@
                     ctx.fillStyle = i % 2 === 0 ? 'rgba(67, 20, 7, 0.4)' : 'rgba(234, 88, 12, 0.35)';
                     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                     bCtx.fillStyle = i % 2 === 0 ? 'rgba(40,40,40,0.5)' : 'rgba(210,210,210,0.5)';
-                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); bCtx.fill();
                 }
                 ctx.fillStyle = '#f8fafc';
                 ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
@@ -678,33 +822,7 @@
         function startExperience() {
             document.getElementById('startOverlay').style.display = 'none';
             init3D();
-            const bg = document.getElementById('bgMusic');
-            if (bg) { 
-                bg.volume = 1.0; 
-                bg.play().then(() => {
-                    document.getElementById('audioBtn').innerText = '🔊 Stray.wav: ON';
-                }).catch(err => {
-                    console.log("Cần tương tác để phát nhạc:", err);
-                }); 
-            }
-        }
-
-        function setVolume(v) {
-            const bg = document.getElementById('bgMusic');
-            if (bg) bg.volume = parseFloat(v);
-            document.getElementById('volVal').innerText = Math.round(v * 100) + '%';
-        }
-
-        function toggleSpaceAudio() {
-            const bg = document.getElementById('bgMusic');
-            if (!bg) return;
-            if (bg.paused) { 
-                bg.play(); 
-                document.getElementById('audioBtn').innerText = '🔊 Stray.wav: ON'; 
-            } else { 
-                bg.pause(); 
-                document.getElementById('audioBtn').innerText = '🔇 Muted'; 
-            }
+            startProceduralStrayMusic(); // Khởi động giai điệu lập trình bằng code
         }
 
         function toggleFreeFly() {
