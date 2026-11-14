@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - Ultimate Cosmic Cinematic Edition</title>
+    <title>NASA Eyes 3D - Cosmic & Earth Civilization Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -34,7 +34,22 @@
             box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
             transform: translateY(-2px);
         }
-        .custom-scrollbar::-webkit-scrollbar { height: 4px; }
+        .upgrade-card {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            transition: all 0.2s ease;
+        }
+        .upgrade-card:hover:not(:disabled) {
+            border-color: #34d399;
+            background: rgba(6, 78, 59, 0.45);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.35);
+        }
+        .upgrade-card:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.6); border-radius: 99px; }
     </style>
 </head>
@@ -48,80 +63,192 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-5xl text-white tracking-widest">
-                ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
+                COSMIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-indigo-400">CIVILIZATION 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Hệ thống sao siêu dày đặc, Ngân Hà rực rỡ & Âm nhạc điện ảnh tổng hợp nâng cao.
+                Khám phá Hệ Mặt Trời 3D & Đổ bộ xuống Trái Đất để kiến tạo, nâng cấp nền văn minh sự sống!
             </p>
         </div>
-        <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(56,189,248,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG TRẢI NGHIỆM VŨ TRỤ
+        <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-emerald-500 to-indigo-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(56,189,248,0.8)] transition active:scale-95">
+            ⚡ KHỞI ĐỘNG VŨ TRỤ
         </button>
     </div>
 
-    <!-- HUD ĐIỀU KHIỂN -->
-    <header class="absolute top-4 left-4 z-20 hud-glass p-4 rounded-2xl w-80 space-y-3">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span class="text-[10px] font-bold tracking-widest text-slate-300">GOD-TIER RENDER ENGINE</span>
+    <!-- =====================================================================
+         GIAO DIỆN CHẾ ĐỘ VŨ TRỤ (SPACE MODE HUD)
+    ===================================================================== -->
+    <div id="spaceUI">
+        <header class="absolute top-4 left-4 z-20 hud-glass p-4 rounded-2xl w-80 space-y-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span class="text-[10px] font-bold tracking-widest text-slate-300">COSMIC ENGINE 3D</span>
+                </div>
+                <div class="flex gap-1.5">
+                    <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
+                        🔊 Music: ON
+                    </button>
+                    <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
+                        👁️ Ẩn
+                    </button>
+                </div>
             </div>
-            <div class="flex gap-1.5">
-                <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
-                    🔊 Music: ON
+
+            <div id="hudBody" class="space-y-3 transition-all duration-300 overflow-hidden">
+                <div class="grid grid-cols-2 gap-2 text-[10px]">
+                    <button onclick="toggleFreeFly()" id="flyBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
+                        🛸 Free-Fly: OFF
+                    </button>
+                    <button onclick="toggleSpacetimeGrid()" id="gridBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
+                        🕸️ Lưới KG: OFF
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-[10px]">
+                    <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
+                        <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-rose-400 font-bold">85%</span></div>
+                        <input type="range" min="0" max="1" step="0.05" value="0.85" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
+                    </div>
+                    <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
+                        <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
+                        <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-800/80 pt-2.5 space-y-1.5">
+                    <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
+                    <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
+                        Bấm chọn Trái Đất bên dưới để mở khóa cổng đổ bộ xuống nền văn minh sự sống!
+                    </p>
+                    <div class="grid grid-cols-2 gap-1 pt-1 text-[10px] text-slate-400">
+                        <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
+                        <div>Nhiệt độ: <span id="planetTemp" class="text-amber-300">5,500 °C</span></div>
+                    </div>
+
+                    <!-- NÚT ĐỔ BỘ TRÁI ĐẤT (CHỈ HIỆN KHI CHỌN TRÁI ĐẤT) -->
+                    <button id="landEarthBtn" onclick="enterEarthMode()" class="hidden w-full mt-2 py-2.5 px-3 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:brightness-110 text-slate-950 font-orbitron font-black text-xs rounded-xl shadow-[0_0_25px_rgba(16,185,129,0.7)] transition animate-bounce">
+                        🌍 ĐỔ BỘ XUỐNG TRÁI ĐẤT
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- THANH CHỌN HÀNH TINH -->
+        <nav class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 hud-glass px-3 py-2.5 rounded-2xl flex gap-2 overflow-x-auto max-w-[95vw] custom-scrollbar">
+            <button id="btn-sun" onclick="selectPlanet('sun')" class="planet-pill active px-3 py-1.5 text-amber-300 rounded-xl text-xs font-bold whitespace-nowrap">☀️ Mặt Trời</button>
+            <button id="btn-mercury" onclick="selectPlanet('mercury')" class="planet-pill px-3 py-1.5 text-slate-300 rounded-xl text-xs font-bold whitespace-nowrap">🪨 Sao Thủy</button>
+            <button id="btn-venus" onclick="selectPlanet('venus')" class="planet-pill px-3 py-1.5 text-amber-200 rounded-xl text-xs font-bold whitespace-nowrap">🌕 Sao Kim</button>
+            <button id="btn-earth" onclick="selectPlanet('earth')" class="planet-pill px-3 py-1.5 text-emerald-300 border-emerald-500/50 rounded-xl text-xs font-bold whitespace-nowrap">🌍 Trái Đất ✨</button>
+            <button id="btn-mars" onclick="selectPlanet('mars')" class="planet-pill px-3 py-1.5 text-rose-400 rounded-xl text-xs font-bold whitespace-nowrap">🔴 Sao Hỏa</button>
+            <button id="btn-jupiter" onclick="selectPlanet('jupiter')" class="planet-pill px-3 py-1.5 text-orange-300 rounded-xl text-xs font-bold whitespace-nowrap">🪐 Sao Mộc</button>
+            <button id="btn-saturn" onclick="selectPlanet('saturn')" class="planet-pill px-3 py-1.5 text-yellow-200 rounded-xl text-xs font-bold whitespace-nowrap">🪐 Sao Thổ</button>
+            <button id="btn-uranus" onclick="selectPlanet('uranus')" class="planet-pill px-3 py-1.5 text-cyan-300 rounded-xl text-xs font-bold whitespace-nowrap">💎 Thiên Vương</button>
+            <button id="btn-neptune" onclick="selectPlanet('neptune')" class="planet-pill px-3 py-1.5 text-indigo-400 rounded-xl text-xs font-bold whitespace-nowrap">🔵 Hải Vương</button>
+        </nav>
+    </div>
+
+    <!-- =====================================================================
+         GIAO DIỆN GAME TRONG GAME: NÂNG CẤP SỰ SỐNG TRÁI ĐẤT (EARTH MODE HUD)
+    ===================================================================== -->
+    <div id="earthUI" class="hidden">
+        <!-- THANH TÀI NGUYÊN & QUAY LẠI VŨ TRỤ -->
+        <div class="absolute top-4 left-4 right-4 z-20 flex flex-wrap justify-between items-center gap-3">
+            <div class="hud-glass px-4 py-2.5 rounded-2xl flex items-center gap-5">
+                <div>
+                    <div class="text-[10px] text-slate-400">⚡ NĂNG LƯỢNG</div>
+                    <div class="font-orbitron font-bold text-base text-amber-300"><span id="resEnergy">50</span> <span class="text-[10px] text-emerald-400">(+<span id="rateEnergy">2</span>/s)</span></div>
+                </div>
+                <div class="h-7 w-[1px] bg-slate-700"></div>
+                <div>
+                    <div class="text-[10px] text-slate-400">🧬 TIẾN HÓA SỰ SỐNG</div>
+                    <div class="font-orbitron font-bold text-base text-emerald-300"><span id="resEvo">0</span> <span class="text-[10px] text-cyan-400">(+<span id="rateEvo">1</span>/s)</span></div>
+                </div>
+                <div class="h-7 w-[1px] bg-slate-700 hidden sm:block"></div>
+                <div class="hidden sm:block">
+                    <div class="text-[10px] text-slate-400">🌍 CẤP ĐỘ VĂN MINH</div>
+                    <div id="civStage" class="font-orbitron font-bold text-sm text-cyan-300">Kỷ Nguyên Khởi Nguyên</div>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="harvestManual()" class="hud-glass px-4 py-2.5 rounded-2xl font-orbitron font-bold text-xs text-amber-300 hover:border-amber-400 active:scale-95 transition">
+                    ✨ Thu Thập (+<span id="clickPower">5</span> ⚡)
                 </button>
-                <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
-                    👁️ Ẩn
+                <button onclick="exitEarthMode()" class="hud-glass px-4 py-2.5 rounded-2xl font-orbitron font-bold text-xs text-cyan-300 hover:border-cyan-400 hover:bg-cyan-950/60 transition">
+                    🌌 Quay lại Vũ Trụ
                 </button>
             </div>
         </div>
 
-        <div id="hudBody" class="space-y-3 transition-all duration-300 overflow-hidden">
-            <div class="grid grid-cols-2 gap-2 text-[10px]">
-                <button onclick="toggleFreeFly()" id="flyBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
-                    🛸 Free-Fly: OFF
-                </button>
-                <button onclick="toggleSpacetimeGrid()" id="gridBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
-                    🕸️ Lưới KG: OFF
-                </button>
+        <!-- BẢNG NÂNG CẤP CÔNG TRÌNH BÊN DƯỚI -->
+        <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 hud-glass p-3.5 rounded-2xl w-[95vw] max-w-4xl">
+            <div class="flex justify-between items-center mb-2 px-1">
+                <span class="text-[11px] font-orbitron font-bold text-emerald-300 tracking-wider">🏗️ KIẾN TẠO & NÂNG CẤP HỆ SINH THÁI 3D</span>
+                <span class="text-[10px] text-slate-400">Kéo chuột để xoay đảo • Cuộn chuột để thu phóng</span>
             </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <!-- Nâng cấp 1: Rừng Sinh Quyển -->
+                <button id="upg-forest" onclick="buyUpgrade('forest')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-bold text-emerald-300">🌲 Rừng Sinh Quyển</span>
+                            <span id="lvl-forest" class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded font-bold">Lv.1</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-1">Trồng thêm rừng cây 3D, tăng +2 🧬/s & +1 ⚡/s</p>
+                    </div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-amber-300">
+                        <span>Chi phí:</span>
+                        <span id="cost-forest">25 ⚡</span>
+                    </div>
+                </button>
 
-            <div class="grid grid-cols-2 gap-2 text-[10px]">
-                <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-rose-400 font-bold">85%</span></div>
-                    <input type="range" min="0" max="1" step="0.05" value="0.85" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
-                </div>
-                <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
-                    <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
-                </div>
-            </div>
+                <!-- Nâng cấp 2: Đô Thị Tương Lai -->
+                <button id="upg-city" onclick="buyUpgrade('city')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-bold text-sky-300">🏙️ Đô Thị Neon</span>
+                            <span id="lvl-city" class="text-[10px] bg-sky-950 text-sky-300 px-1.5 py-0.5 rounded font-bold">Lv.0</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-1">Mọc tháp chọc trời, tăng +6 ⚡/s & +3 🧬/s</p>
+                    </div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-amber-300">
+                        <span>Chi phí:</span>
+                        <span id="cost-city">80 ⚡</span>
+                    </div>
+                </button>
 
-            <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
-                <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
-                <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                    Bật chế độ Free-Fly để camera tự do bay lượn điện ảnh qua hệ mặt trời.
-                </p>
-                <div class="grid grid-cols-2 gap-1 pt-1.5 text-[10px] text-slate-400">
-                    <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
-                    <div>Nhiệt độ: <span id="planetTemp" class="text-amber-300">5,500 °C</span></div>
-                </div>
+                <!-- Nâng cấp 3: Lò Phản Ứng Nhiệt Hạch -->
+                <button id="upg-reactor" onclick="buyUpgrade('reactor')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-bold text-amber-300">⚛️ Lò Nhiệt Hạch</span>
+                            <span id="lvl-reactor" class="text-[10px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded font-bold">Lv.0</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-1">Xây lõi năng lượng phát sáng, tăng +22 ⚡/s</p>
+                    </div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-amber-300">
+                        <span>Chi phí:</span>
+                        <span id="cost-reactor">250 ⚡</span>
+                    </div>
+                </button>
+
+                <!-- Nâng cấp 4: Trạm Phóng Vệ Tinh -->
+                <button id="upg-orbital" onclick="buyUpgrade('orbital')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-bold text-purple-300">🛰️ Vòng Quỹ Đạo</span>
+                            <span id="lvl-orbital" class="text-[10px] bg-purple-950 text-purple-300 px-1.5 py-0.5 rounded font-bold">Lv.0</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-1">Phóng vệ tinh bay quanh đảo, x1.5 toàn sản lượng!</p>
+                    </div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-emerald-300">
+                        <span>Chi phí:</span>
+                        <span id="cost-orbital">120 🧬</span>
+                    </div>
+                </button>
             </div>
         </div>
-    </header>
-
-    <!-- THANH CHỌN HÀNH TINH -->
-    <nav class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 hud-glass px-3 py-2.5 rounded-2xl flex gap-2 overflow-x-auto max-w-[95vw] custom-scrollbar">
-        <button id="btn-sun" onclick="selectPlanet('sun')" class="planet-pill active px-3 py-1.5 text-amber-300 rounded-xl text-xs font-bold whitespace-nowrap">☀️ Mặt Trời</button>
-        <button id="btn-mercury" onclick="selectPlanet('mercury')" class="planet-pill px-3 py-1.5 text-slate-300 rounded-xl text-xs font-bold whitespace-nowrap">🪨 Sao Thủy</button>
-        <button id="btn-venus" onclick="selectPlanet('venus')" class="planet-pill px-3 py-1.5 text-amber-200 rounded-xl text-xs font-bold whitespace-nowrap">🌕 Sao Kim</button>
-        <button id="btn-earth" onclick="selectPlanet('earth')" class="planet-pill px-3 py-1.5 text-sky-400 rounded-xl text-xs font-bold whitespace-nowrap">🌍 Trái Đất</button>
-        <button id="btn-mars" onclick="selectPlanet('mars')" class="planet-pill px-3 py-1.5 text-rose-400 rounded-xl text-xs font-bold whitespace-nowrap">🔴 Sao Hỏa</button>
-        <button id="btn-jupiter" onclick="selectPlanet('jupiter')" class="planet-pill px-3 py-1.5 text-orange-300 rounded-xl text-xs font-bold whitespace-nowrap">🪐 Sao Mộc</button>
-        <button id="btn-saturn" onclick="selectPlanet('saturn')" class="planet-pill px-3 py-1.5 text-yellow-200 rounded-xl text-xs font-bold whitespace-nowrap">🪐 Sao Thổ</button>
-        <button id="btn-uranus" onclick="selectPlanet('uranus')" class="planet-pill px-3 py-1.5 text-cyan-300 rounded-xl text-xs font-bold whitespace-nowrap">💎 Thiên Vương</button>
-        <button id="btn-neptune" onclick="selectPlanet('neptune')" class="planet-pill px-3 py-1.5 text-indigo-400 rounded-xl text-xs font-bold whitespace-nowrap">🔵 Hải Vương</button>
-    </nav>
+    </div>
 
     <div id="canvasContainer" class="fixed inset-0 z-0"></div>
 
@@ -153,12 +280,11 @@
             delayFilter.connect(masterGain);
             masterGain.connect(audioCtx.destination);
 
-            // Giai điệu hoành tráng & cuốn hút hơn
             const chords = [
-                { bass: 110.00, notes: [220.00, 261.63, 329.63, 440.00] }, // Am
-                { bass: 87.31,  notes: [174.61, 220.00, 261.63, 349.23] }, // F
-                { bass: 130.81, notes: [261.63, 329.63, 392.00, 523.25] }, // C
-                { bass: 98.00,  notes: [196.00, 246.94, 293.66, 392.00] }  // G
+                { bass: 110.00, notes: [220.00, 261.63, 329.63, 440.00] },
+                { bass: 87.31,  notes: [174.61, 220.00, 261.63, 349.23] },
+                { bass: 130.81, notes: [261.63, 329.63, 392.00, 523.25] },
+                { bass: 98.00,  notes: [196.00, 246.94, 293.66, 392.00] }
             ];
 
             let chordIdx = 0;
@@ -214,13 +340,7 @@
             function triggerStep() {
                 if (!isMusicPlaying) return;
                 const currentChord = chords[chordIdx];
-                
-                // Đánh nốt bass nền
-                if (noteIdx === 0) {
-                    playNote(currentChord.bass, true, 3.5);
-                }
-
-                // Rải nốt giai điệu (Arpeggio)
+                if (noteIdx === 0) playNote(currentChord.bass, true, 3.5);
                 const n = currentChord.notes[noteIdx % currentChord.notes.length];
                 playNote(n, false, 1.4);
 
@@ -233,22 +353,17 @@
 
             isMusicPlaying = true;
             triggerStep();
-            seqInterval = setInterval(triggerStep, 450); // Nhịp điệu dồn dập và cuốn hút hơn
+            seqInterval = setInterval(triggerStep, 450);
         }
 
         function setVolume(v) {
             const val = parseFloat(v);
             document.getElementById('volVal').innerText = Math.round(val * 100) + '%';
-            if (masterGain && audioCtx) {
-                masterGain.gain.setTargetAtTime(val, audioCtx.currentTime, 0.05);
-            }
+            if (masterGain && audioCtx) masterGain.gain.setTargetAtTime(val, audioCtx.currentTime, 0.05);
         }
 
         function toggleSpaceAudio() {
-            if (!audioCtx) {
-                startProceduralStrayMusic();
-                return;
-            }
+            if (!audioCtx) { startProceduralStrayMusic(); return; }
             if (audioCtx.state === 'running') {
                 audioCtx.suspend();
                 isMusicPlaying = false;
@@ -261,11 +376,270 @@
         }
 
         // =========================================================================
-        // ENGINE 3D VŨ TRỤ NÂNG CẤP (SIÊU SAO & THIÊN HÀ)
+        // HỆ THỐNG GAME TRONG GAME: NÂNG CẤP VĂN MINH TRÁI ĐẤT
+        // =========================================================================
+        let gameMode = 'SPACE'; // 'SPACE' hoặc 'EARTH'
+        let spaceGroup, earthGroup;
+        let earthSatellites = [];
+        let earthClouds = [];
+
+        const civState = {
+            energy: 50,
+            evo: 0,
+            upgrades: {
+                forest: { level: 1, baseCost: 25, costType: 'energy', scale: 1.55 },
+                city: { level: 0, baseCost: 80, costType: 'energy', scale: 1.65 },
+                reactor: { level: 0, baseCost: 250, costType: 'energy', scale: 1.75 },
+                orbital: { level: 0, baseCost: 120, costType: 'evo', scale: 1.9 }
+            }
+        };
+
+        function getUpgradeCost(key) {
+            const u = civState.upgrades[key];
+            return Math.floor(u.baseCost * Math.pow(u.scale, u.level));
+        }
+
+        function getProductionRates() {
+            const f = civState.upgrades.forest.level;
+            const c = civState.upgrades.city.level;
+            const r = civState.upgrades.reactor.level;
+            const o = civState.upgrades.orbital.level;
+
+            const mult = Math.pow(1.5, o);
+            const energyRate = Math.round((2 + f * 1 + c * 6 + r * 22) * mult);
+            const evoRate = Math.round((1 + f * 2 + c * 3) * mult);
+            const clickPower = Math.round((5 + f * 2 + c * 5 + r * 10) * mult);
+            return { energyRate, evoRate, clickPower };
+        }
+
+        function updateCivUI() {
+            const rates = getProductionRates();
+            document.getElementById('resEnergy').innerText = Math.floor(civState.energy).toLocaleString();
+            document.getElementById('resEvo').innerText = Math.floor(civState.evo).toLocaleString();
+            document.getElementById('rateEnergy').innerText = rates.energyRate.toLocaleString();
+            document.getElementById('rateEvo').innerText = rates.evoRate.toLocaleString();
+            document.getElementById('clickPower').innerText = rates.clickPower.toLocaleString();
+
+            // Cập nhật tên Kỷ nguyên
+            const totalLvl = civState.upgrades.forest.level + civState.upgrades.city.level + civState.upgrades.reactor.level + civState.upgrades.orbital.level;
+            let stage = "Kỷ Nguyên Khởi Nguyên";
+            if (totalLvl >= 20) stage = "Văn Minh Liên Sao (Type II)";
+            else if (totalLvl >= 12) stage = "Kỷ Nguyên Lượng Tử & Quỹ Đạo";
+            else if (totalLvl >= 6) stage = "Đô Thị Tương Lai Sinh Thái";
+            else if (totalLvl >= 3) stage = "Kỷ Nguyên Công Nghiệp Xanh";
+            document.getElementById('civStage').innerText = stage;
+
+            // Cập nhật từng thẻ nâng cấp
+            ['forest', 'city', 'reactor', 'orbital'].forEach(key => {
+                const u = civState.upgrades[key];
+                const cost = getUpgradeCost(key);
+                document.getElementById(`lvl-${key}`).innerText = `Lv.${u.level}`;
+                document.getElementById(`cost-${key}`).innerText = `${cost.toLocaleString()} ${u.costType === 'energy' ? '⚡' : '🧬'}`;
+
+                const btn = document.getElementById(`upg-${key}`);
+                const canAfford = u.costType === 'energy' ? civState.energy >= cost : civState.evo >= cost;
+                btn.disabled = !canAfford;
+            });
+        }
+
+        function harvestManual() {
+            const rates = getProductionRates();
+            civState.energy += rates.clickPower;
+            civState.evo += Math.max(1, Math.floor(rates.clickPower / 3));
+            updateCivUI();
+        }
+
+        function buyUpgrade(key) {
+            const u = civState.upgrades[key];
+            const cost = getUpgradeCost(key);
+            if (u.costType === 'energy' && civState.energy >= cost) {
+                civState.energy -= cost;
+                u.level++;
+                spawn3DBuilding(key, u.level);
+            } else if (u.costType === 'evo' && civState.evo >= cost) {
+                civState.evo -= cost;
+                u.level++;
+                spawn3DBuilding(key, u.level);
+            }
+            updateCivUI();
+        }
+
+        // Vòng lặp cộng tài nguyên mỗi giây (chạy ngầm kể cả khi đang ở ngoài vũ trụ!)
+        setInterval(() => {
+            const rates = getProductionRates();
+            civState.energy += rates.energyRate;
+            civState.evo += rates.evoRate;
+            if (gameMode === 'EARTH') updateCivUI();
+        }, 1000);
+
+        // =========================================================================
+        // KHỞI TẠO THẾ GIỚI 3D TRÊN MẶT ĐẤT (ISLAND BIOME 3D)
+        // =========================================================================
+        function buildEarthBiome3D() {
+            earthGroup = new THREE.Group();
+            earthGroup.visible = false;
+            scene.add(earthGroup);
+
+            // Ánh sáng riêng cho đảo sự sống
+            const hemiLight = new THREE.HemisphereLight(0x7dd3fc, 0x064e3b, 1.3);
+            earthGroup.add(hemiLight);
+
+            const dirLight = new THREE.DirectionalLight(0xfef08a, 1.8);
+            dirLight.position.set(25, 40, 25);
+            earthGroup.add(dirLight);
+
+            // 1. Đế đá nổi khổng lồ
+            const baseGeo = new THREE.ConeGeometry(16, 18, 7);
+            baseGeo.rotateX(Math.PI);
+            const baseMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.9, flatShading: true });
+            const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+            baseMesh.position.y = -9.2;
+            earthGroup.add(baseMesh);
+
+            // 2. Mặt cỏ xanh tươi & Hồ nước phát sáng
+            const grassGeo = new THREE.CylinderGeometry(16.2, 16, 0.8, 32);
+            const grassMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.7 });
+            const grassMesh = new THREE.Mesh(grassGeo, grassMat);
+            grassMesh.position.y = -0.2;
+            earthGroup.add(grassMesh);
+
+            const lakeGeo = new THREE.CylinderGeometry(5.5, 5.5, 0.85, 24);
+            const lakeMat = new THREE.MeshStandardMaterial({ color: 0x0ea5e9, emissive: 0x0284c7, emissiveIntensity: 0.4, roughness: 0.2 });
+            const lakeMesh = new THREE.Mesh(lakeGeo, lakeMat);
+            lakeMesh.position.set(-4, -0.15, 3);
+            earthGroup.add(lakeMesh);
+
+            // 3. Mây trắng bay lơ lửng phía trên đảo
+            for (let i = 0; i < 6; i++) {
+                const cloud = new THREE.Mesh(
+                    new THREE.DodecahedronGeometry(1.6 + Math.random(), 1),
+                    new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.75, flatShading: true })
+                );
+                cloud.scale.set(2.2, 0.6, 1.3);
+                cloud.position.set((Math.random() - 0.5) * 26, 9 + Math.random() * 4, (Math.random() - 0.5) * 26);
+                earthGroup.add(cloud);
+                earthClouds.push(cloud);
+            }
+
+            // Cây khởi đầu Level 1
+            spawn3DBuilding('forest', 1);
+        }
+
+        function spawn3DBuilding(type, level) {
+            if (!earthGroup) return;
+
+            if (type === 'forest') {
+                for (let i = 0; i < 4; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const rad = 6.5 + Math.random() * 8;
+                    const x = Math.cos(angle) * rad;
+                    const z = Math.sin(angle) * rad;
+
+                    const tree = new THREE.Group();
+                    const trunk = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.18, 0.28, 1.2, 6),
+                        new THREE.MeshStandardMaterial({ color: 0x78350f })
+                    );
+                    trunk.position.y = 0.6;
+
+                    const leaves = new THREE.Mesh(
+                        new THREE.ConeGeometry(1.1, 2.6, 7),
+                        new THREE.MeshStandardMaterial({ color: level % 2 === 0 ? 0x34d399 : 0x059669, flatShading: true })
+                    );
+                    leaves.position.y = 2.1;
+
+                    tree.add(trunk, leaves);
+                    tree.position.set(x, 0.2, z);
+                    const s = 0.8 + Math.random() * 0.6;
+                    tree.scale.set(s, s, s);
+                    earthGroup.add(tree);
+                }
+            } else if (type === 'city') {
+                for (let i = 0; i < 2; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const rad = 3 + Math.random() * 9;
+                    const h = 3 + Math.random() * 5 + level * 0.4;
+                    const tower = new THREE.Mesh(
+                        new THREE.BoxGeometry(1.3, h, 1.3),
+                        new THREE.MeshStandardMaterial({
+                            color: 0x0f172a,
+                            emissive: 0x38bdf8,
+                            emissiveIntensity: 0.45,
+                            roughness: 0.2,
+                            metalness: 0.8
+                        })
+                    );
+                    tower.position.set(Math.cos(angle) * rad, h / 2 + 0.1, Math.sin(angle) * rad);
+                    earthGroup.add(tower);
+                }
+            } else if (type === 'reactor') {
+                const angle = Math.random() * Math.PI * 2;
+                const rad = 4 + Math.random() * 6;
+                const coreGroup = new THREE.Group();
+
+                const ring = new THREE.Mesh(
+                    new THREE.TorusGeometry(1.2, 0.18, 12, 24),
+                    new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0xf59e0b, emissiveIntensity: 0.8 })
+                );
+                ring.rotation.x = Math.PI / 2;
+                ring.position.y = 1.5;
+
+                const sphere = new THREE.Mesh(
+                    new THREE.OctahedronGeometry(0.75, 1),
+                    new THREE.MeshStandardMaterial({ color: 0xfef08a, emissive: 0xf97316, emissiveIntensity: 1.2 })
+                );
+                sphere.position.y = 1.5;
+
+                coreGroup.add(ring, sphere);
+                coreGroup.position.set(Math.cos(angle) * rad, 0.2, Math.sin(angle) * rad);
+                earthGroup.add(coreGroup);
+            } else if (type === 'orbital') {
+                const satPivot = new THREE.Group();
+                const sat = new THREE.Mesh(
+                    new THREE.OctahedronGeometry(0.6, 0),
+                    new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0xa855f7, emissiveIntensity: 0.9 })
+                );
+                sat.position.set(14 + level * 1.2, 7 + (level % 3) * 1.5, 0);
+                satPivot.add(sat);
+                earthGroup.add(satPivot);
+                earthSatellites.push(satPivot);
+            }
+        }
+
+        function enterEarthMode() {
+            gameMode = 'EARTH';
+            spaceGroup.visible = false;
+            earthGroup.visible = true;
+
+            document.getElementById('spaceUI').classList.add('hidden');
+            document.getElementById('earthUI').classList.remove('hidden');
+
+            // Đặt lại góc nhìn camera cho đảo 3D
+            currentLookAt.set(0, 1.5, 0);
+            targetCamDist = 32;
+            camDist = 32;
+            camAngleX = 0.45;
+            camAngleY = 0.6;
+            updateCivUI();
+        }
+
+        function exitEarthMode() {
+            gameMode = 'SPACE';
+            earthGroup.visible = false;
+            spaceGroup.visible = true;
+
+            document.getElementById('earthUI').classList.add('hidden');
+            document.getElementById('spaceUI').classList.remove('hidden');
+
+            selectPlanet('earth');
+        }
+
+        // =========================================================================
+        // ENGINE 3D VŨ TRỤ THREE.JS
         // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
-        let sunUniforms, milkyWayGroup, galaxyCluster, asteroidBelt, spacetimeGrid, cosmicDust;
+        let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid, cosmicDust;
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, prevMouse = { x: 0, y: 0 };
         let camDist = 72, targetCamDist = 72;
@@ -275,10 +649,10 @@
         let isFreeFly = false, freeFlyAngle = 0;
 
         const planetDB = {
-            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục giữa không gian bao la.", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
+            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục. Bấm chọn Trái Đất để đổ bộ xuống nền văn minh!", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
             mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 4.5 },
             venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 6 },
-            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Tán xạ khí quyển xanh ngọc, mây 3D tách lớp & ánh đèn đô thị ban đêm.", dist: "1.00 AU", temp: "15 °C", zoom: 6.5 },
+            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh duy nhất có sự sống! Bấm nút bên dưới để đổ bộ & nâng cấp văn minh.", dist: "1.00 AU", temp: "15 °C", zoom: 6.5 },
             mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực và hẻm núi sâu.", dist: "1.52 AU", temp: "-63 °C", zoom: 5.5 },
             jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng khí động học & cơn bão Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 13 },
             saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 16 },
@@ -478,7 +852,7 @@
                     ctx.fillStyle = i % 2 === 0 ? 'rgba(67, 20, 7, 0.4)' : 'rgba(234, 88, 12, 0.35)';
                     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                     bCtx.fillStyle = i % 2 === 0 ? 'rgba(40,40,40,0.5)' : 'rgba(210,210,210,0.5)';
-                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); bCtx.fill();
                 }
                 ctx.fillStyle = '#f8fafc';
                 ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
@@ -545,24 +919,22 @@
             return new THREE.CanvasTexture(canvas);
         }
 
-        // TẠO NGÂN HÀ & HỆ THỐNG SAO SIÊU DÀY ĐẶC
         function createMilkyWayAndGalaxies() {
             milkyWayGroup = new THREE.Group();
             milkyWayGroup.rotation.z = Math.PI / 6;
 
-            // 1. Dải Ngân Hà siêu sao khổng lồ (60,000 hạt sao đủ màu sắc)
             const starCount = 60000;
             const starGeo = new THREE.BufferGeometry();
             const starPos = new Float32Array(starCount * 3);
             const starCol = new Float32Array(starCount * 3);
 
             const starColors = [
-                new THREE.Color(0x38bdf8), // Xanh ngọc
-                new THREE.Color(0xa855f7), // Tím tinh vân
-                new THREE.Color(0xfde047), // Vàng ấm
-                new THREE.Color(0xf472b6), // Hồng rực
-                new THREE.Color(0xffffff), // Trắng sáng
-                new THREE.Color(0x60a5fa)  // Xanh dương
+                new THREE.Color(0x38bdf8),
+                new THREE.Color(0xa855f7),
+                new THREE.Color(0xfde047),
+                new THREE.Color(0xf472b6),
+                new THREE.Color(0xffffff),
+                new THREE.Color(0x60a5fa)
             ];
 
             for (let i = 0; i < starCount; i++) {
@@ -594,7 +966,6 @@
             });
             milkyWayGroup.add(new THREE.Points(starGeo, starMat));
 
-            // 2. Bụi sao lấp lánh xung quanh camera (Cosmic Dust)
             const dustCount = 8000;
             const dustGeo = new THREE.BufferGeometry();
             const dustPos = new Float32Array(dustCount * 3);
@@ -605,9 +976,9 @@
             }
             dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
             cosmicDust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xbae6fd, size: 1.2, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending }));
-            scene.add(cosmicDust);
+            spaceGroup.add(cosmicDust);
 
-            scene.add(milkyWayGroup);
+            spaceGroup.add(milkyWayGroup);
         }
 
         function createAsteroidBelt() {
@@ -629,7 +1000,7 @@
                 dummy.updateMatrix();
                 asteroidBelt.setMatrixAt(i, dummy.matrix);
             }
-            scene.add(asteroidBelt);
+            spaceGroup.add(asteroidBelt);
         }
 
         function createSpacetimeGrid() {
@@ -656,12 +1027,15 @@
             });
             spacetimeGrid = new THREE.Mesh(geo, mat);
             spacetimeGrid.visible = false;
-            scene.add(spacetimeGrid);
+            spaceGroup.add(spacetimeGrid);
         }
 
         function init3D() {
             const container = document.getElementById('canvasContainer');
             scene = new THREE.Scene();
+
+            spaceGroup = new THREE.Group();
+            scene.add(spaceGroup);
 
             camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
 
@@ -679,8 +1053,8 @@
             composer.addPass(bloomPass);
 
             const sunLight = new THREE.PointLight(0xfff5e4, 3.8, 2000, 0.25);
-            scene.add(sunLight);
-            scene.add(new THREE.AmbientLight(0x0f172a, 0.45));
+            spaceGroup.add(sunLight);
+            spaceGroup.add(new THREE.AmbientLight(0x0f172a, 0.45));
 
             const flareTex = createFlareTextures();
             const lensflare = new THREE.Lensflare();
@@ -694,6 +1068,7 @@
             createMilkyWayAndGalaxies();
             createAsteroidBelt();
             createSpacetimeGrid();
+            buildEarthBiome3D();
 
             sunUniforms = { uTime: { value: 0 } };
             const sunMat = new THREE.ShaderMaterial({
@@ -704,7 +1079,7 @@
             const sun = new THREE.Mesh(new THREE.SphereGeometry(5.2, 64, 64), sunMat);
             const corona = new THREE.Mesh(new THREE.SphereGeometry(6.8, 64, 64), createAtmosphereMaterial(0xff8c00, 1.4, 3.0));
             sun.add(corona);
-            scene.add(sun);
+            spaceGroup.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
 
             const planetConfigs = [
@@ -723,7 +1098,7 @@
                 const orbitMat = new THREE.MeshBasicMaterial({ color: cfg.atmos || 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending });
                 const orbitRing = new THREE.Mesh(orbitGeo, orbitMat);
                 orbitRing.rotation.x = Math.PI / 2;
-                scene.add(orbitRing);
+                spaceGroup.add(orbitRing);
 
                 const maps = generatePlanetMaps(cfg.id);
                 const pMat = new THREE.MeshStandardMaterial({
@@ -736,7 +1111,7 @@
 
                 const mesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size, 64, 64), pMat);
                 mesh.rotation.z = cfg.tilt;
-                scene.add(mesh);
+                spaceGroup.add(mesh);
 
                 if (cfg.atmos) {
                     const atmosMesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.12, 48, 48), createAtmosphereMaterial(cfg.atmos, 1.2, 3.6));
@@ -793,7 +1168,12 @@
                 planets[cfg.id] = { mesh, distance: cfg.dist, speed: cfg.speed, angle: Math.random() * Math.PI * 2 };
             });
 
-            window.addEventListener('mousedown', e => { if (e.clientY > 280 || e.clientX > 380) { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; } });
+            window.addEventListener('mousedown', e => { 
+                if (e.target.tagName === 'CANVAS') {
+                    isDragging = true; 
+                    prevMouse = { x: e.clientX, y: e.clientY }; 
+                }
+            });
             window.addEventListener('mousemove', e => {
                 if (!isDragging) return;
                 camAngleY -= (e.clientX - prevMouse.x) * 0.005;
@@ -847,7 +1227,7 @@
         function toggleHud() {
             isHudVisible = !isHudVisible;
             const body = document.getElementById('hudBody');
-            body.style.maxHeight = isHudVisible ? '320px' : '0px';
+            body.style.maxHeight = isHudVisible ? '380px' : '0px';
             body.style.opacity = isHudVisible ? '1' : '0';
             document.getElementById('hudToggleBtn').innerText = isHudVisible ? '👁️ Ẩn' : '👁️ Hiện';
         }
@@ -870,11 +1250,39 @@
                 document.getElementById('planetTemp').innerText = info.temp;
                 targetCamDist = info.zoom;
             }
+
+            // Hiện nút Đổ bộ nếu chọn Trái Đất
+            const landBtn = document.getElementById('landEarthBtn');
+            if (id === 'earth') {
+                landBtn.classList.remove('hidden');
+            } else {
+                landBtn.classList.add('hidden');
+            }
         }
 
         function animate() {
             requestAnimationFrame(animate);
 
+            if (gameMode === 'EARTH') {
+                // Xoay nhẹ vệ tinh và mây trên đảo Trái Đất
+                earthSatellites.forEach((sat, idx) => {
+                    sat.rotation.y += 0.015 + idx * 0.004;
+                });
+                earthClouds.forEach((c, idx) => {
+                    c.position.x += Math.sin(Date.now() * 0.0005 + idx) * 0.01;
+                });
+
+                camDist += (targetCamDist - camDist) * 0.08;
+                camera.position.x = currentLookAt.x + camDist * Math.sin(camAngleY) * Math.cos(camAngleX);
+                camera.position.y = currentLookAt.y + camDist * Math.sin(camAngleX);
+                camera.position.z = currentLookAt.z + camDist * Math.cos(camAngleY) * Math.cos(camAngleX);
+                camera.lookAt(currentLookAt);
+
+                composer.render();
+                return;
+            }
+
+            // CHẾ ĐỘ VŨ TRỤ (SPACE MODE)
             if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
             if (milkyWayGroup) milkyWayGroup.rotation.y += 0.00015 * timeSpeed;
             if (cosmicDust) cosmicDust.rotation.y += 0.00035 * timeSpeed;
