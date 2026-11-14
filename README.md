@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -51,9 +51,15 @@
         }
         .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.6); border-radius: 99px; }
+        #warpOverlay {
+            position: fixed; inset: 0; background: radial-gradient(circle, rgba(56,189,248,0.8) 0%, rgba(15,23,42,1) 100%);
+            z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.6s ease;
+        }
     </style>
 </head>
 <body class="w-screen h-screen select-none">
+
+    <div id="warpOverlay"></div>
 
     <!-- MÀN HÌNH CHỜ KHỞI ĐỘNG -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-[#010206] flex flex-col items-center justify-center p-6 text-center space-y-6">
@@ -66,7 +72,7 @@
                 COSMIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-indigo-400">CIVILIZATION 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Hệ Mặt Trời 3D & Đảo Siêu To Khổng Lồ!
+                Đồ họa giữ nguyên bản hoàn hảo • Đảo lớn khổng lồ • Khám phá Mặt Trăng!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-emerald-500 to-indigo-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(56,189,248,0.8)] transition active:scale-95">
@@ -172,8 +178,8 @@
                 <button onclick="harvestManual()" class="hud-glass px-3.5 py-2.5 rounded-2xl font-orbitron font-bold text-xs text-amber-300 hover:border-amber-400 active:scale-95 transition">
                     ✨ Thu Thập (+<span id="clickPower">5</span>)
                 </button>
-                <button id="launchMoonBtn" onclick="enterMoonMode()" class="hidden hud-glass px-3.5 py-2.5 rounded-2xl font-orbitron font-bold text-xs text-purple-300 border-purple-500/60 hover:bg-purple-950/50 active:scale-95 transition animate-pulse">
-                    🚀 Thám Hiểm Mặt Trăng
+                <button id="launchMoonBtn" onclick="launchRocketToMoon()" class="hidden hud-glass px-3.5 py-2.5 rounded-2xl font-orbitron font-bold text-xs text-purple-300 border-purple-500/60 hover:bg-purple-950/50 active:scale-95 transition animate-pulse">
+                    🚀 Phóng Tàu Lên Mặt Trăng
                 </button>
                 <button onclick="exitEarthMode()" class="hud-glass px-3.5 py-2.5 rounded-2xl font-orbitron font-bold text-xs text-cyan-300 hover:border-cyan-400 transition">
                     🌌 Về Vũ Trụ
@@ -500,48 +506,48 @@
         }, 1000);
 
         // =========================================================================
-        // KHỞI TẠO ĐẢO TRÁI ĐẤT & MẶT TRĂNG (KÍCH THƯỚC ĐÃ PHÓNG TO GẤP ĐÔI)
+        // KHỞI TẠO ĐẢO TRÁI ĐẤT & MẶT TRĂNG KHỔNG LỒ (GIỮ NGUYÊN ĐỒ HỌA BAN ĐẦU)
         // =========================================================================
         function buildEarthBiome3D() {
             earthGroup = new THREE.Group();
             earthGroup.visible = false;
             scene.add(earthGroup);
 
-            const hemiLight = new THREE.HemisphereLight(0x7dd3fc, 0x064e3b, 0.8);
+            const hemiLight = new THREE.HemisphereLight(0x7dd3fc, 0x064e3b, 0.75);
             earthGroup.add(hemiLight);
-            const dirLight = new THREE.DirectionalLight(0xfef3c7, 1.2);
-            dirLight.position.set(40, 60, 40);
+            const dirLight = new THREE.DirectionalLight(0xfef3c7, 0.9);
+            dirLight.position.set(25, 40, 25);
             earthGroup.add(dirLight);
 
-            // Phóng to kích thước đảo Trái Đất (Bán kính từ 16 lên 32)
+            // Đảo to khổng lồ
             const baseMesh = new THREE.Mesh(
-                new THREE.ConeGeometry(32, 35, 8).rotateX(Math.PI),
+                new THREE.ConeGeometry(32, 35, 7).rotateX(Math.PI),
                 new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.9, flatShading: true })
             );
             baseMesh.position.y = -17.5;
             earthGroup.add(baseMesh);
 
             const grassMesh = new THREE.Mesh(
-                new THREE.CylinderGeometry(32.4, 32, 1.5, 36),
+                new THREE.CylinderGeometry(32.4, 32, 1.5, 32),
                 new THREE.MeshStandardMaterial({ color: 0x059669, roughness: 0.8 })
             );
             grassMesh.position.y = -0.4;
             earthGroup.add(grassMesh);
 
             const lakeMesh = new THREE.Mesh(
-                new THREE.CylinderGeometry(11, 11, 1.6, 28),
-                new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x0369a1, emissiveIntensity: 0.2, roughness: 0.3 })
+                new THREE.CylinderGeometry(11, 11, 1.6, 24),
+                new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x0369a1, emissiveIntensity: 0.15, roughness: 0.3 })
             );
             lakeMesh.position.set(-8, -0.3, 6);
             earthGroup.add(lakeMesh);
 
             for (let i = 0; i < 10; i++) {
                 const cloud = new THREE.Mesh(
-                    new THREE.DodecahedronGeometry(3 + Math.random() * 2, 1),
+                    new THREE.DodecahedronGeometry(3 + Math.random(), 1),
                     new THREE.MeshStandardMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.55, flatShading: true })
                 );
-                cloud.scale.set(2.5, 0.7, 1.5);
-                cloud.position.set((Math.random() - 0.5) * 45, 16 + Math.random() * 6, (Math.random() - 0.5) * 45);
+                cloud.scale.set(2.2, 0.6, 1.3);
+                cloud.position.set((Math.random() - 0.5) * 45, 16 + Math.random() * 8, (Math.random() - 0.5) * 45);
                 earthGroup.add(cloud);
                 earthClouds.push(cloud);
             }
@@ -555,11 +561,11 @@
 
             const moonHemi = new THREE.HemisphereLight(0x94a3b8, 0x1e293b, 1.0);
             moonGroup.add(moonHemi);
-            const moonSun = new THREE.DirectionalLight(0xffffff, 2.2);
-            moonSun.position.set(40, 60, 40);
+            const moonSun = new THREE.DirectionalLight(0xffffff, 2.0);
+            moonSun.position.set(30, 45, 25);
             moonGroup.add(moonSun);
 
-            // Phóng to kích thước đảo Mặt Trăng (Bán kính từ 17 lên 34)
+            // Đảo Mặt Trăng to khổng lồ
             const moonBase = new THREE.Mesh(
                 new THREE.ConeGeometry(34, 37, 8).rotateX(Math.PI),
                 new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.95, metalness: 0.2, flatShading: true })
@@ -568,13 +574,13 @@
             moonGroup.add(moonBase);
 
             const moonSurface = new THREE.Mesh(
-                new THREE.CylinderGeometry(33, 32.5, 1.6, 36),
+                new THREE.CylinderGeometry(33, 32.5, 1.6, 32),
                 new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.85, metalness: 0.1 })
             );
             moonSurface.position.y = -0.4;
             moonGroup.add(moonSurface);
 
-            for (let i = 0; i < 14; i++) {
+            for (let i = 0; i < 12; i++) {
                 const crater = new THREE.Mesh(
                     new THREE.RingGeometry(1, 3.5, 16),
                     new THREE.MeshStandardMaterial({ color: 0x334155, side: THREE.DoubleSide, roughness: 0.9 })
@@ -596,7 +602,7 @@
                     const tree = new THREE.Group();
                     const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.55, 2.4, 6), new THREE.MeshStandardMaterial({ color: 0x78350f }));
                     trunk.position.y = 1.2;
-                    const leaves = new THREE.Mesh(new THREE.ConeGeometry(2.2, 5, 7), new THREE.MeshStandardMaterial({ color: 0x059669, flatShading: true }));
+                    const leaves = new THREE.Mesh(new THREE.ConeGeometry(2.2, 5, 7), new THREE.MeshStandardMaterial({ color: level % 2 === 0 ? 0x10b981 : 0x047857, flatShading: true }));
                     leaves.position.y = 4.2;
                     tree.add(trunk, leaves);
                     tree.position.set(Math.cos(angle) * rad, 0.4, Math.sin(angle) * rad);
@@ -605,22 +611,27 @@
             } else if (type === 'city') {
                 const angle = Math.random() * Math.PI * 2;
                 const rad = 6 + Math.random() * 18;
-                const h = 8 + level * 1.2;
+                const h = 6 + level * 0.8;
                 const tower = new THREE.Mesh(
                     new THREE.BoxGeometry(2.5, h, 2.5),
-                    new THREE.MeshStandardMaterial({ color: 0x0f172a, emissive: 0x38bdf8, emissiveIntensity: 0.4, roughness: 0.2, metalness: 0.9 })
+                    new THREE.MeshStandardMaterial({ color: 0x0f172a, emissive: 0x38bdf8, emissiveIntensity: 0.35, roughness: 0.3, metalness: 0.8 })
                 );
                 tower.position.set(Math.cos(angle) * rad, h / 2 + 0.4, Math.sin(angle) * rad);
                 earthGroup.add(tower);
             } else if (type === 'reactor') {
                 const angle = Math.random() * Math.PI * 2;
                 const rad = 10;
-                const ring = new THREE.Mesh(new THREE.TorusGeometry(2.5, 0.35, 12, 24), new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0xd97706, emissiveIntensity: 0.7 }));
-                ring.rotation.x = Math.PI / 2; ring.position.set(Math.cos(angle) * rad, 3.5, Math.sin(angle) * rad);
-                earthGroup.add(ring);
+                const coreGroup = new THREE.Group();
+                const ring = new THREE.Mesh(new THREE.TorusGeometry(2.4, 0.36, 12, 24), new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0xd97706, emissiveIntensity: 0.6 }));
+                ring.rotation.x = Math.PI / 2; ring.position.y = 3;
+                const sphere = new THREE.Mesh(new THREE.OctahedronGeometry(1.5, 1), new THREE.MeshStandardMaterial({ color: 0xfde047, emissive: 0xea580c, emissiveIntensity: 0.8 }));
+                sphere.position.y = 3;
+                coreGroup.add(ring, sphere);
+                coreGroup.position.set(Math.cos(angle) * rad, 0.4, Math.sin(angle) * rad);
+                earthGroup.add(coreGroup);
             } else if (type === 'orbital') {
                 const satPivot = new THREE.Group();
-                const sat = new THREE.Mesh(new THREE.OctahedronGeometry(1.2, 0), new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0x9333ea, emissiveIntensity: 0.8 }));
+                const sat = new THREE.Mesh(new THREE.OctahedronGeometry(1.2, 0), new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0x9333ea, emissiveIntensity: 0.7 }));
                 sat.position.set(28, 14, 0); satPivot.add(sat);
                 earthGroup.add(satPivot);
                 earthSatellites.push(satPivot);
@@ -650,48 +661,72 @@
             }
         }
 
-        function enterEarthMode() {
-            gameMode = 'EARTH';
-            spaceGroup.visible = false; moonGroup.visible = false; earthGroup.visible = true;
-            if (bloomPass) bloomPass.strength = 0.28;
-            if (renderer) renderer.toneMappingExposure = 0.85;
-
-            document.getElementById('spaceUI').classList.add('hidden');
-            document.getElementById('moonUI').classList.add('hidden');
-            document.getElementById('earthUI').classList.remove('hidden');
-
-            currentLookAt.set(0, 2.5, 0); targetCamDist = 65; camDist = 65; camAngleX = 0.45; camAngleY = 0.6;
-            updateCivUI();
+        function triggerWarpEffect(callback) {
+            const overlay = document.getElementById('warpOverlay');
+            overlay.style.opacity = '1';
+            setTimeout(() => {
+                callback();
+                setTimeout(() => { overlay.style.opacity = '0'; }, 300);
+            }, 400);
         }
 
-        function enterMoonMode() {
-            gameMode = 'MOON';
-            spaceGroup.visible = false; earthGroup.visible = false; moonGroup.visible = true;
-            if (bloomPass) bloomPass.strength = 0.35;
-            if (renderer) renderer.toneMappingExposure = 0.9;
+        function enterEarthMode() {
+            triggerWarpEffect(() => {
+                gameMode = 'EARTH';
+                spaceGroup.visible = false; moonGroup.visible = false; earthGroup.visible = true;
+                if (bloomPass) bloomPass.strength = 0.28;
+                if (renderer) renderer.toneMappingExposure = 0.85;
 
-            document.getElementById('spaceUI').classList.add('hidden');
-            document.getElementById('earthUI').classList.add('hidden');
-            document.getElementById('moonUI').classList.remove('hidden');
+                document.getElementById('spaceUI').classList.add('hidden');
+                document.getElementById('moonUI').classList.add('hidden');
+                document.getElementById('earthUI').classList.remove('hidden');
 
-            currentLookAt.set(0, 2.5, 0); targetCamDist = 65; camDist = 65; camAngleX = 0.45; camAngleY = 0.6;
-            updateCivUI();
+                currentLookAt.set(0, 2.5, 0); targetCamDist = 65; camDist = 65; camAngleX = 0.45; camAngleY = 0.6;
+                updateCivUI();
+            });
+        }
+
+        function launchRocketToMoon() {
+            triggerWarpEffect(() => {
+                gameMode = 'MOON';
+                spaceGroup.visible = false; earthGroup.visible = false; moonGroup.visible = true;
+                if (bloomPass) bloomPass.strength = 0.35;
+                if (renderer) renderer.toneMappingExposure = 0.9;
+
+                document.getElementById('spaceUI').classList.add('hidden');
+                document.getElementById('earthUI').classList.add('hidden');
+                document.getElementById('moonUI').classList.remove('hidden');
+
+                currentLookAt.set(0, 2.5, 0); targetCamDist = 65; camDist = 65; camAngleX = 0.45; camAngleY = 0.6;
+                updateCivUI();
+            });
         }
 
         function exitEarthMode() {
-            gameMode = 'SPACE';
-            earthGroup.visible = false; moonGroup.visible = false; spaceGroup.visible = true;
-            if (bloomPass) bloomPass.strength = 1.4;
-            if (renderer) renderer.toneMappingExposure = 1.25;
+            triggerWarpEffect(() => {
+                gameMode = 'SPACE';
+                earthGroup.visible = false; moonGroup.visible = false; spaceGroup.visible = true;
+                if (bloomPass) bloomPass.strength = 1.4;
+                if (renderer) renderer.toneMappingExposure = 1.25;
 
-            document.getElementById('earthUI').classList.add('hidden');
-            document.getElementById('moonUI').classList.add('hidden');
-            document.getElementById('spaceUI').classList.remove('hidden');
-            selectPlanet('earth');
+                document.getElementById('earthUI').classList.add('hidden');
+                document.getElementById('moonUI').classList.add('hidden');
+                document.getElementById('spaceUI').classList.remove('hidden');
+                selectPlanet('earth');
+            });
         }
 
         function exitMoonMode() {
-            enterEarthMode();
+            triggerWarpEffect(() => {
+                gameMode = 'EARTH';
+                moonGroup.visible = false; earthGroup.visible = true;
+                if (bloomPass) bloomPass.strength = 0.28;
+                if (renderer) renderer.toneMappingExposure = 0.85;
+
+                document.getElementById('moonUI').classList.add('hidden');
+                document.getElementById('earthUI').classList.remove('hidden');
+                currentLookAt.set(0, 2.5, 0); targetCamDist = 65; camDist = 65;
+            });
         }
 
         // =========================================================================
@@ -709,15 +744,15 @@
         let isFreeFly = false, freeFlyAngle = 0;
 
         const planetDB = {
-            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục.", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
-            mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc.", dist: "0.39 AU", temp: "430 °C", zoom: 4.5 },
-            venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển mây axit sulfuric.", dist: "0.72 AU", temp: "462 °C", zoom: 6 },
-            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống. Đạt cấp độ 6 để mở khóa thám hiểm Mặt Trăng!", dist: "1.00 AU", temp: "15 °C", zoom: 6.5 },
-            mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực.", dist: "1.52 AU", temp: "-63 °C", zoom: 5.5 },
-            jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng & Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 13 },
-            saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng.", dist: "9.58 AU", temp: "-140 °C", zoom: 16 },
-            uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng khí metan xanh ngọc.", dist: "19.22 AU", temp: "-195 °C", zoom: 10 },
-            neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Thế giới băng giá xanh thẫm.", dist: "30.05 AU", temp: "-200 °C", zoom: 10 }
+            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục. Bấm chọn Trái Đất để đổ bộ!", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
+            mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 4.5 },
+            venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 6 },
+            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống! Đạt cấp độ 6 để mở khóa trạm thám hiểm Mặt Trăng.", dist: "1.00 AU", temp: "15 °C", zoom: 6.5 },
+            mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực và hẻm núi sâu.", dist: "1.52 AU", temp: "-63 °C", zoom: 5.5 },
+            jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng khí động học & cơn bão Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 13 },
+            saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 16 },
+            uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng khí metan xanh ngọc bích với vành đai dọc mờ ảo.", dist: "19.22 AU", temp: "-195 °C", zoom: 10 },
+            neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Thế giới băng giá xanh thẫm với những luồng gió siêu thanh.", dist: "30.05 AU", temp: "-200 °C", zoom: 10 }
         };
 
         const sunVertexShader = `
@@ -788,23 +823,38 @@
             const ctx = diffCanvas.getContext('2d'); const bCtx = bumpCanvas.getContext('2d');
             bCtx.fillStyle = '#808080'; bCtx.fillRect(0, 0, w, h);
 
-            if (type === 'mercury') { ctx.fillStyle = '#64748b'; ctx.fillRect(0, 0, w, h); }
-            else if (type === 'venus') { ctx.fillStyle = '#f59e0b'; ctx.fillRect(0, 0, w, h); }
-            else if (type === 'earth') {
+            if (type === 'mercury') {
+                ctx.fillStyle = '#64748b'; ctx.fillRect(0, 0, w, h);
+            } else if (type === 'venus') {
+                ctx.fillStyle = '#f59e0b'; ctx.fillRect(0, 0, w, h);
+            } else if (type === 'earth') {
                 ctx.fillStyle = '#0284c7'; ctx.fillRect(0, 0, w, h);
                 ctx.fillStyle = '#15803d'; ctx.beginPath(); ctx.ellipse(1000, 500, 300, 180, 0, 0, Math.PI * 2); ctx.fill();
-            }
-            else if (type === 'clouds') {
+            } else if (type === 'clouds') {
                 ctx.clearRect(0, 0, w, h);
                 ctx.fillStyle = 'rgba(255,255,255,0.4)';
                 for (let i = 0; i < 150; i++) ctx.fillRect(Math.random() * w, Math.random() * h, 180, 25);
+            } else if (type === 'mars') {
+                ctx.fillStyle = '#9a3412'; ctx.fillRect(0, 0, w, h);
+            } else if (type === 'jupiter') {
+                ctx.fillStyle = '#d97706'; ctx.fillRect(0, 0, w, h);
+            } else if (type === 'saturn') {
+                ctx.fillStyle = '#ca8a04'; ctx.fillRect(0, 0, w, h);
+            } else if (type === 'uranus') {
+                ctx.fillStyle = '#06b6d4'; ctx.fillRect(0, 0, w, h);
+            } else if (type === 'neptune') {
+                ctx.fillStyle = '#1d4ed8'; ctx.fillRect(0, 0, w, h);
             }
-            else if (type === 'mars') { ctx.fillStyle = '#9a3412'; ctx.fillRect(0, 0, w, h); }
-            else if (type === 'jupiter') { ctx.fillStyle = '#d97706'; ctx.fillRect(0, 0, w, h); }
-            else if (type === 'saturn') { ctx.fillStyle = '#ca8a04'; ctx.fillRect(0, 0, w, h); }
-            else if (type === 'uranus') { ctx.fillStyle = '#06b6d4'; ctx.fillRect(0, 0, w, h); }
-            else if (type === 'neptune') { ctx.fillStyle = '#1d4ed8'; ctx.fillRect(0, 0, w, h); }
             return { map: new THREE.CanvasTexture(diffCanvas), bumpMap: new THREE.CanvasTexture(bumpCanvas) };
+        }
+
+        function createSaturnRingTexture() {
+            const canvas = document.createElement('canvas'); canvas.width = 1024; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createLinearGradient(0, 0, 1024, 0);
+            grad.addColorStop(0, 'rgba(234, 179, 8, 0)'); grad.addColorStop(0.5, 'rgba(234, 179, 8, 0.9)'); grad.addColorStop(1, 'rgba(234, 179, 8, 0)');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 64);
+            return new THREE.CanvasTexture(canvas);
         }
 
         function createMilkyWayAndGalaxies() {
@@ -905,7 +955,9 @@
 
             planetConfigs.forEach(cfg => {
                 const maps = generatePlanetMaps(cfg.id);
-                const mesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size, 64, 64), new THREE.MeshStandardMaterial({ map: maps.map, bumpMap: maps.bumpMap, roughness: 0.72 }));
+                const pMat = new THREE.MeshStandardMaterial({ map: maps.map, bumpMap: maps.bumpMap, bumpScale: 0.045, roughness: 0.72, metalness: 0.08 });
+                const mesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size, 64, 64), pMat);
+                mesh.rotation.z = cfg.tilt;
                 spaceGroup.add(mesh);
                 planets[cfg.id] = { mesh, distance: cfg.dist, speed: cfg.speed, angle: Math.random() * Math.PI * 2 };
             });
@@ -971,11 +1023,27 @@
 
             if (gameMode === 'EARTH') {
                 earthSatellites.forEach((sat, i) => sat.rotation.y += 0.015 + i * 0.004);
+                earthClouds.forEach((c, idx) => { c.position.x += Math.sin(Date.now() * 0.0005 + idx) * 0.01; });
             } else if (gameMode === 'MOON') {
-                // Xoay nhẹ Mặt Trăng
+                // Moon mode active
             } else {
                 if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
                 if (milkyWayGroup) milkyWayGroup.rotation.y += 0.00015 * timeSpeed;
+                if (cosmicDust) cosmicDust.rotation.y += 0.00035 * timeSpeed;
+                if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
+
+                if (isFreeFly) {
+                    freeFlyAngle += 0.003 * timeSpeed;
+                    currentLookAt.set(0, 0, 0);
+                    camDist = 85 + Math.sin(freeFlyAngle * 0.5) * 25;
+                    camera.position.x = Math.cos(freeFlyAngle) * camDist;
+                    camera.position.y = 25 + Math.sin(freeFlyAngle) * 15;
+                    camera.position.z = Math.sin(freeFlyAngle) * camDist;
+                    camera.lookAt(currentLookAt);
+                    composer.render();
+                    return;
+                }
+
                 Object.keys(planets).forEach(id => {
                     const p = planets[id];
                     if (p.speed > 0) {
@@ -985,9 +1053,7 @@
                         p.mesh.rotation.y += 0.012 * timeSpeed;
                     }
                 });
-            }
 
-            if (gameMode === 'SPACE') {
                 const targetPos = new THREE.Vector3();
                 if (planets[focusedObject]) planets[focusedObject].mesh.getWorldPosition(targetPos);
                 currentLookAt.lerp(targetPos, 0.08);
