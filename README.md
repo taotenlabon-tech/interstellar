@@ -420,7 +420,6 @@
             document.getElementById('rateEvo').innerText = rates.evoRate.toLocaleString();
             document.getElementById('clickPower').innerText = rates.clickPower.toLocaleString();
 
-            // Cập nhật tên Kỷ nguyên
             const totalLvl = civState.upgrades.forest.level + civState.upgrades.city.level + civState.upgrades.reactor.level + civState.upgrades.orbital.level;
             let stage = "Kỷ Nguyên Khởi Nguyên";
             if (totalLvl >= 20) stage = "Văn Minh Liên Sao (Type II)";
@@ -429,7 +428,6 @@
             else if (totalLvl >= 3) stage = "Kỷ Nguyên Công Nghiệp Xanh";
             document.getElementById('civStage').innerText = stage;
 
-            // Cập nhật từng thẻ nâng cấp
             ['forest', 'city', 'reactor', 'orbital'].forEach(key => {
                 const u = civState.upgrades[key];
                 const cost = getUpgradeCost(key);
@@ -464,7 +462,6 @@
             updateCivUI();
         }
 
-        // Vòng lặp cộng tài nguyên mỗi giây (chạy ngầm kể cả khi đang ở ngoài vũ trụ!)
         setInterval(() => {
             const rates = getProductionRates();
             civState.energy += rates.energyRate;
@@ -473,47 +470,47 @@
         }, 1000);
 
         // =========================================================================
-        // KHỞI TẠO THẾ GIỚI 3D TRÊN MẶT ĐẤT (ISLAND BIOME 3D)
+        // KHỞI TẠO THẾ GIỚI 3D TRÊN MẶT ĐẤT (ÁNH SÁNG DỊU MẮT, KHÔNG CHÓI)
         // =========================================================================
         function buildEarthBiome3D() {
             earthGroup = new THREE.Group();
             earthGroup.visible = false;
             scene.add(earthGroup);
 
-            // Ánh sáng riêng cho đảo sự sống
-            const hemiLight = new THREE.HemisphereLight(0x7dd3fc, 0x064e3b, 1.3);
+            // Ánh sáng dịu nhẹ, êm mắt cho chế độ Trái Đất
+            const hemiLight = new THREE.HemisphereLight(0x7dd3fc, 0x064e3b, 0.75);
             earthGroup.add(hemiLight);
 
-            const dirLight = new THREE.DirectionalLight(0xfef08a, 1.8);
+            const dirLight = new THREE.DirectionalLight(0xfef3c7, 0.9);
             dirLight.position.set(25, 40, 25);
             earthGroup.add(dirLight);
 
             // 1. Đế đá nổi khổng lồ
             const baseGeo = new THREE.ConeGeometry(16, 18, 7);
             baseGeo.rotateX(Math.PI);
-            const baseMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.9, flatShading: true });
+            const baseMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.9, flatShading: true });
             const baseMesh = new THREE.Mesh(baseGeo, baseMat);
             baseMesh.position.y = -9.2;
             earthGroup.add(baseMesh);
 
-            // 2. Mặt cỏ xanh tươi & Hồ nước phát sáng
+            // 2. Mặt cỏ xanh tươi & Hồ nước dịu mắt
             const grassGeo = new THREE.CylinderGeometry(16.2, 16, 0.8, 32);
-            const grassMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.7 });
+            const grassMat = new THREE.MeshStandardMaterial({ color: 0x059669, roughness: 0.8 });
             const grassMesh = new THREE.Mesh(grassGeo, grassMat);
             grassMesh.position.y = -0.2;
             earthGroup.add(grassMesh);
 
             const lakeGeo = new THREE.CylinderGeometry(5.5, 5.5, 0.85, 24);
-            const lakeMat = new THREE.MeshStandardMaterial({ color: 0x0ea5e9, emissive: 0x0284c7, emissiveIntensity: 0.4, roughness: 0.2 });
+            const lakeMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x0369a1, emissiveIntensity: 0.15, roughness: 0.3 });
             const lakeMesh = new THREE.Mesh(lakeGeo, lakeMat);
             lakeMesh.position.set(-4, -0.15, 3);
             earthGroup.add(lakeMesh);
 
-            // 3. Mây trắng bay lơ lửng phía trên đảo
+            // 3. Mây trắng dịu nhẹ bay lơ lửng
             for (let i = 0; i < 6; i++) {
                 const cloud = new THREE.Mesh(
                     new THREE.DodecahedronGeometry(1.6 + Math.random(), 1),
-                    new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.75, flatShading: true })
+                    new THREE.MeshStandardMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.55, flatShading: true })
                 );
                 cloud.scale.set(2.2, 0.6, 1.3);
                 cloud.position.set((Math.random() - 0.5) * 26, 9 + Math.random() * 4, (Math.random() - 0.5) * 26);
@@ -544,7 +541,7 @@
 
                     const leaves = new THREE.Mesh(
                         new THREE.ConeGeometry(1.1, 2.6, 7),
-                        new THREE.MeshStandardMaterial({ color: level % 2 === 0 ? 0x34d399 : 0x059669, flatShading: true })
+                        new THREE.MeshStandardMaterial({ color: level % 2 === 0 ? 0x10b981 : 0x047857, flatShading: true })
                     );
                     leaves.position.y = 2.1;
 
@@ -564,8 +561,8 @@
                         new THREE.MeshStandardMaterial({
                             color: 0x0f172a,
                             emissive: 0x38bdf8,
-                            emissiveIntensity: 0.45,
-                            roughness: 0.2,
+                            emissiveIntensity: 0.35,
+                            roughness: 0.3,
                             metalness: 0.8
                         })
                     );
@@ -579,14 +576,14 @@
 
                 const ring = new THREE.Mesh(
                     new THREE.TorusGeometry(1.2, 0.18, 12, 24),
-                    new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0xf59e0b, emissiveIntensity: 0.8 })
+                    new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0xd97706, emissiveIntensity: 0.6 })
                 );
                 ring.rotation.x = Math.PI / 2;
                 ring.position.y = 1.5;
 
                 const sphere = new THREE.Mesh(
                     new THREE.OctahedronGeometry(0.75, 1),
-                    new THREE.MeshStandardMaterial({ color: 0xfef08a, emissive: 0xf97316, emissiveIntensity: 1.2 })
+                    new THREE.MeshStandardMaterial({ color: 0xfde047, emissive: 0xea580c, emissiveIntensity: 0.8 })
                 );
                 sphere.position.y = 1.5;
 
@@ -597,7 +594,7 @@
                 const satPivot = new THREE.Group();
                 const sat = new THREE.Mesh(
                     new THREE.OctahedronGeometry(0.6, 0),
-                    new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0xa855f7, emissiveIntensity: 0.9 })
+                    new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0x9333ea, emissiveIntensity: 0.7 })
                 );
                 sat.position.set(14 + level * 1.2, 7 + (level % 3) * 1.5, 0);
                 satPivot.add(sat);
@@ -611,10 +608,13 @@
             spaceGroup.visible = false;
             earthGroup.visible = true;
 
+            // Giảm cường độ phát sáng Bloom & Exposure để Trái Đất dịu mắt, không bị chói
+            if (bloomPass) bloomPass.strength = 0.28;
+            if (renderer) renderer.toneMappingExposure = 0.85;
+
             document.getElementById('spaceUI').classList.add('hidden');
             document.getElementById('earthUI').classList.remove('hidden');
 
-            // Đặt lại góc nhìn camera cho đảo 3D
             currentLookAt.set(0, 1.5, 0);
             targetCamDist = 32;
             camDist = 32;
@@ -627,6 +627,10 @@
             gameMode = 'SPACE';
             earthGroup.visible = false;
             spaceGroup.visible = true;
+
+            // Khôi phục lại ánh sáng rực rỡ cho Vũ Trụ
+            if (bloomPass) bloomPass.strength = 1.4;
+            if (renderer) renderer.toneMappingExposure = 1.25;
 
             document.getElementById('earthUI').classList.add('hidden');
             document.getElementById('spaceUI').classList.remove('hidden');
@@ -1251,7 +1255,6 @@
                 targetCamDist = info.zoom;
             }
 
-            // Hiện nút Đổ bộ nếu chọn Trái Đất
             const landBtn = document.getElementById('landEarthBtn');
             if (id === 'earth') {
                 landBtn.classList.remove('hidden');
@@ -1264,7 +1267,6 @@
             requestAnimationFrame(animate);
 
             if (gameMode === 'EARTH') {
-                // Xoay nhẹ vệ tinh và mây trên đảo Trái Đất
                 earthSatellites.forEach((sat, idx) => {
                     sat.rotation.y += 0.015 + idx * 0.004;
                 });
@@ -1282,7 +1284,6 @@
                 return;
             }
 
-            // CHẾ ĐỘ VŨ TRỤ (SPACE MODE)
             if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
             if (milkyWayGroup) milkyWayGroup.rotation.y += 0.00015 * timeSpeed;
             if (cosmicDust) cosmicDust.rotation.y += 0.00035 * timeSpeed;
