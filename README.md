@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -72,11 +72,11 @@
                 COSMIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-indigo-400">CIVILIZATION 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Đồ họa giữ nguyên bản hoàn hảo • Đảo lớn khổng lồ • Khám phá Mặt Trăng!
+                Hệ Mặt Trời vạn sao lấp lánh • Vành đai hành tinh • Đảo khổng lồ & Mặt Trăng!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-emerald-500 to-indigo-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(56,189,248,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG TRẢI NGHIỆM
+            ⚡ KHỞI ĐỘNG VŨ TRỤ
         </button>
     </div>
 
@@ -506,7 +506,7 @@
         }, 1000);
 
         // =========================================================================
-        // KHỞI TẠO ĐẢO TRÁI ĐẤT & MẶT TRĂNG KHỔNG LỒ (GIỮ NGUYÊN ĐỒ HỌA BAN ĐẦU)
+        // KHỞI TẠO ĐẢO TRÁI ĐẤT & MẶT TRĂNG KHỔNG LỒ (ĐỒ HỌA GỐC)
         // =========================================================================
         function buildEarthBiome3D() {
             earthGroup = new THREE.Group();
@@ -519,7 +519,6 @@
             dirLight.position.set(25, 40, 25);
             earthGroup.add(dirLight);
 
-            // Đảo to khổng lồ
             const baseMesh = new THREE.Mesh(
                 new THREE.ConeGeometry(32, 35, 7).rotateX(Math.PI),
                 new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.9, flatShading: true })
@@ -565,7 +564,6 @@
             moonSun.position.set(30, 45, 25);
             moonGroup.add(moonSun);
 
-            // Đảo Mặt Trăng to khổng lồ
             const moonBase = new THREE.Mesh(
                 new THREE.ConeGeometry(34, 37, 8).rotateX(Math.PI),
                 new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.95, metalness: 0.2, flatShading: true })
@@ -730,7 +728,7 @@
         }
 
         // =========================================================================
-        // ENGINE 3D VŨ TRỤ THREE.JS
+        // ENGINE 3D VŨ TRỤ THREE.JS (VẠN SAO, VÀNH ĐAI, HÀNH TINH)
         // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
@@ -825,21 +823,46 @@
 
             if (type === 'mercury') {
                 ctx.fillStyle = '#64748b'; ctx.fillRect(0, 0, w, h);
+                for (let i = 0; i < 1000; i++) {
+                    const x = Math.random() * w, y = Math.random() * h, r = Math.random() * 20 + 2;
+                    ctx.fillStyle = i % 2 === 0 ? 'rgba(30,41,59,0.4)' : 'rgba(148,163,184,0.3)';
+                    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+                }
             } else if (type === 'venus') {
-                ctx.fillStyle = '#f59e0b'; ctx.fillRect(0, 0, w, h);
+                const grad = ctx.createLinearGradient(0, 0, 0, h);
+                grad.addColorStop(0, '#92400e'); grad.addColorStop(0.5, '#f59e0b'); grad.addColorStop(1, '#78350f');
+                ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
             } else if (type === 'earth') {
-                ctx.fillStyle = '#0284c7'; ctx.fillRect(0, 0, w, h);
-                ctx.fillStyle = '#15803d'; ctx.beginPath(); ctx.ellipse(1000, 500, 300, 180, 0, 0, Math.PI * 2); ctx.fill();
+                const seaGrad = ctx.createLinearGradient(0, 0, 0, h);
+                seaGrad.addColorStop(0, '#e0f2fe'); seaGrad.addColorStop(0.5, '#0284c7'); seaGrad.addColorStop(1, '#e0f2fe');
+                ctx.fillStyle = seaGrad; ctx.fillRect(0, 0, w, h);
+                for (let i = 0; i < 60; i++) {
+                    ctx.fillStyle = i % 2 === 0 ? '#15803d' : '#a16207';
+                    ctx.beginPath(); ctx.ellipse(Math.random() * w, Math.random() * h, Math.random() * 180 + 40, Math.random() * 100 + 30, Math.random() * Math.PI, 0, Math.PI * 2); ctx.fill();
+                }
             } else if (type === 'clouds') {
                 ctx.clearRect(0, 0, w, h);
-                ctx.fillStyle = 'rgba(255,255,255,0.4)';
-                for (let i = 0; i < 150; i++) ctx.fillRect(Math.random() * w, Math.random() * h, 180, 25);
+                for (let i = 0; i < 200; i++) {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.4 + 0.1})`;
+                    ctx.beginPath(); ctx.ellipse(Math.random() * w, Math.random() * h, Math.random() * 200 + 40, Math.random() * 30 + 8, 0, 0, Math.PI * 2); ctx.fill();
+                }
             } else if (type === 'mars') {
                 ctx.fillStyle = '#9a3412'; ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
             } else if (type === 'jupiter') {
-                ctx.fillStyle = '#d97706'; ctx.fillRect(0, 0, w, h);
+                const palette = ['#451a03', '#92400e', '#d97706', '#fef3c7', '#b45309'];
+                let y = 0; while (y < h) {
+                    const bandH = Math.random() * 28 + 8;
+                    ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
+                    ctx.fillRect(0, y, w, bandH); y += bandH;
+                }
             } else if (type === 'saturn') {
-                ctx.fillStyle = '#ca8a04'; ctx.fillRect(0, 0, w, h);
+                const palette = ['#713f12', '#a16207', '#eab308', '#fef08a'];
+                let y = 0; while (y < h) {
+                    const bandH = Math.random() * 22 + 6;
+                    ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
+                    ctx.fillRect(0, y, w, bandH); y += bandH;
+                }
             } else if (type === 'uranus') {
                 ctx.fillStyle = '#06b6d4'; ctx.fillRect(0, 0, w, h);
             } else if (type === 'neptune') {
@@ -852,7 +875,12 @@
             const canvas = document.createElement('canvas'); canvas.width = 1024; canvas.height = 64;
             const ctx = canvas.getContext('2d');
             const grad = ctx.createLinearGradient(0, 0, 1024, 0);
-            grad.addColorStop(0, 'rgba(234, 179, 8, 0)'); grad.addColorStop(0.5, 'rgba(234, 179, 8, 0.9)'); grad.addColorStop(1, 'rgba(234, 179, 8, 0)');
+            grad.addColorStop(0.0, 'rgba(234, 179, 8, 0.0)');
+            grad.addColorStop(0.35, 'rgba(254, 243, 199, 0.9)');
+            grad.addColorStop(0.58, 'rgba(234, 179, 8, 0.85)');
+            grad.addColorStop(0.63, 'rgba(0, 0, 0, 0.05)');
+            grad.addColorStop(0.92, 'rgba(202, 138, 4, 0.45)');
+            grad.addColorStop(1.0, 'rgba(234, 179, 8, 0.0)');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 64);
             return new THREE.CanvasTexture(canvas);
         }
@@ -860,44 +888,102 @@
         function createMilkyWayAndGalaxies() {
             milkyWayGroup = new THREE.Group();
             milkyWayGroup.rotation.z = Math.PI / 6;
+
             const starCount = 60000;
             const starGeo = new THREE.BufferGeometry();
             const starPos = new Float32Array(starCount * 3);
             const starCol = new Float32Array(starCount * 3);
-            const colors = [new THREE.Color(0x38bdf8), new THREE.Color(0xa855f7), new THREE.Color(0xfde047), new THREE.Color(0xffffff)];
+
+            const starColors = [
+                new THREE.Color(0x38bdf8),
+                new THREE.Color(0xa855f7),
+                new THREE.Color(0xfde047),
+                new THREE.Color(0xf472b6),
+                new THREE.Color(0xffffff),
+                new THREE.Color(0x60a5fa)
+            ];
 
             for (let i = 0; i < starCount; i++) {
                 const angle = Math.random() * Math.PI * 2;
                 const radius = 800 + Math.random() * 2200;
                 const spread = (Math.random() - 0.5) * (Math.random() - 0.5) * 850;
-                starPos[i * 3] = Math.cos(angle) * radius; starPos[i * 3 + 1] = spread; starPos[i * 3 + 2] = Math.sin(angle) * radius;
-                const c = colors[Math.floor(Math.random() * colors.length)];
-                starCol[i * 3] = c.r; starCol[i * 3 + 1] = c.g; starCol[i * 3 + 2] = c.b;
+
+                starPos[i * 3] = Math.cos(angle) * radius;
+                starPos[i * 3 + 1] = spread;
+                starPos[i * 3 + 2] = Math.sin(angle) * radius;
+
+                const c = starColors[Math.floor(Math.random() * starColors.length)];
+                const brightness = 0.5 + Math.random() * 0.5;
+                starCol[i * 3] = c.r * brightness;
+                starCol[i * 3 + 1] = c.g * brightness;
+                starCol[i * 3 + 2] = c.b * brightness;
             }
+
             starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
             starGeo.setAttribute('color', new THREE.BufferAttribute(starCol, 3));
-            milkyWayGroup.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 2.8, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending })));
+            
+            const starMat = new THREE.PointsMaterial({
+                size: 2.8,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.9,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+            milkyWayGroup.add(new THREE.Points(starGeo, starMat));
 
-            cosmicDust = new THREE.Points(
-                new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(24000), 3)),
-                new THREE.PointsMaterial({ color: 0xbae6fd, size: 1.2, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending })
-            );
+            const dustCount = 8000;
+            const dustGeo = new THREE.BufferGeometry();
+            const dustPos = new Float32Array(dustCount * 3);
+            for (let i = 0; i < dustCount; i++) {
+                dustPos[i * 3] = (Math.random() - 0.5) * 700;
+                dustPos[i * 3 + 1] = (Math.random() - 0.5) * 300;
+                dustPos[i * 3 + 2] = (Math.random() - 0.5) * 700;
+            }
+            dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+            cosmicDust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xbae6fd, size: 1.2, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending }));
             spaceGroup.add(cosmicDust, milkyWayGroup);
         }
 
         function createAsteroidBelt() {
-            asteroidBelt = new THREE.InstancedMesh(new THREE.DodecahedronGeometry(0.11, 0), new THREE.MeshStandardMaterial({ color: 0x94a3b8 }), 2200);
+            const count = 2200;
+            const geo = new THREE.DodecahedronGeometry(0.11, 0);
+            const mat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.85, metalness: 0.2 });
+            asteroidBelt = new THREE.InstancedMesh(geo, mat, count);
+
             const dummy = new THREE.Object3D();
-            for (let i = 0; i < 2200; i++) {
-                const angle = Math.random() * Math.PI * 2; const radius = 30.2 + Math.random() * 3.6;
-                dummy.position.set(Math.cos(angle) * radius, (Math.random() - 0.5) * 1.1, Math.sin(angle) * radius);
-                dummy.updateMatrix(); asteroidBelt.setMatrixAt(i, dummy.matrix);
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 30.2 + Math.random() * 3.6;
+                const y = (Math.random() - 0.5) * 1.1;
+
+                dummy.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+                dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+                const scale = 0.4 + Math.random() * 1.4;
+                dummy.scale.set(scale, scale * 0.7, scale);
+                dummy.updateMatrix();
+                asteroidBelt.setMatrixAt(i, dummy.matrix);
             }
             spaceGroup.add(asteroidBelt);
         }
 
         function createSpacetimeGrid() {
-            spacetimeGrid = new THREE.Mesh(new THREE.PlaneGeometry(160, 160, 48, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x0ea5e9, wireframe: true, transparent: true, opacity: 0.16 }));
+            const size = 160;
+            const divisions = 48;
+            const geo = new THREE.PlaneGeometry(size, size, divisions, divisions);
+            geo.rotateX(-Math.PI / 2);
+
+            const pos = geo.attributes.position;
+            for (let i = 0; i < pos.count; i++) {
+                const x = pos.getX(i);
+                const z = pos.getZ(i);
+                const dist = Math.sqrt(x * x + z * z);
+                const dip = -18.0 / (Math.sqrt(dist * 0.35 + 1.2));
+                pos.setY(i, dip - 3.5);
+            }
+            geo.computeVertexNormals();
+
+            spacetimeGrid = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x0ea5e9, wireframe: true, transparent: true, opacity: 0.16 }));
             spacetimeGrid.visible = false;
             spaceGroup.add(spacetimeGrid);
         }
@@ -954,11 +1040,52 @@
             ];
 
             planetConfigs.forEach(cfg => {
+                const orbitGeo = new THREE.RingGeometry(cfg.dist - 0.06, cfg.dist + 0.06, 220);
+                const orbitRing = new THREE.Mesh(orbitGeo, new THREE.MeshBasicMaterial({ color: cfg.atmos || 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending }));
+                orbitRing.rotation.x = Math.PI / 2;
+                spaceGroup.add(orbitRing);
+
                 const maps = generatePlanetMaps(cfg.id);
                 const pMat = new THREE.MeshStandardMaterial({ map: maps.map, bumpMap: maps.bumpMap, bumpScale: 0.045, roughness: 0.72, metalness: 0.08 });
                 const mesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size, 64, 64), pMat);
                 mesh.rotation.z = cfg.tilt;
                 spaceGroup.add(mesh);
+
+                if (cfg.atmos) {
+                    mesh.add(new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.12, 48, 48), createAtmosphereMaterial(cfg.atmos, 1.2, 3.6)));
+                }
+
+                if (cfg.clouds) {
+                    const cloudMaps = generatePlanetMaps('clouds');
+                    const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.022, 64, 64), new THREE.MeshStandardMaterial({ map: cloudMaps.map, transparent: true, opacity: 0.88, depthWrite: false }));
+                    mesh.add(cloudMesh);
+                    mesh.userData.cloudMesh = cloudMesh;
+                }
+
+                if (cfg.moon) {
+                    const moonPivot = new THREE.Group();
+                    const moonMesh = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), new THREE.MeshStandardMaterial({ map: generatePlanetMaps('mercury').map, roughness: 0.9 }));
+                    moonMesh.position.x = 2.3;
+                    moonPivot.add(moonMesh);
+                    mesh.add(moonPivot);
+                    mesh.userData.moonPivot = moonPivot;
+                }
+
+                if (cfg.rings) {
+                    const rGeo = new THREE.RingGeometry(cfg.size * 1.35, cfg.size * 2.45, 128);
+                    const posAttr = rGeo.attributes.position;
+                    const uvAttr = rGeo.attributes.uv;
+                    const v3 = new THREE.Vector3();
+                    for (let i = 0; i < posAttr.count; i++) {
+                        v3.fromBufferAttribute(posAttr, i);
+                        const u = (v3.length() - cfg.size * 1.35) / (cfg.size * 1.1);
+                        uvAttr.setXY(i, u, 0.5);
+                    }
+                    const ringMesh = new THREE.Mesh(rGeo, new THREE.MeshStandardMaterial({ map: createSaturnRingTexture(), side: THREE.DoubleSide, transparent: true, opacity: 0.95, roughness: 0.5 }));
+                    ringMesh.rotation.x = Math.PI / 2;
+                    mesh.add(ringMesh);
+                }
+
                 planets[cfg.id] = { mesh, distance: cfg.dist, speed: cfg.speed, angle: Math.random() * Math.PI * 2 };
             });
 
@@ -1051,6 +1178,9 @@
                         p.mesh.position.x = Math.cos(p.angle) * p.distance;
                         p.mesh.position.z = Math.sin(p.angle) * p.distance;
                         p.mesh.rotation.y += 0.012 * timeSpeed;
+
+                        if (p.mesh.userData.cloudMesh) p.mesh.userData.cloudMesh.rotation.y += 0.006 * timeSpeed;
+                        if (p.mesh.userData.moonPivot) p.mesh.userData.moonPivot.rotation.y += 0.03 * timeSpeed;
                     }
                 });
 
