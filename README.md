@@ -40,22 +40,22 @@
 </head>
 <body class="w-screen h-screen select-none">
 
-    <!-- MÀN HÌNH CHỜ -->
+    <!-- MÀN HÌNH CHỜ KHỞI ĐỘNG -->
     <div id="startOverlay" class="fixed inset-0 z-50 bg-[#010206] flex flex-col items-center justify-center p-6 text-center space-y-6">
         <div class="relative w-32 h-32 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full border-2 border-cyan-400/50 animate-ping"></div>
-            <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-cyan-300 shadow-[0_0_80px_rgba(56,189,248,0.9)]"></div>
+            <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-cyan-300 shadow-[0_0_100px_rgba(56,189,248,0.9)]"></div>
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-5xl text-white tracking-widest">
                 ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Hệ thống 3D vũ trụ với giai điệu Stray Synth được tổng hợp trực tiếp bằng code (0 file ngoài).
+                Hệ thống sao siêu dày đặc, Ngân Hà rực rỡ & Âm nhạc điện ảnh tổng hợp nâng cao.
             </p>
         </div>
-        <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_50px_rgba(56,189,248,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG & PHÁT NHẠC
+        <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(56,189,248,0.8)] transition active:scale-95">
+            ⚡ KHỞI ĐỘNG TRẢI NGHIỆM VŨ TRỤ
         </button>
     </div>
 
@@ -127,7 +127,7 @@
 
     <script>
         // =========================================================================
-        // BỘ PHÁT GIAI ĐIỆU STRAY AMBIENT SYNTH BẰNG CODE THUẦN (KHÔNG CẦN FILE)
+        // BỘ NHẠC ĐIỆN ẢNH NÂNG CAO (SYNTH & ARPEGGIO)
         // =========================================================================
         let audioCtx, masterGain, delayNode, feedbackGain, isMusicPlaying = false, seqInterval;
 
@@ -138,15 +138,14 @@
             masterGain = audioCtx.createGain();
             masterGain.gain.value = 0.85;
 
-            // Hiệu ứng ngân vang không gian (Stereo Delay / Echo)
             delayNode = audioCtx.createDelay();
-            delayNode.delayTime.value = 0.45;
+            delayNode.delayTime.value = 0.5;
             feedbackGain = audioCtx.createGain();
-            feedbackGain.gain.value = 0.42;
+            feedbackGain.gain.value = 0.45;
 
             const delayFilter = audioCtx.createBiquadFilter();
             delayFilter.type = 'lowpass';
-            delayFilter.frequency.value = 1200;
+            delayFilter.frequency.value = 1500;
 
             delayNode.connect(delayFilter);
             delayFilter.connect(feedbackGain);
@@ -154,36 +153,18 @@
             delayFilter.connect(masterGain);
             masterGain.connect(audioCtx.destination);
 
-            // Giai điệu rải nốt trầm buồn & huyền ảo phong cách Stray (Am - F - C - G)
-            const melodySequence = [
-                // Ô nhịp 1: Am (La thứ)
-                { note: 220.00, bass: 110.00, dur: 1.6 }, // A3 + A2
-                { note: 261.63, bass: null,   dur: 1.2 }, // C4
-                { note: 329.63, bass: null,   dur: 1.4 }, // E4
-                { note: 392.00, bass: null,   dur: 1.8 }, // G4
-
-                // Ô nhịp 2: Fmaj7 (Fa trưởng 7)
-                { note: 349.23, bass: 87.31,  dur: 1.6 }, // F4 + F2
-                { note: 329.63, bass: null,   dur: 1.2 }, // E4
-                { note: 261.63, bass: null,   dur: 1.4 }, // C4
-                { note: 220.00, bass: null,   dur: 1.8 }, // A3
-
-                // Ô nhịp 3: C (Đô trưởng)
-                { note: 261.63, bass: 130.81, dur: 1.6 }, // C4 + C3
-                { note: 329.63, bass: null,   dur: 1.2 }, // E4
-                { note: 392.00, bass: null,   dur: 1.4 }, // G4
-                { note: 493.88, bass: null,   dur: 1.8 }, // B4
-
-                // Ô nhịp 4: Em / G (Mi thứ / Sol)
-                { note: 392.00, bass: 98.00,  dur: 1.6 }, // G4 + G2
-                { note: 329.63, bass: null,   dur: 1.2 }, // E4
-                { note: 293.66, bass: null,   dur: 1.4 }, // D4
-                { note: 246.94, bass: null,   dur: 2.0 }  // B3
+            // Giai điệu hoành tráng & cuốn hút hơn
+            const chords = [
+                { bass: 110.00, notes: [220.00, 261.63, 329.63, 440.00] }, // Am
+                { bass: 87.31,  notes: [174.61, 220.00, 261.63, 349.23] }, // F
+                { bass: 130.81, notes: [261.63, 329.63, 392.00, 523.25] }, // C
+                { bass: 98.00,  notes: [196.00, 246.94, 293.66, 392.00] }  // G
             ];
 
-            let step = 0;
+            let chordIdx = 0;
+            let noteIdx = 0;
 
-            function playSynthNote(freq, isBass, duration) {
+            function playNote(freq, isBass, duration) {
                 if (!audioCtx || audioCtx.state !== 'running') return;
                 const now = audioCtx.currentTime;
 
@@ -198,54 +179,61 @@
                     osc1.frequency.setValueAtTime(freq, now);
                     osc2.frequency.setValueAtTime(freq, now);
                     filter.type = 'lowpass';
-                    filter.frequency.setValueAtTime(220, now);
+                    filter.frequency.setValueAtTime(250, now);
 
                     env.gain.setValueAtTime(0.001, now);
-                    env.gain.linearRampToValueAtTime(0.28, now + 0.15);
-                    env.gain.exponentialRampToValueAtTime(0.0001, now + duration * 2.2);
+                    env.gain.linearRampToValueAtTime(0.32, now + 0.2);
+                    env.gain.exponentialRampToValueAtTime(0.0001, now + duration * 2.5);
                 } else {
-                    // Tiếng Electric Piano / Synth Pad ấm áp hơi lệch pha nhẹ (Detune)
-                    osc1.type = 'triangle';
+                    osc1.type = 'sawtooth';
                     osc2.type = 'sine';
                     osc1.frequency.setValueAtTime(freq, now);
-                    osc2.frequency.setValueAtTime(freq * 1.003, now); // Tạo độ dày âm thanh
+                    osc2.frequency.setValueAtTime(freq * 1.004, now);
 
                     filter.type = 'lowpass';
-                    filter.frequency.setValueAtTime(950, now);
-                    filter.frequency.exponentialRampToValueAtTime(320, now + duration);
+                    filter.frequency.setValueAtTime(1400, now);
+                    filter.frequency.exponentialRampToValueAtTime(400, now + duration);
 
                     env.gain.setValueAtTime(0.001, now);
-                    env.gain.linearRampToValueAtTime(0.16, now + 0.08);
-                    env.gain.exponentialRampToValueAtTime(0.0001, now + duration * 1.4);
+                    env.gain.linearRampToValueAtTime(0.12, now + 0.1);
+                    env.gain.exponentialRampToValueAtTime(0.0001, now + duration * 1.8);
                 }
 
                 osc1.connect(filter);
                 osc2.connect(filter);
                 filter.connect(env);
-
                 env.connect(masterGain);
-                if (!isBass) env.connect(delayNode); // Gửi tiếng đàn vào bộ tạo tiếng vang
+                if (!isBass) env.connect(delayNode);
 
                 osc1.start(now);
                 osc2.start(now);
-                const stopTime = now + duration * (isBass ? 2.3 : 1.5);
-                osc1.stop(stopTime);
-                osc2.stop(stopTime);
+                osc1.stop(now + duration * 2);
+                osc2.stop(now + duration * 2);
             }
 
-            function triggerNextStep() {
+            function triggerStep() {
                 if (!isMusicPlaying) return;
-                const item = melodySequence[step % melodySequence.length];
-                playSynthNote(item.note, false, item.dur);
-                if (item.bass) {
-                    playSynthNote(item.bass, true, item.dur);
+                const currentChord = chords[chordIdx];
+                
+                // Đánh nốt bass nền
+                if (noteIdx === 0) {
+                    playNote(currentChord.bass, true, 3.5);
                 }
-                step++;
+
+                // Rải nốt giai điệu (Arpeggio)
+                const n = currentChord.notes[noteIdx % currentChord.notes.length];
+                playNote(n, false, 1.4);
+
+                noteIdx++;
+                if (noteIdx >= 8) {
+                    noteIdx = 0;
+                    chordIdx = (chordIdx + 1) % chords.length;
+                }
             }
 
             isMusicPlaying = true;
-            triggerNextStep();
-            seqInterval = setInterval(triggerNextStep, 780); // Nhịp độ chậm rãi thư giãn (BPM ~77)
+            triggerStep();
+            seqInterval = setInterval(triggerStep, 450); // Nhịp điệu dồn dập và cuốn hút hơn
         }
 
         function setVolume(v) {
@@ -273,11 +261,11 @@
         }
 
         // =========================================================================
-        // ENGINE 3D VŨ TRỤ THREE.JS
+        // ENGINE 3D VŨ TRỤ NÂNG CẤP (SIÊU SAO & THIÊN HÀ)
         // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
-        let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid, cosmicDust;
+        let sunUniforms, milkyWayGroup, galaxyCluster, asteroidBelt, spacetimeGrid, cosmicDust;
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, prevMouse = { x: 0, y: 0 };
         let camDist = 72, targetCamDist = 72;
@@ -490,7 +478,7 @@
                     ctx.fillStyle = i % 2 === 0 ? 'rgba(67, 20, 7, 0.4)' : 'rgba(234, 88, 12, 0.35)';
                     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                     bCtx.fillStyle = i % 2 === 0 ? 'rgba(40,40,40,0.5)' : 'rgba(210,210,210,0.5)';
-                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); bCtx.fill();
+                    bCtx.beginPath(); bCtx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
                 }
                 ctx.fillStyle = '#f8fafc';
                 ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
@@ -557,59 +545,66 @@
             return new THREE.CanvasTexture(canvas);
         }
 
-        function createMilkyWayBackdrop() {
+        // TẠO NGÂN HÀ & HỆ THỐNG SAO SIÊU DÀY ĐẶC
+        function createMilkyWayAndGalaxies() {
             milkyWayGroup = new THREE.Group();
-            milkyWayGroup.rotation.z = Math.PI / 5;
+            milkyWayGroup.rotation.z = Math.PI / 6;
 
-            const bandCount = 28000;
-            const bandGeo = new THREE.BufferGeometry();
-            const bandPos = new Float32Array(bandCount * 3);
-            const bandCol = new Float32Array(bandCount * 3);
+            // 1. Dải Ngân Hà siêu sao khổng lồ (60,000 hạt sao đủ màu sắc)
+            const starCount = 60000;
+            const starGeo = new THREE.BufferGeometry();
+            const starPos = new Float32Array(starCount * 3);
+            const starCol = new Float32Array(starCount * 3);
 
-            const milkyColors = [
-                new THREE.Color(0x38bdf8),
-                new THREE.Color(0xa855f7),
-                new THREE.Color(0xfde047),
-                new THREE.Color(0xf472b6),
-                new THREE.Color(0xffffff)
+            const starColors = [
+                new THREE.Color(0x38bdf8), // Xanh ngọc
+                new THREE.Color(0xa855f7), // Tím tinh vân
+                new THREE.Color(0xfde047), // Vàng ấm
+                new THREE.Color(0xf472b6), // Hồng rực
+                new THREE.Color(0xffffff), // Trắng sáng
+                new THREE.Color(0x60a5fa)  // Xanh dương
             ];
 
-            for (let i = 0; i < bandCount; i++) {
+            for (let i = 0; i < starCount; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const radius = 1400 + Math.random() * 1200;
-                const spread = (Math.random() - 0.5) * (Math.random() - 0.5) * 650;
+                const radius = 800 + Math.random() * 2200;
+                const spread = (Math.random() - 0.5) * (Math.random() - 0.5) * 850;
 
-                bandPos[i * 3] = Math.cos(angle) * radius;
-                bandPos[i * 3 + 1] = spread;
-                bandPos[i * 3 + 2] = Math.sin(angle) * radius;
+                starPos[i * 3] = Math.cos(angle) * radius;
+                starPos[i * 3 + 1] = spread;
+                starPos[i * 3 + 2] = Math.sin(angle) * radius;
 
-                const c = milkyColors[Math.floor(Math.random() * milkyColors.length)];
-                const brightness = 0.4 + Math.random() * 0.6;
-                bandCol[i * 3] = c.r * brightness;
-                bandCol[i * 3 + 1] = c.g * brightness;
-                bandCol[i * 3 + 2] = c.b * brightness;
+                const c = starColors[Math.floor(Math.random() * starColors.length)];
+                const brightness = 0.5 + Math.random() * 0.5;
+                starCol[i * 3] = c.r * brightness;
+                starCol[i * 3 + 1] = c.g * brightness;
+                starCol[i * 3 + 2] = c.b * brightness;
             }
-            bandGeo.setAttribute('position', new THREE.BufferAttribute(bandPos, 3));
-            bandGeo.setAttribute('color', new THREE.BufferAttribute(bandCol, 3));
-            milkyWayGroup.add(new THREE.Points(bandGeo, new THREE.PointsMaterial({
-                size: 3.2,
+
+            starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+            starGeo.setAttribute('color', new THREE.BufferAttribute(starCol, 3));
+            
+            const starMat = new THREE.PointsMaterial({
+                size: 2.8,
                 vertexColors: true,
                 transparent: true,
-                opacity: 0.82,
+                opacity: 0.9,
                 blending: THREE.AdditiveBlending,
                 depthWrite: false
-            })));
+            });
+            milkyWayGroup.add(new THREE.Points(starGeo, starMat));
 
-            const dustCount = 4000;
+            // 2. Bụi sao lấp lánh xung quanh camera (Cosmic Dust)
+            const dustCount = 8000;
             const dustGeo = new THREE.BufferGeometry();
             const dustPos = new Float32Array(dustCount * 3);
             for (let i = 0; i < dustCount; i++) {
-                dustPos[i * 3] = (Math.random() - 0.5) * 350;
-                dustPos[i * 3 + 1] = (Math.random() - 0.5) * 120;
-                dustPos[i * 3 + 2] = (Math.random() - 0.5) * 350;
+                dustPos[i * 3] = (Math.random() - 0.5) * 700;
+                dustPos[i * 3 + 1] = (Math.random() - 0.5) * 300;
+                dustPos[i * 3 + 2] = (Math.random() - 0.5) * 700;
             }
             dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-            cosmicDust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0x7dd3fc, size: 0.8, transparent: true, opacity: 0.65, blending: THREE.AdditiveBlending }));
+            cosmicDust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xbae6fd, size: 1.2, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending }));
             scene.add(cosmicDust);
 
             scene.add(milkyWayGroup);
@@ -674,18 +669,18 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.toneMapping = THREE.ReinhardToneMapping;
-            renderer.toneMappingExposure = 1.2;
+            renderer.toneMappingExposure = 1.25;
             container.appendChild(renderer.domElement);
 
             const renderScene = new THREE.RenderPass(scene, camera);
-            bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.25, 0.7, 0.3);
+            bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.4, 0.75, 0.25);
             composer = new THREE.EffectComposer(renderer);
             composer.addPass(renderScene);
             composer.addPass(bloomPass);
 
-            const sunLight = new THREE.PointLight(0xfff5e4, 3.5, 2000, 0.25);
+            const sunLight = new THREE.PointLight(0xfff5e4, 3.8, 2000, 0.25);
             scene.add(sunLight);
-            scene.add(new THREE.AmbientLight(0x0f172a, 0.42));
+            scene.add(new THREE.AmbientLight(0x0f172a, 0.45));
 
             const flareTex = createFlareTextures();
             const lensflare = new THREE.Lensflare();
@@ -696,7 +691,7 @@
             lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 50, 0.85, new THREE.Color(0xf472b6)));
             sunLight.add(lensflare);
 
-            createMilkyWayBackdrop();
+            createMilkyWayAndGalaxies();
             createAsteroidBelt();
             createSpacetimeGrid();
 
@@ -822,7 +817,7 @@
         function startExperience() {
             document.getElementById('startOverlay').style.display = 'none';
             init3D();
-            startProceduralStrayMusic(); // Khởi động giai điệu lập trình bằng code
+            startProceduralStrayMusic();
         }
 
         function toggleFreeFly() {
@@ -881,8 +876,8 @@
             requestAnimationFrame(animate);
 
             if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
-            if (milkyWayGroup) milkyWayGroup.rotation.y += 0.00012 * timeSpeed;
-            if (cosmicDust) cosmicDust.rotation.y += 0.0003 * timeSpeed;
+            if (milkyWayGroup) milkyWayGroup.rotation.y += 0.00015 * timeSpeed;
+            if (cosmicDust) cosmicDust.rotation.y += 0.00035 * timeSpeed;
             if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
 
             if (isFreeFly) {
