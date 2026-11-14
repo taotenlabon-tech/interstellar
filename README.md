@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -40,34 +40,48 @@
 </head>
 <body class="w-screen h-screen select-none">
 
-    <!-- HUD ĐIỀU KHIỂN & ÂM THANH TỰ ĐỘNG -->
+    <!-- MÀN HÌNH CHỜ (START OVERLAY) GỐC -->
+    <div id="startOverlay" class="fixed inset-0 z-50 bg-[#010206] flex flex-col items-center justify-center p-6 text-center space-y-6">
+        <div class="relative w-32 h-32 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full border-2 border-cyan-400/50 animate-ping"></div>
+            <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-cyan-300 shadow-[0_0_80px_rgba(56,189,248,0.9)]"></div>
+        </div>
+        <div class="space-y-2 max-w-lg">
+            <h1 class="font-orbitron font-black text-2xl sm:text-5xl text-white tracking-widest">
+                ULTIMATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-rose-400">COSMIC 3D</span>
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                Hệ thống 3D IMAX vũ trụ đỉnh cao cùng âm thanh gốc Stray.wav tích hợp sẵn.
+            </p>
+        </div>
+        <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-indigo-500 to-rose-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_50px_rgba(56,189,248,0.8)] transition active:scale-95">
+            ⚡ KHỞI ĐỘNG & PHÁT STRAY.WAV
+        </button>
+    </div>
+
+    <!-- AUDIO NHẠC GỐC STRAY.WAV NHÚNG TRỰC TIẾP -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Stray.wav" type="audio/wav">
+    </audio>
+
+    <!-- HUD ĐIỀU KHIỂN -->
     <header class="absolute top-4 left-4 z-20 hud-glass p-4 rounded-2xl w-80 space-y-3">
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                 <span class="text-[10px] font-bold tracking-widest text-slate-300">GOD-TIER RENDER ENGINE</span>
             </div>
-            <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
-                👁️ Ẩn
-            </button>
+            <div class="flex gap-1.5">
+                <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
+                    🔊 Stray.wav: ON
+                </button>
+                <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
+                    👁️ Ẩn
+                </button>
+            </div>
         </div>
 
         <div id="hudBody" class="space-y-3 transition-all duration-300 overflow-hidden">
-            <!-- BẢNG ÂM THANH TỔNG HỢP KHÔNG GIAN -->
-            <div class="bg-slate-950/80 p-2.5 rounded-xl border border-rose-500/40 space-y-2 shadow-[0_0_15px_rgba(244,63,94,0.15)]">
-                <div class="flex justify-between items-center text-[10px]">
-                    <span class="text-rose-300 font-bold flex items-center gap-1.5">🎵 AMBIENT SYNTH: <span class="text-white">Active</span></span>
-                    <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-rose-950/80 border border-rose-500/60 text-rose-200 rounded-lg font-bold hover:bg-rose-900 transition">
-                        ⏸ Tắt Nhạc
-                    </button>
-                </div>
-                <div class="flex items-center justify-between text-[10px]">
-                    <span class="text-slate-400">🔊 Vol:</span>
-                    <input type="range" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)" class="w-28 accent-rose-500 h-1 cursor-pointer">
-                    <span id="volVal" class="text-rose-400 font-bold">80%</span>
-                </div>
-            </div>
-
             <div class="grid grid-cols-2 gap-2 text-[10px]">
                 <button onclick="toggleFreeFly()" id="flyBtn" class="py-1.5 px-2 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-xl font-bold hover:border-cyan-400 transition">
                     🛸 Free-Fly: OFF
@@ -77,9 +91,15 @@
                 </button>
             </div>
 
-            <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80 text-[10px]">
-                <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ thời gian</span><span id="speedVal" class="text-cyan-300 font-bold">1.0x</span></div>
-                <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
+            <div class="grid grid-cols-2 gap-2 text-[10px]">
+                <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
+                    <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-rose-400 font-bold">100%</span></div>
+                    <input type="range" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
+                </div>
+                <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
+                    <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
+                    <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
+                </div>
             </div>
 
             <div class="border-t border-slate-800/80 pt-2.5 space-y-1">
@@ -111,119 +131,6 @@
     <div id="canvasContainer" class="fixed inset-0 z-0"></div>
 
     <script>
-        // ==========================================
-        // BỘ TỔNG HỢP ÂM THANH KHÔNG GIAN THỜI GIAN THỰC
-        // ==========================================
-        let audioCtx, masterGain, isAudioPlaying = false, chordTimer;
-
-        function initSpaceSynth() {
-            if (audioCtx) {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                return;
-            }
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            audioCtx = new AudioContext();
-
-            masterGain = audioCtx.createGain();
-            masterGain.gain.value = 0.8;
-            masterGain.connect(audioCtx.destination);
-
-            // Tạo dải âm trầm vũ trụ (Sub-Bass)
-            const subOsc1 = audioCtx.createOscillator();
-            const subOsc2 = audioCtx.createOscillator();
-            const subFilter = audioCtx.createBiquadFilter();
-            const subGain = audioCtx.createGain();
-
-            subOsc1.type = 'sine';
-            subOsc1.frequency.value = 55; // A1
-            subOsc2.type = 'triangle';
-            subOsc2.frequency.value = 110; // A2
-
-            subFilter.type = 'lowpass';
-            subFilter.frequency.value = 180;
-            subGain.gain.value = 0.4;
-
-            subOsc1.connect(subFilter);
-            subOsc2.connect(subFilter);
-            subFilter.connect(subGain);
-            subGain.connect(masterGain);
-
-            subOsc1.start();
-            subOsc2.start();
-
-            // Hợp âm không gian ngân vang liên tục
-            const chords = [
-                [220.00, 261.63, 329.63, 392.00], 
-                [174.61, 220.00, 261.63, 329.63], 
-                [130.81, 196.00, 246.94, 329.63], 
-                [164.81, 196.00, 293.66, 392.00]
-            ];
-            let chordIndex = 0;
-
-            function playPad() {
-                if (!isAudioPlaying || audioCtx.state !== 'running') return;
-                const now = audioCtx.currentTime;
-                const freqs = chords[chordIndex % chords.length];
-                chordIndex++;
-
-                freqs.forEach((f, idx) => {
-                    const osc = audioCtx.createOscillator();
-                    const noteGain = audioCtx.createGain();
-                    const filter = audioCtx.createBiquadFilter();
-
-                    osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
-                    osc.frequency.setValueAtTime(f, now);
-
-                    filter.type = 'lowpass';
-                    filter.frequency.setValueAtTime(250, now);
-                    filter.frequency.exponentialRampToValueAtTime(850, now + 3);
-                    filter.frequency.exponentialRampToValueAtTime(200, now + 7);
-
-                    noteGain.gain.setValueAtTime(0.0001, now);
-                    noteGain.gain.linearRampToValueAtTime(0.12, now + 2.5);
-                    noteGain.gain.exponentialRampToValueAtTime(0.0001, now + 7.5);
-
-                    osc.connect(filter);
-                    filter.connect(noteGain);
-                    noteGain.connect(masterGain);
-
-                    osc.start(now);
-                    osc.stop(now + 7.5);
-                });
-            }
-
-            isAudioPlaying = true;
-            playPad();
-            chordTimer = setInterval(playPad, 6000);
-        }
-
-        function setVolume(v) {
-            const val = parseFloat(v);
-            document.getElementById('volVal').innerText = Math.round(val * 100) + '%';
-            if (masterGain && audioCtx) {
-                masterGain.gain.setTargetAtTime(val, audioCtx.currentTime, 0.05);
-            }
-        }
-
-        function toggleSpaceAudio() {
-            if (!audioCtx) {
-                initSpaceSynth();
-                return;
-            }
-            if (audioCtx.state === 'running') {
-                audioCtx.suspend();
-                isAudioPlaying = false;
-                document.getElementById('audioBtn').innerText = '▶ Bật Nhạc';
-            } else {
-                audioCtx.resume();
-                isAudioPlaying = true;
-                document.getElementById('audioBtn').innerText = '⏸ Tắt Nhạc';
-            }
-        }
-
-        // ==========================================
-        // ENGINE 3D THREE.JS
-        // ==========================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
         let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid, cosmicDust;
@@ -747,12 +654,7 @@
                 planets[cfg.id] = { mesh, distance: cfg.dist, speed: cfg.speed, angle: Math.random() * Math.PI * 2 };
             });
 
-            window.addEventListener('mousedown', e => { 
-                initSpaceSynth(); // Tự động kích hoạt âm thanh ngay khi click chuột đầu tiên
-                if (e.clientY > 280 || e.clientX > 380) { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; } 
-            });
-            window.addEventListener('keydown', () => initSpaceSynth()); // Kích hoạt âm thanh khi bấm phím bất kỳ
-
+            window.addEventListener('mousedown', e => { if (e.clientY > 280 || e.clientX > 380) { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; } });
             window.addEventListener('mousemove', e => {
                 if (!isDragging) return;
                 camAngleY -= (e.clientX - prevMouse.x) * 0.005;
@@ -770,37 +672,38 @@
                 composer.setSize(window.innerWidth, window.innerHeight);
             });
 
-            // Thử khởi tạo âm thanh ngay khi load
-            setTimeout(() => initSpaceSynth(), 1000);
-
             animate();
         }
 
-        window.onload = function() {
+        function startExperience() {
+            document.getElementById('startOverlay').style.display = 'none';
             init3D();
-        };
-
-        function setVolume(v) {
-            const val = parseFloat(v);
-            document.getElementById('volVal').innerText = Math.round(val * 100) + '%';
-            if (masterGain && audioCtx) {
-                masterGain.gain.setTargetAtTime(val, audioCtx.currentTime, 0.05);
+            const bg = document.getElementById('bgMusic');
+            if (bg) { 
+                bg.volume = 1.0; 
+                bg.play().then(() => {
+                    document.getElementById('audioBtn').innerText = '🔊 Stray.wav: ON';
+                }).catch(err => {
+                    console.log("Cần tương tác để phát nhạc:", err);
+                }); 
             }
         }
 
+        function setVolume(v) {
+            const bg = document.getElementById('bgMusic');
+            if (bg) bg.volume = parseFloat(v);
+            document.getElementById('volVal').innerText = Math.round(v * 100) + '%';
+        }
+
         function toggleSpaceAudio() {
-            if (!audioCtx) {
-                initSpaceSynth();
-                return;
-            }
-            if (audioCtx.state === 'running') {
-                audioCtx.suspend();
-                isAudioPlaying = false;
-                document.getElementById('audioBtn').innerText = '▶ Bật Nhạc';
-            } else {
-                audioCtx.resume();
-                isAudioPlaying = true;
-                document.getElementById('audioBtn').innerText = '⏸ Tắt Nhạc';
+            const bg = document.getElementById('bgMusic');
+            if (!bg) return;
+            if (bg.paused) { 
+                bg.play(); 
+                document.getElementById('audioBtn').innerText = '🔊 Stray.wav: ON'; 
+            } else { 
+                bg.pause(); 
+                document.getElementById('audioBtn').innerText = '🔇 Muted'; 
             }
         }
 
