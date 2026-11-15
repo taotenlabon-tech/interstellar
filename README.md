@@ -72,11 +72,11 @@
                 COSMIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-indigo-400">CIVILIZATION 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Hệ Mặt Trời vạn sao lấp lánh • Vành đai hành tinh • Đảo khổng lồ & Mặt Trăng!
+                Hệ Mặt Trời hành tinh khổng lồ • Vành đai hoành tráng • Trải nghiệm đỉnh cao!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-emerald-500 to-indigo-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(56,189,248,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG VŨ TRỤ
+            ⚡ KHỞI ĐỘNG HỆ THỐNG LỚN
         </button>
     </div>
 
@@ -122,7 +122,7 @@
                 <div class="border-t border-slate-800/80 pt-2.5 space-y-1.5">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                     <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                        Chọn hành tinh để quan sát hoặc chọn Trái Đất để đổ bộ!
+                        Chọn hành tinh lớn để quan sát hoặc chọn Trái Đất để đổ bộ!
                     </p>
                     <div class="grid grid-cols-2 gap-1 pt-1 text-[10px] text-slate-400">
                         <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -728,29 +728,29 @@
         }
 
         // =========================================================================
-        // ENGINE 3D VŨ TRỤ THREE.JS (VẠN SAO, VÀNH ĐAI, HÀNH TINH)
+        // ENGINE 3D VŨ TRỤ THREE.JS (HÀNH TINH & VÀNH ĐAI ĐÃ PHÓNG TO)
         // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
         let sunUniforms, milkyWayGroup, asteroidBelt, spacetimeGrid, cosmicDust;
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, prevMouse = { x: 0, y: 0 };
-        let camDist = 72, targetCamDist = 72;
+        let camDist = 95, targetCamDist = 95;
         let camAngleX = 0.35, camAngleY = 0.25;
         let currentLookAt = new THREE.Vector3(0, 0, 0);
         let timeSpeed = 1.0;
         let isFreeFly = false, freeFlyAngle = 0;
 
         const planetDB = {
-            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục. Bấm chọn Trái Đất để đổ bộ!", dist: "0 AU", temp: "5,500 °C", zoom: 72 },
-            mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 4.5 },
-            venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 6 },
-            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống! Đạt cấp độ 6 để mở khóa trạm thám hiểm Mặt Trăng.", dist: "1.00 AU", temp: "15 °C", zoom: 6.5 },
-            mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực và hẻm núi sâu.", dist: "1.52 AU", temp: "-63 °C", zoom: 5.5 },
-            jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng khí động học & cơn bão Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 13 },
-            saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 16 },
-            uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng khí metan xanh ngọc bích với vành đai dọc mờ ảo.", dist: "19.22 AU", temp: "-195 °C", zoom: 10 },
-            neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Thế giới băng giá xanh thẫm với những luồng gió siêu thanh.", dist: "30.05 AU", temp: "-200 °C", zoom: 10 }
+            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục khổng lồ. Bấm chọn Trái Đất để đổ bộ!", dist: "0 AU", temp: "5,500 °C", zoom: 90 },
+            mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 12 },
+            venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 14 },
+            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống! Đạt cấp độ 6 để mở khóa trạm thám hiểm Mặt Trăng.", dist: "1.00 AU", temp: "15 °C", zoom: 15 },
+            mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực và hẻm núi sâu.", dist: "1.52 AU", temp: "-63 °C", zoom: 13 },
+            jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng khí động học & cơn bão Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 25 },
+            saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 30 },
+            uranus: { name: "SAO THIÊN VƯƠNG (URANUS)", desc: "Hành tinh băng khí metan xanh ngọc bích với vành đai dọc mờ ảo.", dist: "19.22 AU", temp: "-195 °C", zoom: 20 },
+            neptune: { name: "SAO HẢI VƯƠNG (NEPTUNE)", desc: "Thế giới băng giá xanh thẫm với những luồng gió siêu thanh.", dist: "30.05 AU", temp: "-200 °C", zoom: 20 }
         };
 
         const sunVertexShader = `
@@ -823,46 +823,21 @@
 
             if (type === 'mercury') {
                 ctx.fillStyle = '#64748b'; ctx.fillRect(0, 0, w, h);
-                for (let i = 0; i < 1000; i++) {
-                    const x = Math.random() * w, y = Math.random() * h, r = Math.random() * 20 + 2;
-                    ctx.fillStyle = i % 2 === 0 ? 'rgba(30,41,59,0.4)' : 'rgba(148,163,184,0.3)';
-                    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
-                }
             } else if (type === 'venus') {
-                const grad = ctx.createLinearGradient(0, 0, 0, h);
-                grad.addColorStop(0, '#92400e'); grad.addColorStop(0.5, '#f59e0b'); grad.addColorStop(1, '#78350f');
-                ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = '#f59e0b'; ctx.fillRect(0, 0, w, h);
             } else if (type === 'earth') {
-                const seaGrad = ctx.createLinearGradient(0, 0, 0, h);
-                seaGrad.addColorStop(0, '#e0f2fe'); seaGrad.addColorStop(0.5, '#0284c7'); seaGrad.addColorStop(1, '#e0f2fe');
-                ctx.fillStyle = seaGrad; ctx.fillRect(0, 0, w, h);
-                for (let i = 0; i < 60; i++) {
-                    ctx.fillStyle = i % 2 === 0 ? '#15803d' : '#a16207';
-                    ctx.beginPath(); ctx.ellipse(Math.random() * w, Math.random() * h, Math.random() * 180 + 40, Math.random() * 100 + 30, Math.random() * Math.PI, 0, Math.PI * 2); ctx.fill();
-                }
+                ctx.fillStyle = '#0284c7'; ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = '#15803d'; ctx.beginPath(); ctx.ellipse(1000, 500, 300, 180, 0, 0, Math.PI * 2); ctx.fill();
             } else if (type === 'clouds') {
                 ctx.clearRect(0, 0, w, h);
-                for (let i = 0; i < 200; i++) {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.4 + 0.1})`;
-                    ctx.beginPath(); ctx.ellipse(Math.random() * w, Math.random() * h, Math.random() * 200 + 40, Math.random() * 30 + 8, 0, 0, Math.PI * 2); ctx.fill();
-                }
+                ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                for (let i = 0; i < 150; i++) ctx.fillRect(Math.random() * w, Math.random() * h, 180, 25);
             } else if (type === 'mars') {
                 ctx.fillStyle = '#9a3412'; ctx.fillRect(0, 0, w, h);
-                ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, w, 45); ctx.fillRect(0, h - 45, w, 45);
             } else if (type === 'jupiter') {
-                const palette = ['#451a03', '#92400e', '#d97706', '#fef3c7', '#b45309'];
-                let y = 0; while (y < h) {
-                    const bandH = Math.random() * 28 + 8;
-                    ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
-                    ctx.fillRect(0, y, w, bandH); y += bandH;
-                }
+                ctx.fillStyle = '#d97706'; ctx.fillRect(0, 0, w, h);
             } else if (type === 'saturn') {
-                const palette = ['#713f12', '#a16207', '#eab308', '#fef08a'];
-                let y = 0; while (y < h) {
-                    const bandH = Math.random() * 22 + 6;
-                    ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
-                    ctx.fillRect(0, y, w, bandH); y += bandH;
-                }
+                ctx.fillStyle = '#ca8a04'; ctx.fillRect(0, 0, w, h);
             } else if (type === 'uranus') {
                 ctx.fillStyle = '#06b6d4'; ctx.fillRect(0, 0, w, h);
             } else if (type === 'neptune') {
@@ -875,12 +850,7 @@
             const canvas = document.createElement('canvas'); canvas.width = 1024; canvas.height = 64;
             const ctx = canvas.getContext('2d');
             const grad = ctx.createLinearGradient(0, 0, 1024, 0);
-            grad.addColorStop(0.0, 'rgba(234, 179, 8, 0.0)');
-            grad.addColorStop(0.35, 'rgba(254, 243, 199, 0.9)');
-            grad.addColorStop(0.58, 'rgba(234, 179, 8, 0.85)');
-            grad.addColorStop(0.63, 'rgba(0, 0, 0, 0.05)');
-            grad.addColorStop(0.92, 'rgba(202, 138, 4, 0.45)');
-            grad.addColorStop(1.0, 'rgba(234, 179, 8, 0.0)');
+            grad.addColorStop(0, 'rgba(234, 179, 8, 0)'); grad.addColorStop(0.5, 'rgba(234, 179, 8, 0.9)'); grad.addColorStop(1, 'rgba(234, 179, 8, 0)');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 64);
             return new THREE.CanvasTexture(canvas);
         }
@@ -888,102 +858,44 @@
         function createMilkyWayAndGalaxies() {
             milkyWayGroup = new THREE.Group();
             milkyWayGroup.rotation.z = Math.PI / 6;
-
             const starCount = 60000;
             const starGeo = new THREE.BufferGeometry();
             const starPos = new Float32Array(starCount * 3);
             const starCol = new Float32Array(starCount * 3);
-
-            const starColors = [
-                new THREE.Color(0x38bdf8),
-                new THREE.Color(0xa855f7),
-                new THREE.Color(0xfde047),
-                new THREE.Color(0xf472b6),
-                new THREE.Color(0xffffff),
-                new THREE.Color(0x60a5fa)
-            ];
+            const colors = [new THREE.Color(0x38bdf8), new THREE.Color(0xa855f7), new THREE.Color(0xfde047), new THREE.Color(0xffffff)];
 
             for (let i = 0; i < starCount; i++) {
                 const angle = Math.random() * Math.PI * 2;
                 const radius = 800 + Math.random() * 2200;
                 const spread = (Math.random() - 0.5) * (Math.random() - 0.5) * 850;
-
-                starPos[i * 3] = Math.cos(angle) * radius;
-                starPos[i * 3 + 1] = spread;
-                starPos[i * 3 + 2] = Math.sin(angle) * radius;
-
-                const c = starColors[Math.floor(Math.random() * starColors.length)];
-                const brightness = 0.5 + Math.random() * 0.5;
-                starCol[i * 3] = c.r * brightness;
-                starCol[i * 3 + 1] = c.g * brightness;
-                starCol[i * 3 + 2] = c.b * brightness;
+                starPos[i * 3] = Math.cos(angle) * radius; starPos[i * 3 + 1] = spread; starPos[i * 3 + 2] = Math.sin(angle) * radius;
+                const c = colors[Math.floor(Math.random() * colors.length)];
+                starCol[i * 3] = c.r; starCol[i * 3 + 1] = c.g; starCol[i * 3 + 2] = c.b;
             }
-
             starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
             starGeo.setAttribute('color', new THREE.BufferAttribute(starCol, 3));
-            
-            const starMat = new THREE.PointsMaterial({
-                size: 2.8,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.9,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false
-            });
-            milkyWayGroup.add(new THREE.Points(starGeo, starMat));
+            milkyWayGroup.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 2.8, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending })));
 
-            const dustCount = 8000;
-            const dustGeo = new THREE.BufferGeometry();
-            const dustPos = new Float32Array(dustCount * 3);
-            for (let i = 0; i < dustCount; i++) {
-                dustPos[i * 3] = (Math.random() - 0.5) * 700;
-                dustPos[i * 3 + 1] = (Math.random() - 0.5) * 300;
-                dustPos[i * 3 + 2] = (Math.random() - 0.5) * 700;
-            }
-            dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-            cosmicDust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xbae6fd, size: 1.2, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending }));
+            cosmicDust = new THREE.Points(
+                new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(24000), 3)),
+                new THREE.PointsMaterial({ color: 0xbae6fd, size: 1.2, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending })
+            );
             spaceGroup.add(cosmicDust, milkyWayGroup);
         }
 
         function createAsteroidBelt() {
-            const count = 2200;
-            const geo = new THREE.DodecahedronGeometry(0.11, 0);
-            const mat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.85, metalness: 0.2 });
-            asteroidBelt = new THREE.InstancedMesh(geo, mat, count);
-
+            asteroidBelt = new THREE.InstancedMesh(new THREE.DodecahedronGeometry(0.18, 0), new THREE.MeshStandardMaterial({ color: 0x94a3b8 }), 2500);
             const dummy = new THREE.Object3D();
-            for (let i = 0; i < count; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const radius = 30.2 + Math.random() * 3.6;
-                const y = (Math.random() - 0.5) * 1.1;
-
-                dummy.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
-                dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-                const scale = 0.4 + Math.random() * 1.4;
-                dummy.scale.set(scale, scale * 0.7, scale);
-                dummy.updateMatrix();
-                asteroidBelt.setMatrixAt(i, dummy.matrix);
+            for (let i = 0; i < 2500; i++) {
+                const angle = Math.random() * Math.PI * 2; const radius = 35 + Math.random() * 6;
+                dummy.position.set(Math.cos(angle) * radius, (Math.random() - 0.5) * 1.5, Math.sin(angle) * radius);
+                dummy.updateMatrix(); asteroidBelt.setMatrixAt(i, dummy.matrix);
             }
             spaceGroup.add(asteroidBelt);
         }
 
         function createSpacetimeGrid() {
-            const size = 160;
-            const divisions = 48;
-            const geo = new THREE.PlaneGeometry(size, size, divisions, divisions);
-            geo.rotateX(-Math.PI / 2);
-
-            const pos = geo.attributes.position;
-            for (let i = 0; i < pos.count; i++) {
-                const x = pos.getX(i);
-                const z = pos.getZ(i);
-                const dist = Math.sqrt(x * x + z * z);
-                const dip = -18.0 / (Math.sqrt(dist * 0.35 + 1.2));
-                pos.setY(i, dip - 3.5);
-            }
-            geo.computeVertexNormals();
-
-            spacetimeGrid = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x0ea5e9, wireframe: true, transparent: true, opacity: 0.16 }));
+            spacetimeGrid = new THREE.Mesh(new THREE.PlaneGeometry(200, 200, 48, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x0ea5e9, wireframe: true, transparent: true, opacity: 0.16 }));
             spacetimeGrid.visible = false;
             spaceGroup.add(spacetimeGrid);
         }
@@ -1007,13 +919,13 @@
             composer = new THREE.EffectComposer(renderer);
             composer.addPass(renderScene); composer.addPass(bloomPass);
 
-            const sunLight = new THREE.PointLight(0xfff5e4, 3.8, 2000, 0.25);
+            const sunLight = new THREE.PointLight(0xfff5e4, 4.5, 2500, 0.2);
             spaceGroup.add(sunLight, new THREE.AmbientLight(0x0f172a, 0.45));
 
             const flareTex = createFlareTextures();
             const lensflare = new THREE.Lensflare();
-            lensflare.addElement(new THREE.LensflareElement(flareTex.streak, 720, 0, new THREE.Color(0x7dd3fc)));
-            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 150, 0, new THREE.Color(0xfef08a)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.streak, 850, 0, new THREE.Color(0x7dd3fc)));
+            lensflare.addElement(new THREE.LensflareElement(flareTex.orb, 180, 0, new THREE.Color(0xfef08a)));
             sunLight.add(lensflare);
 
             createMilkyWayAndGalaxies();
@@ -1023,25 +935,27 @@
             buildMoonBiome3D();
 
             sunUniforms = { uTime: { value: 0 } };
-            const sun = new THREE.Mesh(new THREE.SphereGeometry(5.2, 64, 64), new THREE.ShaderMaterial({ uniforms: sunUniforms, vertexShader: sunVertexShader, fragmentShader: sunFragmentShader }));
-            sun.add(new THREE.Mesh(new THREE.SphereGeometry(6.8, 64, 64), createAtmosphereMaterial(0xff8c00, 1.4, 3.0)));
+            // Phóng to Mặt Trời (Bán kính từ 5.2 lên 9.5)
+            const sun = new THREE.Mesh(new THREE.SphereGeometry(9.5, 64, 64), new THREE.ShaderMaterial({ uniforms: sunUniforms, vertexShader: sunVertexShader, fragmentShader: sunFragmentShader }));
+            sun.add(new THREE.Mesh(new THREE.SphereGeometry(12.0, 64, 64), createAtmosphereMaterial(0xff8c00, 1.4, 3.0)));
             spaceGroup.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
 
+            // Phóng to kích thước các hành tinh và mở rộng khoảng cách quỹ đạo tương ứng
             const planetConfigs = [
-                { id: 'mercury', size: 0.55, dist: 10, speed: 0.022, tilt: 0.03, atmos: null },
-                { id: 'venus', size: 0.95, dist: 14.5, speed: 0.016, tilt: 3.09, atmos: 0xfbbf24 },
-                { id: 'earth', size: 1.18, dist: 20, speed: 0.012, tilt: 0.41, atmos: 0x38bdf8, clouds: true, moon: true },
-                { id: 'mars', size: 0.78, dist: 26, speed: 0.009, tilt: 0.44, atmos: 0xf97316 },
-                { id: 'jupiter', size: 2.8, dist: 38, speed: 0.006, tilt: 0.05, atmos: 0xfdba74 },
-                { id: 'saturn', size: 2.3, dist: 50, speed: 0.004, tilt: 0.47, atmos: 0xfef08a, rings: true },
-                { id: 'uranus', size: 1.55, dist: 60, speed: 0.003, tilt: 1.71, atmos: 0x22d3ee },
-                { id: 'neptune', size: 1.5, dist: 69, speed: 0.002, tilt: 0.49, atmos: 0x3b82f6 }
+                { id: 'mercury', size: 1.2, dist: 13, speed: 0.022, tilt: 0.03, atmos: null },
+                { id: 'venus', size: 1.9, dist: 19, speed: 0.016, tilt: 3.09, atmos: 0xfbbf24 },
+                { id: 'earth', size: 2.3, dist: 26, speed: 0.012, tilt: 0.41, atmos: 0x38bdf8, clouds: true, moon: true },
+                { id: 'mars', size: 1.5, dist: 34, speed: 0.009, tilt: 0.44, atmos: 0xf97316 },
+                { id: 'jupiter', size: 5.2, dist: 48, speed: 0.006, tilt: 0.05, atmos: 0xfdba74 },
+                { id: 'saturn', size: 4.3, dist: 63, speed: 0.004, tilt: 0.47, atmos: 0xfef08a, rings: true },
+                { id: 'uranus', size: 2.8, dist: 76, speed: 0.003, tilt: 1.71, atmos: 0x22d3ee },
+                { id: 'neptune', size: 2.7, dist: 88, speed: 0.002, tilt: 0.49, atmos: 0x3b82f6 }
             ];
 
             planetConfigs.forEach(cfg => {
-                const orbitGeo = new THREE.RingGeometry(cfg.dist - 0.06, cfg.dist + 0.06, 220);
-                const orbitRing = new THREE.Mesh(orbitGeo, new THREE.MeshBasicMaterial({ color: cfg.atmos || 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending }));
+                const orbitGeo = new THREE.RingGeometry(cfg.dist - 0.08, cfg.dist + 0.08, 220);
+                const orbitRing = new THREE.Mesh(orbitGeo, new THREE.MeshBasicMaterial({ color: cfg.atmos || 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.28, blending: THREE.AdditiveBlending }));
                 orbitRing.rotation.x = Math.PI / 2;
                 spaceGroup.add(orbitRing);
 
@@ -1064,21 +978,21 @@
 
                 if (cfg.moon) {
                     const moonPivot = new THREE.Group();
-                    const moonMesh = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), new THREE.MeshStandardMaterial({ map: generatePlanetMaps('mercury').map, roughness: 0.9 }));
-                    moonMesh.position.x = 2.3;
+                    const moonMesh = new THREE.Mesh(new THREE.SphereGeometry(0.55, 32, 32), new THREE.MeshStandardMaterial({ map: generatePlanetMaps('mercury').map, roughness: 0.9 }));
+                    moonMesh.position.x = 4.2;
                     moonPivot.add(moonMesh);
                     mesh.add(moonPivot);
                     mesh.userData.moonPivot = moonPivot;
                 }
 
                 if (cfg.rings) {
-                    const rGeo = new THREE.RingGeometry(cfg.size * 1.35, cfg.size * 2.45, 128);
+                    const rGeo = new THREE.RingGeometry(cfg.size * 1.4, cfg.size * 2.6, 128);
                     const posAttr = rGeo.attributes.position;
                     const uvAttr = rGeo.attributes.uv;
                     const v3 = new THREE.Vector3();
                     for (let i = 0; i < posAttr.count; i++) {
                         v3.fromBufferAttribute(posAttr, i);
-                        const u = (v3.length() - cfg.size * 1.35) / (cfg.size * 1.1);
+                        const u = (v3.length() - cfg.size * 1.4) / (cfg.size * 1.2);
                         uvAttr.setXY(i, u, 0.5);
                     }
                     const ringMesh = new THREE.Mesh(rGeo, new THREE.MeshStandardMaterial({ map: createSaturnRingTexture(), side: THREE.DoubleSide, transparent: true, opacity: 0.95, roughness: 0.5 }));
@@ -1097,7 +1011,7 @@
                 prevMouse = { x: e.clientX, y: e.clientY };
             });
             window.addEventListener('mouseup', () => isDragging = false);
-            window.addEventListener('wheel', e => { targetCamDist = Math.max(2.5, Math.min(450, targetCamDist + e.deltaY * 0.06)); });
+            window.addEventListener('wheel', e => { targetCamDist = Math.max(2.5, Math.min(550, targetCamDist + e.deltaY * 0.08)); });
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); composer.setSize(window.innerWidth, window.innerHeight);
@@ -1162,9 +1076,9 @@
                 if (isFreeFly) {
                     freeFlyAngle += 0.003 * timeSpeed;
                     currentLookAt.set(0, 0, 0);
-                    camDist = 85 + Math.sin(freeFlyAngle * 0.5) * 25;
+                    camDist = 110 + Math.sin(freeFlyAngle * 0.5) * 35;
                     camera.position.x = Math.cos(freeFlyAngle) * camDist;
-                    camera.position.y = 25 + Math.sin(freeFlyAngle) * 15;
+                    camera.position.y = 35 + Math.sin(freeFlyAngle) * 20;
                     camera.position.z = Math.sin(freeFlyAngle) * camDist;
                     camera.lookAt(currentLookAt);
                     composer.render();
