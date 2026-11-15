@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -72,11 +72,11 @@
                 COSMIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-indigo-400">CIVILIZATION 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Hệ Mặt Trời hành tinh khổng lồ • Vành đai hoành tráng • Trải nghiệm đỉnh cao!
+                Hệ Mặt Trời Vạn Sao Lấp Lánh • Hành Trình Khổng Lồ • Khám Phá Mặt Trăng!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-emerald-500 to-indigo-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(56,189,248,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG HỆ THỐNG LỚN
+            ⚡ KHỞI ĐỘNG VŨ TRỤ VẠN SAO
         </button>
     </div>
 
@@ -122,7 +122,7 @@
                 <div class="border-t border-slate-800/80 pt-2.5 space-y-1.5">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                     <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                        Chọn hành tinh lớn để quan sát hoặc chọn Trái Đất để đổ bộ!
+                        Chọn hành tinh để quan sát hoặc chọn Trái Đất để đổ bộ!
                     </p>
                     <div class="grid grid-cols-2 gap-1 pt-1 text-[10px] text-slate-400">
                         <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -728,7 +728,7 @@
         }
 
         // =========================================================================
-        // ENGINE 3D VŨ TRỤ THREE.JS (HÀNH TINH & VÀNH ĐAI ĐÃ PHÓNG TO)
+        // ENGINE 3D VŨ TRỤ THREE.JS (VẠN SAO RỰC RỠ, HÀNH TINH & VÀNH ĐAI TO LỚN)
         // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
@@ -850,7 +850,7 @@
             const canvas = document.createElement('canvas'); canvas.width = 1024; canvas.height = 64;
             const ctx = canvas.getContext('2d');
             const grad = ctx.createLinearGradient(0, 0, 1024, 0);
-            grad.addColorStop(0, 'rgba(234, 179, 8, 0)'); grad.addColorStop(0.5, 'rgba(234, 179, 8, 0.9)'); grad.addColorStop(1, 'rgba(234, 179, 8, 0)');
+            grad.addColorStop(0, 'rgba(234, 179, 8, 0)'); grad.addColorStop(0.5, 'rgba(234, 179, 8, 0.95)'); grad.addColorStop(1, 'rgba(234, 179, 8, 0)');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, 1024, 64);
             return new THREE.CanvasTexture(canvas);
         }
@@ -858,27 +858,42 @@
         function createMilkyWayAndGalaxies() {
             milkyWayGroup = new THREE.Group();
             milkyWayGroup.rotation.z = Math.PI / 6;
-            const starCount = 60000;
+
+            // Tăng số lượng sao lên 90,000 ngôi sao cực kỳ dày đặc và rực rỡ
+            const starCount = 90000;
             const starGeo = new THREE.BufferGeometry();
             const starPos = new Float32Array(starCount * 3);
             const starCol = new Float32Array(starCount * 3);
-            const colors = [new THREE.Color(0x38bdf8), new THREE.Color(0xa855f7), new THREE.Color(0xfde047), new THREE.Color(0xffffff)];
+            const colors = [
+                new THREE.Color(0x38bdf8), 
+                new THREE.Color(0xa855f7), 
+                new THREE.Color(0xfde047), 
+                new THREE.Color(0xffffff), 
+                new THREE.Color(0xf43f5e),
+                new THREE.Color(0x60a5fa)
+            ];
 
             for (let i = 0; i < starCount; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const radius = 800 + Math.random() * 2200;
-                const spread = (Math.random() - 0.5) * (Math.random() - 0.5) * 850;
-                starPos[i * 3] = Math.cos(angle) * radius; starPos[i * 3 + 1] = spread; starPos[i * 3 + 2] = Math.sin(angle) * radius;
+                const radius = 600 + Math.random() * 2400;
+                const spread = (Math.random() - 0.5) * (Math.random() - 0.5) * 950;
+                starPos[i * 3] = Math.cos(angle) * radius; 
+                starPos[i * 3 + 1] = spread; 
+                starPos[i * 3 + 2] = Math.sin(angle) * radius;
+
                 const c = colors[Math.floor(Math.random() * colors.length)];
-                starCol[i * 3] = c.r; starCol[i * 3 + 1] = c.g; starCol[i * 3 + 2] = c.b;
+                const bright = 0.7 + Math.random() * 0.3;
+                starCol[i * 3] = c.r * bright; 
+                starCol[i * 3 + 1] = c.g * bright; 
+                starCol[i * 3 + 2] = c.b * bright;
             }
             starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
             starGeo.setAttribute('color', new THREE.BufferAttribute(starCol, 3));
-            milkyWayGroup.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 2.8, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending })));
+            milkyWayGroup.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 3.5, vertexColors: true, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false })));
 
             cosmicDust = new THREE.Points(
-                new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(24000), 3)),
-                new THREE.PointsMaterial({ color: 0xbae6fd, size: 1.2, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending })
+                new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(35000), 3)),
+                new THREE.PointsMaterial({ color: 0x7dd3fc, size: 1.6, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false })
             );
             spaceGroup.add(cosmicDust, milkyWayGroup);
         }
@@ -915,7 +930,7 @@
             container.appendChild(renderer.domElement);
 
             const renderScene = new THREE.RenderPass(scene, camera);
-            bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.4, 0.75, 0.25);
+            bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.8, 0.2);
             composer = new THREE.EffectComposer(renderer);
             composer.addPass(renderScene); composer.addPass(bloomPass);
 
@@ -935,13 +950,11 @@
             buildMoonBiome3D();
 
             sunUniforms = { uTime: { value: 0 } };
-            // Phóng to Mặt Trời (Bán kính từ 5.2 lên 9.5)
             const sun = new THREE.Mesh(new THREE.SphereGeometry(9.5, 64, 64), new THREE.ShaderMaterial({ uniforms: sunUniforms, vertexShader: sunVertexShader, fragmentShader: sunFragmentShader }));
             sun.add(new THREE.Mesh(new THREE.SphereGeometry(12.0, 64, 64), createAtmosphereMaterial(0xff8c00, 1.4, 3.0)));
             spaceGroup.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
 
-            // Phóng to kích thước các hành tinh và mở rộng khoảng cách quỹ đạo tương ứng
             const planetConfigs = [
                 { id: 'mercury', size: 1.2, dist: 13, speed: 0.022, tilt: 0.03, atmos: null },
                 { id: 'venus', size: 1.9, dist: 19, speed: 0.016, tilt: 3.09, atmos: 0xfbbf24 },
