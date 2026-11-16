@@ -72,7 +72,7 @@
                 COSMIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-indigo-400">CIVILIZATION 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Vòm Vạn Sao Bao Trùm Không Gian • Quỹ Đạo Mở Rộng Rõ Ràng • Khám Phá Mặt Trăng!
+                Vòm Vạn Sao Bao Trùm • Hệ Mặt Trời Khổng Lồ • Khai Thác Helium-3 Mặt Trăng!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-cyan-500 via-emerald-500 to-indigo-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(56,189,248,0.8)] transition active:scale-95">
@@ -165,7 +165,7 @@
                 <div class="h-7 w-[1px] bg-slate-700"></div>
                 <div>
                     <div class="text-[10px] text-slate-400">🪙 HELIUM-3</div>
-                    <div class="font-orbitron font-bold text-sm text-purple-300"><span id="resMoon">0</span></div>
+                    <div class="font-orbitron font-bold text-sm text-purple-300"><span id="resMoon">0</span> <span class="text-[9px] text-purple-400">(+<span id="rateMoonGen">0</span>/s)</span></div>
                 </div>
                 <div class="h-7 w-[1px] bg-slate-700 hidden sm:block"></div>
                 <div class="hidden sm:block">
@@ -179,7 +179,7 @@
                     ✨ Thu Thập (+<span id="clickPower">5</span>)
                 </button>
                 <button id="launchMoonBtn" onclick="launchRocketToMoon()" class="hidden hud-glass px-3.5 py-2.5 rounded-2xl font-orbitron font-bold text-xs text-purple-300 border-purple-500/60 hover:bg-purple-950/50 active:scale-95 transition animate-pulse">
-                    🚀 Phóng Tàu Lên Mặt Trăng
+                    🚀 Căn Cứ Mặt Trăng
                 </button>
                 <button onclick="exitEarthMode()" class="hud-glass px-3.5 py-2.5 rounded-2xl font-orbitron font-bold text-xs text-cyan-300 hover:border-cyan-400 transition">
                     🌌 Về Vũ Trụ
@@ -189,39 +189,39 @@
 
         <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 hud-glass p-3.5 rounded-2xl w-[95vw] max-w-4xl">
             <div class="flex justify-between items-center mb-2 px-1">
-                <span class="text-[11px] font-orbitron font-bold text-emerald-300 tracking-wider">🏗️ HỆ SINH THÁI TRÁI ĐẤT KHỔNG LỒ</span>
+                <span class="text-[11px] font-orbitron font-bold text-emerald-300 tracking-wider">🏗️ HỆ SINH THÁI TRÁI ĐẤT (MAX LV.10)</span>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <button id="upg-forest" onclick="buyUpgrade('forest')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
                     <div>
-                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-emerald-300">🌲 Rừng Xanh</span><span id="lvl-forest" class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded font-bold">Lv.1</span></div>
+                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-emerald-300">🌲 Rừng Xanh</span><span id="lvl-forest" class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded font-bold">Lv.10</span></div>
                         <p class="text-[10px] text-slate-400 mt-1">Trồng rừng lớn, +2 🧬/s</p>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-amber-300"><span>Chi phí:</span><span id="cost-forest">25 ⚡</span></div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-amber-300"><span>Chi phí:</span><span id="cost-forest">MAX</span></div>
                 </button>
 
                 <button id="upg-city" onclick="buyUpgrade('city')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
                     <div>
-                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-sky-300">🏙️ Đô Thị Neon</span><span id="lvl-city" class="text-[10px] bg-sky-950 text-sky-300 px-1.5 py-0.5 rounded font-bold">Lv.0</span></div>
+                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-sky-300">🏙️ Đô Thị Neon</span><span id="lvl-city" class="text-[10px] bg-sky-950 text-sky-300 px-1.5 py-0.5 rounded font-bold">Lv.10</span></div>
                         <p class="text-[10px] text-slate-400 mt-1">Tháp chọc trời, +6 ⚡/s</p>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-amber-300"><span>Chi phí:</span><span id="cost-city">80 ⚡</span></div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-amber-300"><span>Chi phí:</span><span id="cost-city">MAX</span></div>
                 </button>
 
                 <button id="upg-reactor" onclick="buyUpgrade('reactor')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
                     <div>
-                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-amber-300">⚛️ Lò Nhiệt Hạch</span><span id="lvl-reactor" class="text-[10px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded font-bold">Lv.0</span></div>
+                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-amber-300">⚛️ Lò Nhiệt Hạch</span><span id="lvl-reactor" class="text-[10px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded font-bold">Lv.10</span></div>
                         <p class="text-[10px] text-slate-400 mt-1">Lõi năng lượng, +22 ⚡/s</p>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-amber-300"><span>Chi phí:</span><span id="cost-reactor">250 ⚡</span></div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-amber-300"><span>Chi phí:</span><span id="cost-reactor">MAX</span></div>
                 </button>
 
                 <button id="upg-orbital" onclick="buyUpgrade('orbital')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
                     <div>
-                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-purple-300">🛰️ Trạm Quỹ Đạo</span><span id="lvl-orbital" class="text-[10px] bg-purple-950 text-purple-300 px-1.5 py-0.5 rounded font-bold">Lv.0</span></div>
-                        <p class="text-[10px] text-slate-400 mt-1">Vệ tinh, x1.5 toàn sản lượng!</p>
+                        <div class="flex justify-between items-center"><span class="text-xs font-bold text-purple-300">🛰️ Trạm Quỹ Đạo</span><span id="lvl-orbital" class="text-[10px] bg-purple-950 text-purple-300 px-1.5 py-0.5 rounded font-bold">Lv.10</span></div>
+                        <p class="text-[10px] text-slate-400 mt-1">Vệ tinh, x1.5 sản lượng!</p>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-emerald-300"><span>Chi phí:</span><span id="cost-orbital">120 🧬</span></div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-emerald-300"><span>Chi phí:</span><span id="cost-orbital">MAX</span></div>
                 </button>
             </div>
         </div>
@@ -232,8 +232,8 @@
         <div class="absolute top-4 left-4 right-4 z-20 flex justify-between items-center gap-3">
             <div class="hud-glass px-4 py-2.5 rounded-2xl flex items-center gap-4">
                 <div>
-                    <div class="text-[10px] text-slate-400">🪙 HELIUM-3</div>
-                    <div class="font-orbitron font-bold text-sm text-purple-300"><span id="moonRes">0</span> <span class="text-[9px] text-amber-300">(+<span id="moonRate">1</span>/s)</span></div>
+                    <div class="text-[10px] text-slate-400">🪙 HELIUM-3 (KHAI THÁC TỰ ĐỘNG)</div>
+                    <div class="font-orbitron font-bold text-sm text-purple-300"><span id="moonRes">0</span> <span class="text-[9px] text-amber-300">(+<span id="moonRate">2500</span>/s)</span></div>
                 </div>
             </div>
             <button onclick="exitMoonMode()" class="hud-glass px-4 py-2.5 rounded-2xl font-orbitron font-bold text-xs text-emerald-300 hover:border-emerald-400 transition">
@@ -243,23 +243,23 @@
 
         <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 hud-glass p-3.5 rounded-2xl w-[95vw] max-w-2xl">
             <div class="flex justify-between items-center mb-2 px-1">
-                <span class="text-[11px] font-orbitron font-bold text-purple-300 tracking-wider">🚀 CĂN CỨ MẶT TRĂNG KHỔNG LỒ</span>
+                <span class="text-[11px] font-orbitron font-bold text-purple-300 tracking-wider">🚀 CĂN CỨ MẶT TRĂNG - KHAI THÁC HELIUM-3</span>
             </div>
             <div class="grid grid-cols-2 gap-3">
                 <button onclick="buyMoonUpgrade('dome')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-center"><span class="text-xs font-bold text-cyan-300">🌕 Trạm Vòm Lunar</span><span id="lvl-dome" class="text-[10px] bg-cyan-950 text-cyan-300 px-1.5 py-0.5 rounded font-bold">Lv.0</span></div>
-                        <p class="text-[10px] text-slate-400 mt-1">Vòm sinh học lớn, +2 He-3/s</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Vòm sinh học lớn, +500 He-3/s</p>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-purple-300"><span>Chi phí:</span><span id="cost-dome">50 🪙</span></div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-purple-300"><span>Chi phí:</span><span id="cost-dome">100 🪙</span></div>
                 </button>
 
                 <button onclick="buyMoonUpgrade('laser')" class="upgrade-card p-3 rounded-xl text-left flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-center"><span class="text-xs font-bold text-rose-300">⚡ Máy Khoan Laser</span><span id="lvl-laser" class="text-[10px] bg-rose-950 text-rose-300 px-1.5 py-0.5 rounded font-bold">Lv.0</span></div>
-                        <p class="text-[10px] text-slate-400 mt-1">Khoan khổng lồ, +8 He-3/s</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Khoan khổng lồ, +2000 He-3/s</p>
                     </div>
-                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-purple-300"><span>Chi phí:</span><span id="cost-laser">200 🪙</span></div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-700/60 flex justify-between items-center text-[11px] font-bold text-purple-300"><span>Chi phí:</span><span id="cost-laser">500 🪙</span></div>
                 </button>
             </div>
         </div>
@@ -368,59 +368,42 @@
         }
 
         // =========================================================================
-        // HỆ THỐNG GAME TRONG GAME (TRÁI ĐẤT & MẶT TRĂNG KHỔNG LỒ)
+        // HỆ THỐNG GAME (ĐÃ THIẾT LẬP SẴN MỖI CÔNG TRÌNH LEVEL 10)
         // =========================================================================
         let gameMode = 'SPACE'; // 'SPACE', 'EARTH', 'MOON'
         let spaceGroup, earthGroup, moonGroup;
         let earthSatellites = [], earthClouds = [];
 
         const civState = {
-            energy: 50,
-            evo: 0,
-            moonRes: 0,
+            energy: 10000,
+            evo: 5000,
+            moonRes: 25000,
             upgrades: {
-                forest: { level: 1, baseCost: 25, costType: 'energy', scale: 1.55 },
-                city: { level: 0, baseCost: 80, costType: 'energy', scale: 1.65 },
-                reactor: { level: 0, baseCost: 250, costType: 'energy', scale: 1.75 },
-                orbital: { level: 0, baseCost: 120, costType: 'evo', scale: 1.9 }
+                forest: { level: 10, baseCost: 0, costType: 'energy', scale: 1 },
+                city: { level: 10, baseCost: 0, costType: 'energy', scale: 1 },
+                reactor: { level: 10, baseCost: 0, costType: 'energy', scale: 1 },
+                orbital: { level: 10, baseCost: 0, costType: 'evo', scale: 1 }
             },
             moonUpgrades: {
-                dome: { level: 0, baseCost: 50, scale: 1.6 },
-                laser: { level: 0, baseCost: 200, scale: 1.8 }
+                dome: { level: 5, baseCost: 100, scale: 1.5 },
+                laser: { level: 5, baseCost: 500, scale: 1.6 }
             }
         };
-
-        function getUpgradeCost(key) {
-            const u = civState.upgrades[key];
-            return Math.floor(u.baseCost * Math.pow(u.scale, u.level));
-        }
 
         function getMoonCost(key) {
             const u = civState.moonUpgrades[key];
             return Math.floor(u.baseCost * Math.pow(u.scale, u.level));
         }
 
-        function getTotalLvl() {
-            return civState.upgrades.forest.level + civState.upgrades.city.level + civState.upgrades.reactor.level + civState.upgrades.orbital.level;
-        }
-
         function getProductionRates() {
-            const f = civState.upgrades.forest.level;
-            const c = civState.upgrades.city.level;
-            const r = civState.upgrades.reactor.level;
-            const o = civState.upgrades.orbital.level;
-            const mult = Math.pow(1.5, o);
-
-            const energyRate = Math.round((2 + f * 1 + c * 6 + r * 22) * mult);
-            const evoRate = Math.round((1 + f * 2 + c * 3) * mult);
-            const clickPower = Math.round((5 + f * 2 + c * 5 + r * 10) * mult);
-            return { energyRate, evoRate, clickPower };
+            return { energyRate: 1500, evoRate: 800, clickPower: 250 };
         }
 
         function getMoonRates() {
             const d = civState.moonUpgrades.dome.level;
             const l = civState.moonUpgrades.laser.level;
-            return { moonRate: Math.round(d * 2 + l * 8) };
+            // Mặc định LV 10 mỗi công trình Trái Đất tạo sẵn 2500 He-3/s, cộng thêm từ Mặt Trăng
+            return { moonRate: 2500 + d * 500 + l * 2000 };
         }
 
         function updateCivUI() {
@@ -435,28 +418,15 @@
 
             document.getElementById('moonRes').innerText = Math.floor(civState.moonRes).toLocaleString();
             document.getElementById('moonRate').innerText = moonRates.moonRate.toLocaleString();
+            document.getElementById('rateMoonGen').innerText = moonRates.moonRate.toLocaleString();
 
-            const totalLvl = getTotalLvl();
-            let stage = "Khởi Nguyên";
-            if (totalLvl >= 20) stage = "Liên Sao (Type II)";
-            else if (totalLvl >= 12) stage = "Lượng Tử & Quỹ Đạo";
-            else if (totalLvl >= 6) stage = "Đô Thị Tương Lai";
-            else if (totalLvl >= 3) stage = "Công Nghiệp Xanh";
-            document.getElementById('civStage').innerText = stage;
-
-            const launchBtn = document.getElementById('launchMoonBtn');
-            if (totalLvl >= 6) {
-                launchBtn.classList.remove('hidden');
-            } else {
-                launchBtn.classList.add('hidden');
-            }
+            document.getElementById('civStage').innerText = "Liên Sao Tối Thượng (Lv.10)";
+            document.getElementById('launchMoonBtn').classList.remove('hidden');
 
             ['forest', 'city', 'reactor', 'orbital'].forEach(key => {
-                const u = civState.upgrades[key];
-                const cost = getUpgradeCost(key);
-                document.getElementById(`lvl-${key}`).innerText = `Lv.${u.level}`;
-                document.getElementById(`cost-${key}`).innerText = `${cost.toLocaleString()} ${u.costType === 'energy' ? '⚡' : '🧬'}`;
-                document.getElementById(`upg-${key}`).disabled = u.costType === 'energy' ? civState.energy < cost : civState.evo < cost;
+                document.getElementById(`lvl-${key}`).innerText = `Lv.10`;
+                document.getElementById(`cost-${key}`).innerText = `MAX`;
+                document.getElementById(`upg-${key}`).disabled = true;
             });
 
             ['dome', 'laser'].forEach(key => {
@@ -470,19 +440,12 @@
         function harvestManual() {
             const rates = getProductionRates();
             civState.energy += rates.clickPower;
-            civState.evo += Math.max(1, Math.floor(rates.clickPower / 3));
+            civState.evo += Math.floor(rates.clickPower / 2);
             updateCivUI();
         }
 
         function buyUpgrade(key) {
-            const u = civState.upgrades[key];
-            const cost = getUpgradeCost(key);
-            if (u.costType === 'energy' && civState.energy >= cost) {
-                civState.energy -= cost; u.level++; spawn3DBuilding(key, u.level);
-            } else if (u.costType === 'evo' && civState.evo >= cost) {
-                civState.evo -= cost; u.level++; spawn3DBuilding(key, u.level);
-            }
-            updateCivUI();
+            // Đã đạt Max Lv.10
         }
 
         function buyMoonUpgrade(key) {
@@ -540,7 +503,7 @@
             lakeMesh.position.set(-8, -0.3, 6);
             earthGroup.add(lakeMesh);
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 15; i++) {
                 const cloud = new THREE.Mesh(
                     new THREE.DodecahedronGeometry(3 + Math.random(), 1),
                     new THREE.MeshStandardMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.55, flatShading: true })
@@ -550,7 +513,12 @@
                 earthGroup.add(cloud);
                 earthClouds.push(cloud);
             }
-            spawn3DBuilding('forest', 1);
+
+            // Dựng sẵn toàn bộ kiến trúc Level 10 hoành tráng
+            for(let i=0; i<15; i++) spawn3DBuilding('forest', 10);
+            for(let i=0; i<10; i++) spawn3DBuilding('city', 10);
+            for(let i=0; i<4; i++) spawn3DBuilding('reactor', 10);
+            for(let i=0; i<3; i++) spawn3DBuilding('orbital', 10);
         }
 
         function buildMoonBiome3D() {
@@ -578,41 +546,32 @@
             moonSurface.position.y = -0.4;
             moonGroup.add(moonSurface);
 
-            for (let i = 0; i < 12; i++) {
-                const crater = new THREE.Mesh(
-                    new THREE.RingGeometry(1, 3.5, 16),
-                    new THREE.MeshStandardMaterial({ color: 0x334155, side: THREE.DoubleSide, roughness: 0.9 })
-                );
-                crater.rotation.x = Math.PI / 2;
-                const angle = Math.random() * Math.PI * 2;
-                const r = 8 + Math.random() * 20;
-                crater.position.set(Math.cos(angle) * r, 0.45, Math.sin(angle) * r);
-                moonGroup.add(crater);
+            for (let i = 0; i < 15; i++) {
+                spawnMoonStructure('dome', 5);
+                spawnMoonStructure('laser', 5);
             }
         }
 
         function spawn3DBuilding(type, level) {
             if (!earthGroup) return;
             if (type === 'forest') {
-                for (let i = 0; i < 6; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const rad = 12 + Math.random() * 16;
-                    const tree = new THREE.Group();
-                    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.55, 2.4, 6), new THREE.MeshStandardMaterial({ color: 0x78350f }));
-                    trunk.position.y = 1.2;
-                    const leaves = new THREE.Mesh(new THREE.ConeGeometry(2.2, 5, 7), new THREE.MeshStandardMaterial({ color: level % 2 === 0 ? 0x10b981 : 0x047857, flatShading: true }));
-                    leaves.position.y = 4.2;
-                    tree.add(trunk, leaves);
-                    tree.position.set(Math.cos(angle) * rad, 0.4, Math.sin(angle) * rad);
-                    earthGroup.add(tree);
-                }
+                const angle = Math.random() * Math.PI * 2;
+                const rad = 12 + Math.random() * 16;
+                const tree = new THREE.Group();
+                const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.55, 2.4, 6), new THREE.MeshStandardMaterial({ color: 0x78350f }));
+                trunk.position.y = 1.2;
+                const leaves = new THREE.Mesh(new THREE.ConeGeometry(2.2, 5, 7), new THREE.MeshStandardMaterial({ color: 0x10b981, flatShading: true }));
+                leaves.position.y = 4.2;
+                tree.add(trunk, leaves);
+                tree.position.set(Math.cos(angle) * rad, 0.4, Math.sin(angle) * rad);
+                earthGroup.add(tree);
             } else if (type === 'city') {
                 const angle = Math.random() * Math.PI * 2;
                 const rad = 6 + Math.random() * 18;
-                const h = 6 + level * 0.8;
+                const h = 12;
                 const tower = new THREE.Mesh(
                     new THREE.BoxGeometry(2.5, h, 2.5),
-                    new THREE.MeshStandardMaterial({ color: 0x0f172a, emissive: 0x38bdf8, emissiveIntensity: 0.35, roughness: 0.3, metalness: 0.8 })
+                    new THREE.MeshStandardMaterial({ color: 0x0f172a, emissive: 0x38bdf8, emissiveIntensity: 0.5, roughness: 0.3, metalness: 0.8 })
                 );
                 tower.position.set(Math.cos(angle) * rad, h / 2 + 0.4, Math.sin(angle) * rad);
                 earthGroup.add(tower);
@@ -630,7 +589,7 @@
             } else if (type === 'orbital') {
                 const satPivot = new THREE.Group();
                 const sat = new THREE.Mesh(new THREE.OctahedronGeometry(1.2, 0), new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0x9333ea, emissiveIntensity: 0.7 }));
-                sat.position.set(28, 14, 0); satPivot.add(sat);
+                sat.position.set(28 + Math.random() * 4, 14 + Math.random() * 5, 0); satPivot.add(sat);
                 earthGroup.add(satPivot);
                 earthSatellites.push(satPivot);
             }
@@ -728,7 +687,7 @@
         }
 
         // =========================================================================
-        // ENGINE 3D VŨ TRỤ THREE.JS (VÒM VẠN SAO + QUỸ ĐẠO NỚI RỘNG)
+        // ENGINE 3D VŨ TRỤ THREE.JS (VÒM VẠN SAO + QUỸ ĐẠO RÕ RÀNG)
         // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
@@ -745,7 +704,7 @@
             sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục khổng lồ. Bấm chọn Trái Đất để đổ bộ!", dist: "0 AU", temp: "5,500 °C", zoom: 90 },
             mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 20 },
             venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 22 },
-            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống! Đạt cấp độ 6 để mở khóa trạm thám hiểm Mặt Trăng.", dist: "1.00 AU", temp: "15 °C", zoom: 22 },
+            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống! Đạt cấp độ tối thượng, mở khóa sản lượng Helium-3.", dist: "1.00 AU", temp: "15 °C", zoom: 22 },
             mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực và hẻm núi sâu.", dist: "1.52 AU", temp: "-63 °C", zoom: 20 },
             jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng khí động học & cơn bão Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 32 },
             saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 38 },
@@ -977,7 +936,6 @@
             spaceGroup.add(sun);
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
 
-            // ĐÃ NỚI RỘNG KHOẢNG CÁCH QUỸ ĐẠO ĐỂ DỄ DÀNG QUAN SÁT SAO THỦY & CÁC HÀNH TINH KHÁC
             const planetConfigs = [
                 { id: 'mercury', size: 1.6, dist: 17, speed: 0.022, tilt: 0.03, atmos: null },
                 { id: 'venus', size: 2.2, dist: 25, speed: 0.016, tilt: 3.09, atmos: 0xfbbf24 },
