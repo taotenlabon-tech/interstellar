@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - 2 Min Doom & Red Alert</title>
+    <title>NASA Eyes 3D - 1M30S Mission & Audio Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -42,9 +42,9 @@
         }
         @keyframes pulseAlert {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.02); }
+            50% { opacity: 0.35; transform: scale(1.02); }
         }
-        .alert-pulse { animation: pulseAlert 0.8s infinite ease-in-out; }
+        .alert-pulse { animation: pulseAlert 0.5s infinite ease-in-out; }
     </style>
 </head>
 <body class="w-screen h-screen select-none">
@@ -59,14 +59,14 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& RED ALERT DOOM</span>
+                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& 1M30S DOOM</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Nhiệm Vụ 2 Phút • Cảnh Báo 20s & Màn Hình Đỏ Rực 10s • Bùm Nổ 3D Khi Hết Giờ!
+                Nhiệm Vụ 1 Phút 30 Giây • Tự Động Bật/Tắt Nhạc • Cảnh Báo Chói Tai 30s & Đỏ Rực 10s Cuối!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG VŨ TRỤ & NHIỆM VỤ 2 PHÚT
+            ⚡ KHỞI ĐỘNG VŨ TRỤ & BẮT ĐẦU
         </button>
     </div>
 
@@ -112,7 +112,7 @@
                 <div class="border-t border-slate-800/80 pt-2.5 space-y-1.5">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                     <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                        Chọn hành tinh để quan sát hoặc chọn Trái Đất để đổ bộ thực hiện nhiệm vụ sinh tồn 2 phút!
+                        Chọn hành tinh để quan sát hoặc chọn Trái Đất để đổ bộ thực hiện nhiệm vụ sinh tồn 1 phút 30 giây!
                     </p>
                     <div class="grid grid-cols-2 gap-1 pt-1 text-[10px] text-slate-400">
                         <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -120,7 +120,7 @@
                     </div>
 
                     <button id="landEarthBtn" onclick="enterEarthMode()" class="hidden w-full mt-2 py-2.5 px-3 bg-gradient-to-r from-rose-600 to-amber-500 hover:brightness-110 text-white font-orbitron font-black text-xs rounded-xl shadow-[0_0_25px_rgba(244,63,94,0.7)] transition animate-bounce">
-                        🔥 ĐỔ BỘ TRÁI ĐẤT - NHIỆM VỤ 2 PHÚT
+                        🔥 ĐỔ BỘ TRÁI ĐẤT - 1M30S MISSION
                     </button>
                 </div>
             </div>
@@ -144,12 +144,12 @@
         <div id="hudTopBar" class="absolute top-4 left-4 right-4 flex justify-between items-center hud-glass px-5 py-3 rounded-2xl max-w-4xl mx-auto w-full z-10 transition-colors duration-500">
             <div class="flex items-center gap-6">
                 <div>
-                    <div id="timerLabel" class="text-[10px] text-rose-400">⏳ THỜI GIAN CÒN LẠI</div>
-                    <div id="missionTimer" class="font-orbitron font-bold text-sm text-amber-300">02:00</div>
+                    <div id="timerLabel" class="text-[10px] text-rose-400">⏳ THỜI GIAN CÒN LẠI (1M30S)</div>
+                    <div id="missionTimer" class="font-orbitron font-bold text-sm text-amber-300">01:30</div>
                 </div>
                 <div class="h-6 w-[1px] bg-slate-700"></div>
                 <div>
-                    <div class="text-[10px] text-cyan-400">🎮 NHIỆM VỤ HIỆN TẠI (<span id="diffLabel" class="text-amber-300">DỄ</span>)</div>
+                    <div class="text-[10px] text-cyan-400">🎮 NHIỆM VỤ (<span id="diffLabel" class="text-amber-300">DỄ</span>)</div>
                     <div id="missionText" class="font-orbitron font-bold text-xs text-cyan-300">Chọn cấp độ khó để bắt đầu!</div>
                 </div>
             </div>
@@ -161,46 +161,46 @@
         <div id="gameBoxContainer" class="relative w-full max-w-4xl h-[74vh] bg-[#030712] border border-cyan-500/40 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(56,189,248,0.2)] mt-12 transition-colors duration-500">
             <canvas id="game2DCanvas" class="w-full h-full block"></canvas>
 
-            <!-- BẢNG CẢNH BÁO 20S CUỐI -->
-            <div id="alertBanner20s" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-20 px-6 py-2 bg-rose-600/90 border border-white text-white font-orbitron font-black text-xs rounded-xl shadow-[0_0_30px_rgba(244,63,94,0.9)] alert-pulse pointer-events-none">
-                ⚠️ CẢNH BÁO: CHỈ CÒN 20 GIÂY TRƯỚC KHI TRÁI ĐẤT PHÁT NỔ! ⚠️
+            <!-- BẢNG CẢNH BÁO 30S & 10S CUỐI -->
+            <div id="alertBanner30s" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-20 px-6 py-2.5 bg-rose-600 border-2 border-white text-white font-orbitron font-black text-xs sm:text-sm rounded-xl shadow-[0_0_40px_rgba(244,63,94,1)] alert-pulse pointer-events-none text-center">
+                🚨 CẢNH BÁO KHẨN CẤP: NGUY CƠ TRÁI ĐẤT NỔ TUNG TRONG 30 GIÂY! 🚨
             </div>
 
             <!-- MÀN HÌNH CHỌN CẤP ĐỘ KHÓ -->
             <div id="difficultyOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-6 z-20">
                 <div class="space-y-2">
-                    <h2 class="font-orbitron font-black text-2xl text-white tracking-wider">CHỌN CẤP ĐỘ SINH TỒN (02:00)</h2>
-                    <p class="text-xs text-slate-400">Cảnh báo: Dưới 20s sẽ báo động đỏ, dưới 10s màn hình đỏ rực trước khi phát nổ 3D!</p>
+                    <h2 class="font-orbitron font-black text-2xl text-white tracking-wider">CHỌN CẤP ĐỘ SINH TỒN (01:30)</h2>
+                    <p class="text-xs text-slate-400">Nhạc Straywav sẽ tự tắt khi vào Trái Đất. Dưới 30s còi báo động chói tai sẽ hú lên!</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
                     <button onclick="startMission('easy')" class="p-4 bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
                         <span class="text-2xl">🟢</span>
                         <span class="font-orbitron font-bold text-emerald-300 text-sm">DỄ</span>
-                        <span class="text-[11px] text-slate-300">Mục tiêu tiêu chuẩn. Không có thiên thạch rơi.</span>
+                        <span class="text-[11px] text-slate-300">Không có thiên thạch rơi. Dễ thở hơn.</span>
                     </button>
                     <button onclick="startMission('normal')" class="p-4 bg-amber-950/60 border border-amber-500/50 hover:bg-amber-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
                         <span class="text-2xl">🟡</span>
                         <span class="font-orbitron font-bold text-amber-300 text-sm">BÌNH THƯỜNG</span>
-                        <span class="text-[11px] text-slate-300">Có mưa thiên thạch vừa phải. Tránh né cẩn thận!</span>
+                        <span class="text-[11px] text-slate-300">Mưa thiên thạch vừa phải. Cần khéo léo né tránh.</span>
                     </button>
                     <button onclick="startMission('hard')" class="p-4 bg-rose-950/60 border border-rose-500/50 hover:bg-rose-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
                         <span class="text-2xl">🔴</span>
                         <span class="font-orbitron font-bold text-rose-400 text-sm">SIÊU KHÓ</span>
-                        <span class="text-[11px] text-slate-300">Nhiệm vụ gấp đôi! Mưa thiên thạch dồn dập tốc độ cao.</span>
+                        <span class="text-[11px] text-slate-300">Mưa thiên thạch dày đặc tốc độ cao! Thử thách cực đại.</span>
                     </button>
                 </div>
             </div>
 
-            <!-- BẢNG THẤT BẠI 3D KHI HẾT GIỜ (02:00) -->
-            <div id="gameOverModal" class="hidden absolute inset-0 bg-rose-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-5 z-30">
-                <div class="hud-glass p-6 rounded-3xl max-w-md w-full border-rose-500 space-y-4">
+            <!-- BẢNG THẤT BẠI KHI HẾT GIỜ (00:00) -->
+            <div id="gameOverModal" class="hidden absolute inset-0 bg-rose-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-5 z-30">
+                <div class="hud-glass p-6 rounded-3xl max-w-md w-full border-rose-500 space-y-4 shadow-[0_0_60px_rgba(244,63,94,0.8)]">
                     <div class="text-5xl animate-bounce">💥🌍❌</div>
                     <h2 class="font-orbitron font-black text-2xl text-rose-500 tracking-widest">BẠN ĐÃ THẤT BẠI!</h2>
                     <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                        Hết 2 phút! Trái Đất đã bùng nổ hoàn toàn do không hoàn thành nhiệm vụ kịp thời.
+                        Hết 1 phút 30 giây! Trái Đất đã bùng nổ hoàn toàn do không hoàn thành nhiệm vụ kịp thời.
                     </p>
                     <div class="flex gap-3 pt-2">
-                        <button onclick="resetToDifficulty()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-orbitron font-bold text-xs rounded-xl transition">
+                        <button onclick="resetToDifficulty()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-orbitron font-bold text-xs rounded-xl transition shadow-lg">
                             🔄 Thử Lại
                         </button>
                         <button onclick="exitEarthMode()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 font-orbitron font-bold text-xs rounded-xl transition">
@@ -236,7 +236,7 @@
             </p>
             <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700 text-xs space-y-1 text-slate-300">
                 <div>Cấp độ hoàn thành: <span id="winDiff3D" class="text-amber-300 font-bold">BÌNH THƯỜNG</span></div>
-                <div>Thời gian còn lại: <span id="winTime3D" class="text-cyan-300 font-bold">01:00</span></div>
+                <div>Thời gian còn lại: <span id="winTime3D" class="text-cyan-300 font-bold">00:45</span></div>
             </div>
             <div class="flex gap-3 pt-2">
                 <button onclick="replayFrom3D()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
@@ -285,7 +285,7 @@
             let chordIdx = 0, noteIdx = 0;
 
             function playNote(freq, isBass, duration) {
-                if (!audioCtx || audioCtx.state !== 'running') return;
+                if (!audioCtx || audioCtx.state !== 'running' || !isMusicPlaying) return;
                 const now = audioCtx.currentTime;
                 const osc1 = audioCtx.createOscillator();
                 const osc2 = audioCtx.createOscillator();
@@ -334,6 +334,27 @@
             seqInterval = setInterval(triggerStep, 450);
         }
 
+        // Phát âm thanh cảnh báo chói tai (Beep tần số cao)
+        function playHarshAlertBeep() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(880, now); // Tần số cao chói tai
+                osc.frequency.exponentialRampToValueAtTime(1760, now + 0.15);
+                
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+
+                osc.connect(gain);
+                gain.connect(masterGain);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            } catch (e) {}
+        }
+
         function setVolume(v) {
             const val = parseFloat(v);
             document.getElementById('volVal').innerText = Math.round(val * 100) + '%';
@@ -348,17 +369,18 @@
 
         function toggleSpaceAudio() {
             if (!audioCtx) { startProceduralStrayMusic(); return; }
-            if (audioCtx.state === 'running') {
-                audioCtx.suspend(); isMusicPlaying = false;
+            if (isMusicPlaying) {
+                isMusicPlaying = false;
                 document.getElementById('audioBtn').innerText = '🔇 Muted';
             } else {
-                audioCtx.resume(); isMusicPlaying = true;
+                isMusicPlaying = true;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
                 document.getElementById('audioBtn').innerText = '🔊 Music: ON';
             }
         }
 
         // =========================================================================
-        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT & NỔ TUNG 3D (2 PHÚT + CẢNH BÁO ĐỎ 20s/10s)
+        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT (1 PHÚT 30 GIÂY + CẢNH BÁO CHÓI TAI 30S)
         // =========================================================================
         let gameMode = 'SPACE';
         let spaceGroup, moonEscapeGroup;
@@ -370,7 +392,7 @@
         let currentDifficulty = 'easy';
         let missionStage = 1;
         let progressCount = 0;
-        let timeLeft = 120; // 2 phút
+        let timeLeft = 90; // 1 phút 30 giây (90 giây)
 
         let player2D = { x: 80, y: 80, radius: 13, speed: 4.5, color: '#38bdf8' };
         let keys2D = {};
@@ -392,10 +414,10 @@
             document.getElementById('difficultyOverlay').classList.remove('hidden');
             document.getElementById('gameOverModal').classList.add('hidden');
             document.getElementById('gameMsg').classList.add('hidden');
-            document.getElementById('alertBanner20s').classList.add('hidden');
+            document.getElementById('alertBanner30s').classList.add('hidden');
             document.getElementById('earthUI').style.backgroundColor = '#030712';
             document.getElementById('hudTopBar').style.backgroundColor = '';
-            document.getElementById('missionTimer').innerText = "02:00";
+            document.getElementById('missionTimer').innerText = "01:30";
             document.getElementById('missionText').innerText = "Chọn cấp độ khó để bắt đầu!";
         }
 
@@ -404,14 +426,14 @@
             missionState = 'PLAYING';
             missionStage = 1;
             progressCount = 0;
-            timeLeft = 120;
+            timeLeft = 90; // 90 giây
 
             const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
             document.getElementById('diffLabel').innerText = diffNames[diff];
             document.getElementById('difficultyOverlay').classList.add('hidden');
             document.getElementById('gameOverModal').classList.add('hidden');
             document.getElementById('gameMsg').classList.remove('hidden');
-            document.getElementById('alertBanner20s').classList.add('hidden');
+            document.getElementById('alertBanner30s').classList.add('hidden');
             document.getElementById('earthUI').style.backgroundColor = '#030712';
 
             player2D.x = 70;
@@ -432,15 +454,21 @@
                     let s = String(timeLeft % 60).padStart(2, '0');
                     document.getElementById('missionTimer').innerText = `${m}:${s}`;
 
-                    // Cảnh báo 20 giây cuối
-                    if (timeLeft <= 20 && timeLeft > 10) {
-                        document.getElementById('alertBanner20s').classList.remove('hidden');
+                    // Cảnh báo 30 giây cuối: hiển thị bảng & phát tiếng còi chói tai
+                    if (timeLeft <= 30 && timeLeft > 10) {
+                        const banner = document.getElementById('alertBanner30s');
+                        banner.classList.remove('hidden');
+                        banner.innerText = `🚨 CẢNH BÁO: CÒN ${timeLeft} GIÂY TRƯỚC KHI TRÁI ĐẤT NỔ! 🚨`;
+                        playHarshAlertBeep();
                     }
-                    // Cảnh báo 10 giây cuối: màn hình chuyển đỏ rực máu
+                    // Cảnh báo 10 giây cuối: màn hình đỏ rực máu kết hợp tiếng còi dồn dập
                     else if (timeLeft <= 10 && timeLeft > 0) {
-                        document.getElementById('alertBanner20s').innerText = `⚠️ BÁO ĐỘNG ĐỎ: CÒN ${timeLeft} GIÂY TRƯỚC KHI NỔ TUNG! ⚠️`;
+                        const banner = document.getElementById('alertBanner30s');
+                        banner.classList.remove('hidden');
+                        banner.innerText = `⚠️ BÁO ĐỘNG ĐỎ: CÒN ${timeLeft} GIÂY - SẮP BÙNG NỔ! ⚠️`;
                         document.getElementById('earthUI').style.backgroundColor = '#450a0a';
                         document.getElementById('gameBoxContainer').style.borderColor = '#ef4444';
+                        playHarshAlertBeep();
                     }
                     else if (timeLeft <= 0) {
                         triggerGameOverDoom();
@@ -453,14 +481,14 @@
             missionState = 'GAMEOVER';
             clearInterval(gameInterval);
             clearInterval(missionTimerInterval);
-            document.getElementById('alertBanner20s').classList.add('hidden');
+            document.getElementById('alertBanner30s').classList.add('hidden');
 
             triggerWarpEffect(() => {
                 gameMode = 'MOON_ESCAPE_3D';
                 document.getElementById('earthUI').classList.add('hidden');
                 document.getElementById('moonEscapeUI').classList.remove('hidden');
                 document.getElementById('victoryModal3D').classList.add('hidden');
-                document.getElementById('launchStatusText').innerText = "💥 THẤT BẠI! Hết 2 phút - Trái Đất đã bùng nổ hoàn toàn...";
+                document.getElementById('launchStatusText').innerText = "💥 THẤT BẠI! Hết thời gian - Trái Đất đã bùng nổ hoàn toàn...";
 
                 spaceGroup.visible = false;
                 if (!moonEscapeGroup) buildMoonEscapeScene3D();
@@ -480,9 +508,9 @@
         function getStageTargetCount() {
             if (missionStage === 4) return 1;
             if (currentDifficulty === 'hard') {
-                return missionStage === 1 ? 5 : missionStage === 2 ? 5 : 6;
+                return missionStage === 1 ? 4 : missionStage === 2 ? 4 : 5;
             }
-            return missionStage === 1 ? 3 : missionStage === 2 ? 3 : 4;
+            return missionStage === 1 ? 3 : missionStage === 2 ? 3 : 3;
         }
 
         function updateMissionHUD() {
@@ -516,8 +544,8 @@
         function spawnMeteors() {
             meteors2D = [];
             if (currentDifficulty === 'easy') return;
-            let count = currentDifficulty === 'normal' ? 6 : 14;
-            let speedBase = currentDifficulty === 'normal' ? 2.5 : 4.8;
+            let count = currentDifficulty === 'normal' ? 5 : 12;
+            let speedBase = currentDifficulty === 'normal' ? 2.5 : 4.5;
 
             for (let i = 0; i < count; i++) {
                 meteors2D.push({
@@ -755,6 +783,11 @@
                 document.getElementById('spaceUI').classList.remove('hidden');
                 selectPlanet('earth');
                 targetCamDist = 160;
+
+                // Tự động BẬT nhạc Straywav khi ra ngoài vũ trụ
+                isMusicPlaying = true;
+                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                document.getElementById('audioBtn').innerText = '🔊 Music: ON';
             });
         }
 
@@ -768,6 +801,10 @@
         }
 
         function enterEarthMode() {
+            // Tự động TẮT nhạc Straywav khi vào Trái Đất
+            isMusicPlaying = false;
+            document.getElementById('audioBtn').innerText = '🔇 Muted';
+
             triggerWarpEffect(() => {
                 gameMode = 'EARTH';
                 spaceGroup.visible = false;
@@ -795,6 +832,11 @@
                 document.getElementById('earthUI').classList.add('hidden');
                 document.getElementById('spaceUI').classList.remove('hidden');
                 selectPlanet('earth');
+
+                // Tự động BẬT lại nhạc Straywav khi quay về vũ trụ
+                isMusicPlaying = true;
+                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                document.getElementById('audioBtn').innerText = '🔊 Music: ON';
             });
         }
 
