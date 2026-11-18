@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - Earth Doom & 3D Moon Escape</title>
+    <title>NASA Eyes 3D - Earth Burning & 3D Moon Escape</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -57,7 +57,7 @@
                 NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& EARTH DOOM 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Trái Đất Bốc Cháy 3D • Sao Thủy Rõ Nét • 3 Phút Sinh Tồn & Hiệu Ứng Nổ Tung Trái Đất 3D!
+                Trái Đất Xanh Với Hiệu Ứng Lửa Cháy 3D • Điều Chỉnh Ánh Sáng • 3 Phút Sinh Tồn & Nổ Tung 3D!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
@@ -99,15 +99,15 @@
                         <input type="range" min="0" max="1" step="0.05" value="0.85" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
                     </div>
                     <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                        <div class="flex justify-between text-slate-400 mb-1"><span>⏳ Tốc độ</span><span id="speedVal" class="text-cyan-300">1.0x</span></div>
-                        <input type="range" min="0" max="5" step="0.1" value="1" oninput="setSpeed(this.value)" class="w-full accent-cyan-400 h-1 cursor-pointer">
+                        <div class="flex justify-between text-slate-400 mb-1"><span>☀️ Ánh sáng</span><span id="brightVal" class="text-amber-300 font-bold">125%</span></div>
+                        <input type="range" min="0.3" max="2.5" step="0.05" value="1.25" oninput="setBrightness(this.value)" class="w-full accent-amber-400 h-1 cursor-pointer">
                     </div>
                 </div>
 
                 <div class="border-t border-slate-800/80 pt-2.5 space-y-1.5">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                     <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                        Chọn hành tinh để quan sát hoặc chọn Trái Đất (đang bốc cháy) để đổ bộ thực hiện nhiệm vụ 3 phút!
+                        Chọn hành tinh để quan sát hoặc chọn Trái Đất (đang có lửa cháy trên bề mặt) để đổ bộ làm nhiệm vụ!
                     </p>
                     <div class="grid grid-cols-2 gap-1 pt-1 text-[10px] text-slate-400">
                         <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -115,7 +115,7 @@
                     </div>
 
                     <button id="landEarthBtn" onclick="enterEarthMode()" class="hidden w-full mt-2 py-2.5 px-3 bg-gradient-to-r from-rose-600 to-amber-500 hover:brightness-110 text-white font-orbitron font-black text-xs rounded-xl shadow-[0_0_25px_rgba(244,63,94,0.7)] transition animate-bounce">
-                        🔥 ĐỔ BỘ TRÁI ĐẤT BỐC CHÁY - 3 PHÚT
+                        🔥 ĐỔ BỘ TRÁI ĐẤT - NHIỆM VỤ 3 PHÚT
                     </button>
                 </div>
             </div>
@@ -328,6 +328,12 @@
             if (masterGain && audioCtx) masterGain.gain.setTargetAtTime(val, audioCtx.currentTime, 0.05);
         }
 
+        function setBrightness(v) {
+            userBrightness = parseFloat(v);
+            document.getElementById('brightVal').innerText = Math.round(userBrightness * 100) + '%';
+            if (renderer) renderer.toneMappingExposure = userBrightness;
+        }
+
         function toggleSpaceAudio() {
             if (!audioCtx) { startProceduralStrayMusic(); return; }
             if (audioCtx.state === 'running') {
@@ -342,7 +348,7 @@
         // =========================================================================
         // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT & NỔ TUNG 3D
         // =========================================================================
-        let gameMode = 'SPACE'; // 'SPACE', 'EARTH', 'MOON_ESCAPE_3D'
+        let gameMode = 'SPACE';
         let spaceGroup, moonEscapeGroup;
         let rocket3D, rocketFlame3D, escapeCurve3D, escapeProgress = 0;
         let explodingEarthMesh, earthDebrisList = [];
@@ -587,15 +593,15 @@
             dirLight.position.set(40, 50, 40);
             moonEscapeGroup.add(dirLight, new THREE.AmbientLight(0x1e293b, 0.9));
 
-            // Trái Đất bốc cháy trước khi nổ tung
+            // Trái Đất xanh với hiệu ứng lửa trước khi nổ tung
+            const earthMaps = generatePlanetMaps('earth');
             explodingEarthMesh = new THREE.Mesh(
                 new THREE.SphereGeometry(12, 48, 48),
-                new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xd97706, emissiveIntensity: 0.9, roughness: 0.6 })
+                new THREE.MeshStandardMaterial({ map: earthMaps.map, roughness: 0.6 })
             );
             explodingEarthMesh.position.set(-28, -12, 0);
             moonEscapeGroup.add(explodingEarthMesh);
 
-            // Tạo các mảnh vỡ cho hiệu ứng nổ tung Trái Đất
             earthDebrisList = [];
             for (let i = 0; i < 40; i++) {
                 const debris = new THREE.Mesh(
@@ -615,7 +621,6 @@
                 earthDebrisList.push(debris);
             }
 
-            // Mặt Trăng sáng bạc bên phải trên
             const moonMesh = new THREE.Mesh(
                 new THREE.SphereGeometry(7, 64, 64),
                 new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.85, metalness: 0.1 })
@@ -623,14 +628,12 @@
             moonMesh.position.set(28, 16, -5);
             moonEscapeGroup.add(moonMesh);
 
-            // Quỹ đạo đường bay 3D
             escapeCurve3D = new THREE.QuadraticBezierCurve3(
                 new THREE.Vector3(-22, -5, 2),
                 new THREE.Vector3(0, 18, 8),
                 new THREE.Vector3(24, 14, -3)
             );
 
-            // Mô hình Tên Lửa 3D
             rocket3D = new THREE.Group();
             const body = new THREE.Mesh(
                 new THREE.CylinderGeometry(0.7, 0.9, 3.8, 24),
@@ -726,6 +729,7 @@
                 spaceGroup.visible = true;
                 if (moonEscapeGroup) moonEscapeGroup.visible = false;
                 if (bloomPass) bloomPass.strength = 1.4;
+                if (renderer) renderer.toneMappingExposure = userBrightness;
 
                 document.getElementById('earthUI').classList.add('hidden');
                 document.getElementById('spaceUI').classList.remove('hidden');
@@ -734,24 +738,26 @@
         }
 
         // =========================================================================
-        // ENGINE 3D VŨ TRỤ THREE.JS (TRÁI ĐẤT BỐC CHÁY VÀ SAO THỦY RÕ RÀNG)
+        // ENGINE 3D VŨ TRỤ THREE.JS (TRÁI ĐẤT XANH CÓ LỬA CHÁY & CHỈNH ÁNH SÁNG)
         // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
         let sunUniforms, starDomeGroup, asteroidBelt, spacetimeGrid, cosmicDust;
+        let earthFireFlames = [];
         let focusedObject = 'sun';
         let isHudVisible = true, isDragging = false, prevMouse = { x: 0, y: 0 };
         let camDist = 95, targetCamDist = 95;
         let camAngleX = 0.35, camAngleY = 0.25;
         let currentLookAt = new THREE.Vector3(0, 0, 0);
         let timeSpeed = 1.0;
+        let userBrightness = 1.25;
         let isFreeFly = false, freeFlyAngle = 0;
 
         const planetDB = {
             sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục khổng lồ.", dist: "0 AU", temp: "5,500 °C", zoom: 90 },
             mercury: { name: "SAO THỦY (MERCURY)", desc: "Hành tinh gần Mặt Trời nhất với bề mặt đá bazan xám bạc.", dist: "0.39 AU", temp: "430 °C", zoom: 20 },
             venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric.", dist: "0.72 AU", temp: "462 °C", zoom: 22 },
-            earth: { name: "TRÁI ĐẤT BỐC CHÁY (EARTH DOOM)", desc: "Hành tinh đang bốc cháy dữ dội! Đổ bộ ngay để làm nhiệm vụ!", dist: "1.00 AU", temp: "180 °C 🔥", zoom: 22 },
+            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Trái Đất xanh đang bùng phát các đám cháy lớn trên bề mặt! Đổ bộ ngay để cứu lấy hành tinh!", dist: "1.00 AU", temp: "68 °C 🔥", zoom: 22 },
             mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực.", dist: "1.52 AU", temp: "-63 °C", zoom: 20 },
             jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng khí động học & Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 32 },
             saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 38 },
@@ -795,41 +801,6 @@
             }
         `;
 
-        // Shader Trái Đất Bốc Cháy 3D ngoài vũ trụ
-        const earthDoomVertexShader = `
-            varying vec3 vNormal;
-            varying vec3 vPosition;
-            void main() {
-                vNormal = normalize(normalMatrix * normal);
-                vPosition = position;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `;
-
-        const earthDoomFragmentShader = `
-            uniform float uTime;
-            varying vec3 vNormal;
-            varying vec3 vPosition;
-            float hash(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
-            float noise(vec3 x) {
-                vec3 i = floor(x); vec3 f = fract(x); f = f * f * (3.0 - 2.0 * f);
-                return mix(mix(mix(hash(i + vec3(0,0,0)), hash(i + vec3(1,0,0)), f.x),
-                               mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
-                           mix(mix(hash(i + vec3(0,0,1)), hash(i + vec3(1,0,1)), f.x),
-                               mix(hash(i + vec3(0,1,1)), hash(i + vec3(1,1,1)), f.x), f.y), f.z);
-            }
-            void main() {
-                float n = noise(vPosition * 0.5 + vec3(0.0, uTime * 0.3, 0.0));
-                vec3 col = mix(vec3(0.75, 0.12, 0.02), vec3(0.98, 0.45, 0.05), n);
-                col += vec3(0.4, 0.05, 0.01) * sin(uTime * 3.0 + vPosition.y);
-                float fresnel = pow(1.0 - max(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0), 2.0);
-                col += vec3(1.0, 0.3, 0.1) * fresnel * 1.5;
-                gl_FragColor = vec4(col, 1.0);
-            }
-        `;
-
-        let earthDoomUniforms = { uTime: { value: 0 } };
-
         function createAtmosphereMaterial(colorHex, intensity = 1.1, power = 3.5) {
             return new THREE.ShaderMaterial({
                 uniforms: { uColor: { value: new THREE.Color(colorHex) }, uIntensity: { value: intensity }, uPower: { value: power } },
@@ -872,6 +843,17 @@
                 }
             } else if (type === 'venus') {
                 ctx.fillStyle = '#f59e0b'; ctx.fillRect(0, 0, w, h);
+            } else if (type === 'earth') {
+                // Đại dương xanh biếc & Lục địa xanh tươi tự nhiên
+                ctx.fillStyle = '#0284c7'; ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = '#16a34a';
+                ctx.beginPath(); ctx.ellipse(500, 400, 260, 150, 0.2, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.ellipse(1200, 520, 340, 200, -0.1, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.ellipse(1750, 350, 220, 140, 0.3, 0, Math.PI * 2); ctx.fill();
+            } else if (type === 'clouds') {
+                ctx.clearRect(0, 0, w, h);
+                ctx.fillStyle = 'rgba(255,255,255,0.45)';
+                for (let i = 0; i < 150; i++) ctx.fillRect(Math.random() * w, Math.random() * h, 180, 25);
             } else if (type === 'mars') {
                 ctx.fillStyle = '#9a3412'; ctx.fillRect(0, 0, w, h);
             } else if (type === 'jupiter') {
@@ -988,7 +970,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.toneMapping = THREE.ReinhardToneMapping;
-            renderer.toneMappingExposure = 1.25;
+            renderer.toneMappingExposure = userBrightness;
             container.appendChild(renderer.domElement);
 
             const renderScene = new THREE.RenderPass(scene, camera);
@@ -1018,7 +1000,7 @@
             const planetConfigs = [
                 { id: 'mercury', size: 1.9, dist: 20, speed: 0.022, tilt: 0.03, atmos: 0xe2e8f0 },
                 { id: 'venus', size: 2.3, dist: 27, speed: 0.016, tilt: 3.09, atmos: 0xfbbf24 },
-                { id: 'earth', size: 2.6, dist: 36, speed: 0.012, tilt: 0.41, atmos: 0xef4444, isDoom: true },
+                { id: 'earth', size: 2.6, dist: 36, speed: 0.012, tilt: 0.41, atmos: 0x38bdf8, clouds: true, hasFire: true },
                 { id: 'mars', size: 1.9, dist: 45, speed: 0.009, tilt: 0.44, atmos: 0xf97316 },
                 { id: 'jupiter', size: 5.8, dist: 64, speed: 0.006, tilt: 0.05, atmos: 0xfdba74 },
                 { id: 'saturn', size: 4.8, dist: 82, speed: 0.004, tilt: 0.47, atmos: 0xfef08a, rings: true },
@@ -1032,23 +1014,58 @@
                 orbitRing.rotation.x = Math.PI / 2;
                 spaceGroup.add(orbitRing);
 
-                let mesh;
-                if (cfg.isDoom) {
-                    earthDoomUniforms = { uTime: { value: 0 } };
-                    const doomMat = new THREE.ShaderMaterial({ uniforms: earthDoomUniforms, vertexShader: earthDoomVertexShader, fragmentShader: earthDoomFragmentShader });
-                    mesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size, 64, 64), doomMat);
-                    mesh.add(new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.2, 48, 48), createAtmosphereMaterial(0xff4500, 1.8, 3.0)));
-                } else {
-                    const maps = generatePlanetMaps(cfg.id);
-                    const pMat = new THREE.MeshStandardMaterial({ map: maps.map, bumpMap: maps.bumpMap, bumpScale: 0.045, roughness: 0.72, metalness: 0.08 });
-                    mesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size, 64, 64), pMat);
-                }
-
+                const maps = generatePlanetMaps(cfg.id);
+                const pMat = new THREE.MeshStandardMaterial({ map: maps.map, bumpMap: maps.bumpMap, bumpScale: 0.045, roughness: 0.72, metalness: 0.08 });
+                const mesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size, 64, 64), pMat);
                 mesh.rotation.z = cfg.tilt;
                 spaceGroup.add(mesh);
 
-                if (cfg.atmos && !cfg.isDoom) {
+                if (cfg.atmos) {
                     mesh.add(new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.12, 48, 48), createAtmosphereMaterial(cfg.atmos, 1.2, 3.6)));
+                }
+
+                if (cfg.clouds) {
+                    const cloudMaps = generatePlanetMaps('clouds');
+                    const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(cfg.size * 1.022, 64, 64), new THREE.MeshStandardMaterial({ map: cloudMaps.map, transparent: true, opacity: 0.88, depthWrite: false }));
+                    mesh.add(cloudMesh);
+                    mesh.userData.cloudMesh = cloudMesh;
+                }
+
+                // Thêm các ngọn lửa 3D cháy bập bùng trên bề mặt Trái Đất xanh
+                if (cfg.hasFire) {
+                    earthFireFlames = [];
+                    for (let i = 0; i < 36; i++) {
+                        const u = Math.random();
+                        const v = Math.random();
+                        const theta = u * 2.0 * Math.PI;
+                        const phi = Math.acos(2.0 * v - 1.0);
+
+                        const normal = new THREE.Vector3(
+                            Math.sin(phi) * Math.cos(theta),
+                            Math.sin(phi) * Math.sin(theta),
+                            Math.cos(phi)
+                        ).normalize();
+
+                        const flameHeight = 0.5 + Math.random() * 0.7;
+                        const flame = new THREE.Mesh(
+                            new THREE.ConeGeometry(0.18 + Math.random() * 0.14, flameHeight, 8),
+                            new THREE.MeshBasicMaterial({
+                                color: Math.random() > 0.4 ? 0xf97316 : 0xfacc15,
+                                transparent: true,
+                                opacity: 0.9
+                            })
+                        );
+
+                        flame.position.copy(normal).multiplyScalar(cfg.size + flameHeight * 0.35);
+                        flame.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal);
+                        flame.userData = {
+                            baseScale: 0.8 + Math.random() * 0.5,
+                            phase: Math.random() * Math.PI * 2
+                        };
+
+                        mesh.add(flame);
+                        earthFireFlames.push(flame);
+                    }
                 }
 
                 if (cfg.rings) {
@@ -1103,8 +1120,6 @@
             document.getElementById('gridBtn').innerText = spacetimeGrid.visible ? '🕸️ Lưới KG: ON' : '🕸️ Lưới KG: OFF';
         }
 
-        function setSpeed(v) { timeSpeed = parseFloat(v); document.getElementById('speedVal').innerText = timeSpeed.toFixed(1) + 'x'; }
-
         function toggleHud() {
             isHudVisible = !isHudVisible;
             document.getElementById('hudBody').style.maxHeight = isHudVisible ? '380px' : '0px';
@@ -1127,11 +1142,11 @@
 
         function animate() {
             requestAnimationFrame(animate);
+            const nowSec = performance.now() * 0.005;
 
             if (gameMode === 'MOON_ESCAPE_3D' && rocket3D && escapeCurve3D) {
                 if (starDomeGroup) starDomeGroup.rotation.y += 0.00015;
 
-                // Hiệu ứng Trái Đất nổ tung 3D trong 1.5 giây đầu
                 if (isEarthExploding) {
                     explosionProgress += 0.015;
                     if (explodingEarthMesh) explodingEarthMesh.scale.addScalar(0.08);
@@ -1177,10 +1192,15 @@
 
             } else if (gameMode === 'SPACE') {
                 if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
-                if (earthDoomUniforms) earthDoomUniforms.uTime.value += 0.02 * timeSpeed;
                 if (starDomeGroup) starDomeGroup.rotation.y += 0.0001 * timeSpeed;
                 if (cosmicDust) cosmicDust.rotation.y += 0.00025 * timeSpeed;
                 if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
+
+                // Hiệu ứng ngọn lửa bập bùng trên bề mặt Trái Đất xanh
+                earthFireFlames.forEach(f => {
+                    const flicker = f.userData.baseScale + Math.sin(nowSec * 3.5 + f.userData.phase) * 0.35;
+                    f.scale.set(1, Math.max(0.4, flicker), 1);
+                });
 
                 if (isFreeFly) {
                     freeFlyAngle += 0.003 * timeSpeed;
