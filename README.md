@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - 2D Earth Doom Mission & Moon Escape</title>
+    <title>NASA Eyes 3D - 2D Earth Mission & 3D Moon Escape</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -54,10 +54,10 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& THOÁT KHỎI TRÁI ĐẤT</span>
+                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& 3D MOON ESCAPE</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Vòm Vạn Sao 360° • Quỹ Đạo Sao Thủy Rõ Ràng • 3 Phút Sinh Tồn & Bay Lên Mặt Trăng!
+                Hệ Mặt Trời 3D • Sao Thủy Rõ Nét • 3 Phút Sinh Tồn & Phóng Tên Lửa 3D Lên Mặt Trăng!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
@@ -123,7 +123,7 @@
 
         <nav class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 hud-glass px-3 py-2.5 rounded-2xl flex gap-2 overflow-x-auto max-w-[95vw] custom-scrollbar">
             <button id="btn-sun" onclick="selectPlanet('sun')" class="planet-pill active px-3 py-1.5 text-amber-300 rounded-xl text-xs font-bold whitespace-nowrap">☀️ Mặt Trời</button>
-            <button id="btn-mercury" onclick="selectPlanet('mercury')" class="planet-pill px-3 py-1.5 text-slate-300 rounded-xl text-xs font-bold whitespace-nowrap">🪨 Sao Thủy</button>
+            <button id="btn-mercury" onclick="selectPlanet('mercury')" class="planet-pill px-3 py-1.5 text-slate-200 rounded-xl text-xs font-bold whitespace-nowrap">🌑 Sao Thủy</button>
             <button id="btn-venus" onclick="selectPlanet('venus')" class="planet-pill px-3 py-1.5 text-amber-200 rounded-xl text-xs font-bold whitespace-nowrap">🌕 Sao Kim</button>
             <button id="btn-earth" onclick="selectPlanet('earth')" class="planet-pill px-3 py-1.5 text-rose-400 border-rose-500/50 rounded-xl text-xs font-bold whitespace-nowrap">🌍 Trái Đất 🎮</button>
             <button id="btn-mars" onclick="selectPlanet('mars')" class="planet-pill px-3 py-1.5 text-rose-400 rounded-xl text-xs font-bold whitespace-nowrap">🔴 Sao Hỏa</button>
@@ -160,7 +160,7 @@
             <div id="difficultyOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-6 z-20">
                 <div class="space-y-2">
                     <h2 class="font-orbitron font-black text-2xl text-white tracking-wider">CHỌN CẤP ĐỘ SINH TỒN (03:00)</h2>
-                    <p class="text-xs text-slate-400">Hoàn thành 4 nhiệm vụ trước khi Trái Đất nổ tung để phóng tên lửa lên Mặt Trăng!</p>
+                    <p class="text-xs text-slate-400">Hoàn thành 4 nhiệm vụ trước khi Trái Đất nổ tung để kích hoạt cảnh phóng tên lửa 3D lên Mặt Trăng!</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
                     <button onclick="startMission('easy')" class="p-4 bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
@@ -178,31 +178,6 @@
                         <span class="font-orbitron font-bold text-rose-400 text-sm">SIÊU KHÓ</span>
                         <span class="text-[11px] text-slate-300">Nhiệm vụ gấp đôi! Mưa thiên thạch dồn dập tốc độ cao.</span>
                     </button>
-                </div>
-            </div>
-
-            <!-- BẢNG CHÚC MỪNG HOÀN THÀNH NHIỆM VỤ & BAY LÊN MẶT TRĂNG -->
-            <div id="victoryModal" class="hidden absolute inset-0 bg-slate-950/70 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center space-y-5 z-30">
-                <div class="hud-glass p-6 sm:p-8 rounded-3xl max-w-md w-full border-amber-400/60 space-y-4 shadow-[0_0_60px_rgba(251,191,36,0.4)]">
-                    <div class="text-4xl animate-bounce">🌕🚀🎉</div>
-                    <h2 class="font-orbitron font-black text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-cyan-300">
-                        NHIỆM VỤ HOÀN THÀNH!
-                    </h2>
-                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                        Tàu cứu hộ đã thoát khỏi Trái Đất rực lửa và hạ cánh an toàn xuống <strong class="text-amber-300">Mặt Trăng</strong>! Nền văn minh nhân loại đã được bảo toàn.
-                    </p>
-                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-700 text-xs space-y-1 text-slate-300">
-                        <div>Cấp độ hoàn thành: <span id="winDiff" class="text-amber-300 font-bold">BÌNH THƯỜNG</span></div>
-                        <div>Thời gian còn lại: <span id="winTime" class="text-cyan-300 font-bold">01:24</span></div>
-                    </div>
-                    <div class="flex gap-3 pt-2">
-                        <button onclick="resetToDifficulty()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
-                            🔄 Chơi Lại
-                        </button>
-                        <button onclick="exitEarthMode()" class="flex-1 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
-                            🌌 Về Vũ Trụ
-                        </button>
-                    </div>
                 </div>
             </div>
 
@@ -227,6 +202,37 @@
                 <span class="px-4 py-1.5 bg-slate-900/90 border border-cyan-500/60 rounded-xl text-[11px] font-bold text-amber-300 shadow-lg">
                     ⌨️ Dùng phím MŨI TÊN hoặc W, A, S, D để di chuyển! Tránh thiên thạch đỏ!
                 </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GIAO DIỆN HOẠT ẢNH 3D TÊN LỬA BAY LÊN MẶT TRĂNG & BẢNG CHÚC MỪNG -->
+    <div id="moonEscapeUI" class="hidden fixed inset-0 z-40 pointer-events-none flex flex-col justify-between p-6">
+        <div class="hud-glass px-5 py-3 rounded-2xl max-w-md mx-auto text-center border-amber-400/50">
+            <div class="text-[10px] text-amber-300 tracking-widest font-bold">🚀 CHIẾN DỊCH DI TẢN KHÔNG GIAN 3D</div>
+            <div id="launchStatusText" class="font-orbitron font-bold text-sm text-white mt-0.5">Đang rời khỏi Trái Đất hướng tới Mặt Trăng...</div>
+        </div>
+
+        <!-- BẢNG CHÚC MỪNG HIỆN RA KHI TÀU CHẠM MẶT TRĂNG 3D -->
+        <div id="victoryModal3D" class="hidden pointer-events-auto m-auto hud-glass p-6 sm:p-8 rounded-3xl max-w-md w-full border-amber-400/70 text-center space-y-4 shadow-[0_0_80px_rgba(251,191,36,0.5)]">
+            <div class="text-5xl animate-bounce">🌕🚀🎉</div>
+            <h2 class="font-orbitron font-black text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-cyan-300">
+                CHÚC MỪNG CHIẾN THẮNG!
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                Tàu cứu hộ 3D đã vượt qua quỹ đạo Trái Đất và hạ cánh an toàn xuống <strong class="text-amber-300">Mặt Trăng</strong>! Bạn đã cứu sống nhân loại thành công.
+            </p>
+            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700 text-xs space-y-1 text-slate-300">
+                <div>Cấp độ hoàn thành: <span id="winDiff3D" class="text-amber-300 font-bold">BÌNH THƯỜNG</span></div>
+                <div>Thời gian còn lại: <span id="winTime3D" class="text-cyan-300 font-bold">01:24</span></div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="replayFrom3D()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
+                    🔄 Chơi Lại
+                </button>
+                <button onclick="finishToUniverse()" class="flex-1 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
+                    🌌 Khám Phá Vũ Trụ
+                </button>
             </div>
         </div>
     </div>
@@ -334,24 +340,22 @@
         }
 
         // =========================================================================
-        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT & HOẠT ẢNH BAY LÊN MẶT TRĂNG
+        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT
         // =========================================================================
-        let gameMode = 'SPACE';
-        let spaceGroup;
+        let gameMode = 'SPACE'; // 'SPACE', 'EARTH', 'MOON_ESCAPE_3D'
+        let spaceGroup, moonEscapeGroup;
+        let rocket3D, rocketFlame3D, escapeCurve3D, escapeProgress = 0;
         let canvas2D, ctx2D, gameInterval, missionTimerInterval;
-        let missionState = 'SELECT'; // 'SELECT', 'PLAYING', 'LAUNCHING', 'GAMEOVER'
+        let missionState = 'SELECT';
         let currentDifficulty = 'easy';
-        let missionStage = 1; // 1: Nước, 2: Trạm khiên, 3: Cứu nhà khoa học, 4: Bệ phóng
+        let missionStage = 1;
         let progressCount = 0;
-        let timeLeft = 180; // 3 phút = 180 giây
+        let timeLeft = 180; // 3 phút
 
         let player2D = { x: 80, y: 80, radius: 13, speed: 4.5, color: '#38bdf8' };
         let keys2D = {};
         let items2D = [];
         let meteors2D = [];
-
-        // Biến hoạt ảnh tên lửa bay lên Mặt Trăng
-        let rocketAnim = { x: 0, y: 0, progress: 0, stars: [] };
 
         window.addEventListener('keydown', e => keys2D[e.key] = true);
         window.addEventListener('keyup', e => keys2D[e.key] = false);
@@ -366,7 +370,6 @@
         function resetToDifficulty() {
             missionState = 'SELECT';
             document.getElementById('difficultyOverlay').classList.remove('hidden');
-            document.getElementById('victoryModal').classList.add('hidden');
             document.getElementById('gameOverModal').classList.add('hidden');
             document.getElementById('gameMsg').classList.add('hidden');
             document.getElementById('missionTimer').innerText = "03:00";
@@ -378,12 +381,11 @@
             missionState = 'PLAYING';
             missionStage = 1;
             progressCount = 0;
-            timeLeft = 180; // 3 phút
+            timeLeft = 180;
 
             const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
             document.getElementById('diffLabel').innerText = diffNames[diff];
             document.getElementById('difficultyOverlay').classList.add('hidden');
-            document.getElementById('victoryModal').classList.add('hidden');
             document.getElementById('gameOverModal').classList.add('hidden');
             document.getElementById('gameMsg').classList.remove('hidden');
 
@@ -415,7 +417,7 @@
         }
 
         function getStageTargetCount() {
-            if (missionStage === 4) return 1; // Bệ phóng tên lửa luôn là 1
+            if (missionStage === 4) return 1;
             if (currentDifficulty === 'hard') {
                 return missionStage === 1 ? 5 : missionStage === 2 ? 5 : 6;
             }
@@ -468,37 +470,25 @@
         }
 
         function gameLoop2D() {
-            if (gameMode !== 'EARTH') return;
+            if (gameMode !== 'EARTH' || missionState !== 'PLAYING') return;
 
-            if (missionState === 'PLAYING') {
-                update2DPlaying();
-                render2DPlaying();
-            } else if (missionState === 'LAUNCHING') {
-                updateAndRenderMoonLaunch();
-            }
-        }
-
-        function update2DPlaying() {
             if ((keys2D['ArrowUp'] || keys2D['w'] || keys2D['W']) && player2D.y > 20) player2D.y -= player2D.speed;
             if ((keys2D['ArrowDown'] || keys2D['s'] || keys2D['S']) && player2D.y < canvas2D.height - 20) player2D.y += player2D.speed;
             if ((keys2D['ArrowLeft'] || keys2D['a'] || keys2D['A']) && player2D.x > 20) player2D.x -= player2D.speed;
             if ((keys2D['ArrowRight'] || keys2D['d'] || keys2D['D']) && player2D.x < canvas2D.width - 20) player2D.x += player2D.speed;
 
-            // Di chuyển thiên thạch
             meteors2D.forEach(m => {
                 m.x += m.vx;
                 m.y += m.vy;
                 if (m.x < 130 || m.x > canvas2D.width - 20) m.vx *= -1;
                 if (m.y < 20 || m.y > canvas2D.height - 20) m.vy *= -1;
 
-                // Va chạm thiên thạch đẩy lùi về điểm xuất phát
                 if (Math.hypot(player2D.x - m.x, player2D.y - m.y) < player2D.radius + m.radius) {
                     player2D.x = 70;
                     player2D.y = canvas2D.height / 2;
                 }
             });
 
-            // Thu thập vật phẩm
             items2D.forEach(item => {
                 if (!item.collected) {
                     if (Math.hypot(player2D.x - item.x, player2D.y - item.y) < player2D.radius + item.radius) {
@@ -508,6 +498,8 @@
                     }
                 }
             });
+
+            render2DPlaying();
         }
 
         function checkMissionProgress() {
@@ -516,7 +508,7 @@
                 missionStage++;
                 progressCount = 0;
                 if (missionStage > 4) {
-                    startMoonLaunchAnimation();
+                    trigger3DMoonEscape();
                 } else {
                     updateMissionHUD();
                     spawnMissionItems();
@@ -530,7 +522,6 @@
             ctx2D.fillStyle = '#090d16';
             ctx2D.fillRect(0, 0, canvas2D.width, canvas2D.height);
 
-            // Lưới địa hình Trái Đất
             ctx2D.strokeStyle = 'rgba(244, 63, 94, 0.12)';
             ctx2D.lineWidth = 1;
             for (let x = 0; x < canvas2D.width; x += 40) {
@@ -540,11 +531,9 @@
                 ctx2D.beginPath(); ctx2D.moveTo(0, y); ctx2D.lineTo(canvas2D.width, y); ctx2D.stroke();
             }
 
-            // Vùng an toàn xuất phát bên trái
             ctx2D.fillStyle = 'rgba(56, 189, 248, 0.08)';
             ctx2D.fillRect(0, 0, 120, canvas2D.height);
 
-            // Vẽ vật phẩm
             items2D.forEach(item => {
                 if (!item.collected) {
                     ctx2D.save();
@@ -561,7 +550,6 @@
                 }
             });
 
-            // Vẽ thiên thạch
             meteors2D.forEach(m => {
                 ctx2D.save();
                 ctx2D.beginPath();
@@ -573,7 +561,6 @@
                 ctx2D.restore();
             });
 
-            // Vẽ nhân vật
             ctx2D.save();
             ctx2D.beginPath();
             ctx2D.arc(player2D.x, player2D.y, player2D.radius, 0, Math.PI * 2);
@@ -588,150 +575,113 @@
         }
 
         // =========================================================================
-        // HOẠT ẢNH TÊN LỬA BAY TỪ TRÁI ĐẤT LÊN MẶT TRĂNG & BẢNG CHÚC MỪNG
+        // HOẠT ẢNH 3D TÊN LỬA BAY TỪ TRÁI ĐẤT LÊN MẶT TRĂNG & BẢNG CHÚC MỪNG
         // =========================================================================
-        function startMoonLaunchAnimation() {
-            missionState = 'LAUNCHING';
-            document.getElementById('gameMsg').classList.add('hidden');
-            document.getElementById('missionText').innerText = "🚀 ĐANG PHÓNG TÀU CỨU HỘ LÊN MẶT TRĂNG...";
+        function buildMoonEscapeScene3D() {
+            moonEscapeGroup = new THREE.Group();
+            scene.add(moonEscapeGroup);
 
-            rocketAnim.progress = 0;
-            rocketAnim.stars = [];
-            for (let i = 0; i < 80; i++) {
-                rocketAnim.stars.push({
-                    x: Math.random() * canvas2D.width,
-                    y: Math.random() * canvas2D.height,
-                    r: 1 + Math.random() * 2
-                });
-            }
+            // Ánh sáng cho cảnh 3D
+            const dirLight = new THREE.DirectionalLight(0xffffff, 2.2);
+            dirLight.position.set(40, 50, 40);
+            moonEscapeGroup.add(dirLight, new THREE.AmbientLight(0x1e293b, 0.9));
+
+            // Trái Đất rực lửa bên trái dưới
+            const earthMesh = new THREE.Mesh(
+                new THREE.SphereGeometry(12, 64, 64),
+                new THREE.MeshStandardMaterial({ color: 0xea580c, emissive: 0x991b1b, emissiveIntensity: 0.8, roughness: 0.7 })
+            );
+            earthMesh.position.set(-28, -12, 0);
+            earthMesh.add(new THREE.Mesh(new THREE.SphereGeometry(13.5, 48, 48), createAtmosphereMaterial(0xf43f5e, 1.4, 3.0)));
+            moonEscapeGroup.add(earthMesh);
+
+            // Mặt Trăng sáng bạc bên phải trên
+            const moonMesh = new THREE.Mesh(
+                new THREE.SphereGeometry(7, 64, 64),
+                new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.85, metalness: 0.1 })
+            );
+            moonMesh.position.set(28, 16, -5);
+            moonMesh.add(new THREE.Mesh(new THREE.SphereGeometry(8.0, 48, 48), createAtmosphereMaterial(0x94a3b8, 0.9, 3.5)));
+            moonEscapeGroup.add(moonMesh);
+
+            // Quỹ đạo đường bay 3D
+            escapeCurve3D = new THREE.QuadraticBezierCurve3(
+                new THREE.Vector3(-22, -5, 2),
+                new THREE.Vector3(0, 18, 8),
+                new THREE.Vector3(24, 14, -3)
+            );
+            const points = escapeCurve3D.getPoints(60);
+            const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+            const lineMat = new THREE.LineDashedMaterial({ color: 0x38bdf8, dashSize: 1.5, gapSize: 1, transparent: true, opacity: 0.5 });
+            const trajectoryLine = new THREE.Line(lineGeo, lineMat);
+            trajectoryLine.computeLineDistances();
+            moonEscapeGroup.add(trajectoryLine);
+
+            // Mô hình Tên Lửa 3D
+            rocket3D = new THREE.Group();
+            const body = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.7, 0.9, 3.8, 24),
+                new THREE.MeshStandardMaterial({ color: 0xf8fafc, metalness: 0.4, roughness: 0.3 })
+            );
+            const nose = new THREE.Mesh(
+                new THREE.ConeGeometry(0.7, 1.5, 24),
+                new THREE.MeshStandardMaterial({ color: 0xf43f5e, roughness: 0.4 })
+            );
+            nose.position.y = 2.65;
+
+            // Cánh đuôi tên lửa
+            const finGeo = new THREE.BoxGeometry(0.15, 1.2, 1.0);
+            const finMat = new THREE.MeshStandardMaterial({ color: 0x0284c7 });
+            const fin1 = new THREE.Mesh(finGeo, finMat); fin1.position.set(0.85, -1.3, 0);
+            const fin2 = new THREE.Mesh(finGeo, finMat); fin2.position.set(-0.85, -1.3, 0);
+            const fin3 = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.2, 0.15), finMat); fin3.position.set(0, -1.3, 0.85);
+            const fin4 = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.2, 0.15), finMat); fin4.position.set(0, -1.3, -0.85);
+
+            // Ngọn lửa phản lực
+            rocketFlame3D = new THREE.Mesh(
+                new THREE.ConeGeometry(0.65, 2.8, 16).rotateX(Math.PI),
+                new THREE.MeshBasicMaterial({ color: 0xf59e0b })
+            );
+            rocketFlame3D.position.y = -3.2;
+
+            rocket3D.add(body, nose, fin1, fin2, fin3, fin4, rocketFlame3D);
+            moonEscapeGroup.add(rocket3D);
         }
 
-        function updateAndRenderMoonLaunch() {
-            if (rocketAnim.progress < 1) {
-                rocketAnim.progress += 0.0055; // Khoảng 3 giây bay lên Mặt Trăng
-                if (rocketAnim.progress >= 1) {
-                    rocketAnim.progress = 1;
-                    showVictoryModal();
+        function trigger3DMoonEscape() {
+            missionState = 'LAUNCHING_3D';
+            triggerWarpEffect(() => {
+                gameMode = 'MOON_ESCAPE_3D';
+                document.getElementById('earthUI').classList.add('hidden');
+                document.getElementById('moonEscapeUI').classList.remove('hidden');
+                document.getElementById('victoryModal3D').classList.add('hidden');
+                document.getElementById('launchStatusText').innerText = "Đang rời khỏi Trái Đất hướng tới Mặt Trăng...";
+
+                spaceGroup.visible = false;
+                if (!moonEscapeGroup) buildMoonEscapeScene3D();
+                moonEscapeGroup.visible = true;
+                if (starDomeGroup) {
+                    // Giữ vòm sao làm nền cho cảnh 3D bay lên Mặt Trăng
+                    scene.add(starDomeGroup);
                 }
-            }
 
-            const w = canvas2D.width;
-            const h = canvas2D.height;
-
-            // Nền vũ trụ tối
-            ctx2D.fillStyle = '#02040a';
-            ctx2D.fillRect(0, 0, w, h);
-
-            // Vẽ sao lấp lánh
-            ctx2D.fillStyle = '#ffffff';
-            rocketAnim.stars.forEach(s => {
-                ctx2D.beginPath();
-                ctx2D.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx2D.fill();
+                escapeProgress = 0;
+                if (bloomPass) bloomPass.strength = 0.8;
             });
-
-            // Vẽ Trái Đất rực lửa ở góc dưới bên trái
-            const earthX = w * 0.18;
-            const earthY = h * 0.82;
-            const earthR = 75;
-            const earthGrad = ctx2D.createRadialGradient(earthX, earthY, 10, earthX, earthY, earthR);
-            earthGrad.addColorStop(0, '#fbbf24');
-            earthGrad.addColorStop(0.6, '#ea580c');
-            earthGrad.addColorStop(1, '#7f1d1d');
-            ctx2D.save();
-            ctx2D.beginPath();
-            ctx2D.arc(earthX, earthY, earthR, 0, Math.PI * 2);
-            ctx2D.fillStyle = earthGrad;
-            ctx2D.shadowColor = '#f43f5e';
-            ctx2D.shadowBlur = 35;
-            ctx2D.fill();
-            ctx2D.restore();
-
-            // Vẽ Mặt Trăng sáng bạc ở góc trên bên phải
-            const moonX = w * 0.82;
-            const moonY = h * 0.22;
-            const moonR = 52;
-            const moonGrad = ctx2D.createRadialGradient(moonX - 10, moonY - 10, 5, moonX, moonY, moonR);
-            moonGrad.addColorStop(0, '#f8fafc');
-            moonGrad.addColorStop(0.7, '#cbd5e1');
-            moonGrad.addColorStop(1, '#64748b');
-            ctx2D.save();
-            ctx2D.beginPath();
-            ctx2D.arc(moonX, moonY, moonR, 0, Math.PI * 2);
-            ctx2D.fillStyle = moonGrad;
-            ctx2D.shadowColor = '#e2e8f0';
-            ctx2D.shadowBlur = 30;
-            ctx2D.fill();
-            ctx2D.restore();
-
-            // Vẽ quỹ đạo đường đứt nét từ Trái Đất tới Mặt Trăng
-            ctx2D.save();
-            ctx2D.setLineDash([6, 8]);
-            ctx2D.strokeStyle = 'rgba(56, 189, 248, 0.35)';
-            ctx2D.lineWidth = 2;
-            ctx2D.beginPath();
-            ctx2D.moveTo(earthX, earthY);
-            ctx2D.quadraticCurveTo(w * 0.45, h * 0.25, moonX, moonY);
-            ctx2D.stroke();
-            ctx2D.restore();
-
-            // Tính vị trí tên lửa theo đường cong Bezier bậc 2
-            const t = rocketAnim.progress;
-            const cx = w * 0.45;
-            const cy = h * 0.25;
-            const rx = (1 - t) * (1 - t) * earthX + 2 * (1 - t) * t * cx + t * t * moonX;
-            const ry = (1 - t) * (1 - t) * earthY + 2 * (1 - t) * t * cy + t * t * moonY;
-
-            // Tính góc xoay mũi tên lửa theo hướng bay
-            const dx = 2 * (1 - t) * (cx - earthX) + 2 * t * (moonX - cx);
-            const dy = 2 * (1 - t) * (cy - earthY) + 2 * t * (moonY - cy);
-            const angle = Math.atan2(dy, dx);
-
-            // Vẽ luồng lửa phản lực và tên lửa
-            ctx2D.save();
-            ctx2D.translate(rx, ry);
-            ctx2D.rotate(angle);
-
-            // Lửa đuôi tên lửa
-            if (t < 0.98) {
-                ctx2D.beginPath();
-                ctx2D.moveTo(-14, -5);
-                ctx2D.lineTo(-32 - Math.random() * 14, 0);
-                ctx2D.lineTo(-14, 5);
-                ctx2D.fillStyle = '#f59e0b';
-                ctx2D.shadowColor = '#fbbf24';
-                ctx2D.shadowBlur = 15;
-                ctx2D.fill();
-            }
-
-            // Thân tên lửa
-            ctx2D.fillStyle = '#ffffff';
-            ctx2D.beginPath();
-            ctx2D.moveTo(18, 0);
-            ctx2D.lineTo(-12, -8);
-            ctx2D.lineTo(-12, 8);
-            ctx2D.closePath();
-            ctx2D.fill();
-
-            // Mũi tên lửa đỏ
-            ctx2D.fillStyle = '#f43f5e';
-            ctx2D.beginPath();
-            ctx2D.moveTo(18, 0);
-            ctx2D.lineTo(8, -4.5);
-            ctx2D.lineTo(8, 4.5);
-            ctx2D.closePath();
-            ctx2D.fill();
-
-            ctx2D.restore();
         }
 
-        function showVictoryModal() {
-            const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
-            document.getElementById('winDiff').innerText = diffNames[currentDifficulty];
-            let m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-            let s = String(timeLeft % 60).padStart(2, '0');
-            document.getElementById('winTime').innerText = `${m}:${s}`;
-            document.getElementById('victoryModal').classList.remove('hidden');
+        function replayFrom3D() {
+            if (moonEscapeGroup) moonEscapeGroup.visible = false;
+            if (starDomeGroup && spaceGroup) spaceGroup.add(starDomeGroup);
+            document.getElementById('moonEscapeUI').classList.add('hidden');
+            enterEarthMode();
+        }
+
+        function finishToUniverse() {
+            if (moonEscapeGroup) moonEscapeGroup.visible = false;
+            if (starDomeGroup && spaceGroup) spaceGroup.add(starDomeGroup);
+            document.getElementById('moonEscapeUI').classList.add('hidden');
+            exitEarthMode();
         }
 
         function triggerWarpEffect(callback) {
@@ -747,6 +697,7 @@
             triggerWarpEffect(() => {
                 gameMode = 'EARTH';
                 spaceGroup.visible = false;
+                if (moonEscapeGroup) moonEscapeGroup.visible = false;
                 if (bloomPass) bloomPass.strength = 0.35;
 
                 document.getElementById('spaceUI').classList.add('hidden');
@@ -763,6 +714,7 @@
             triggerWarpEffect(() => {
                 gameMode = 'SPACE';
                 spaceGroup.visible = true;
+                if (moonEscapeGroup) moonEscapeGroup.visible = false;
                 if (bloomPass) bloomPass.strength = 1.4;
 
                 document.getElementById('earthUI').classList.add('hidden');
@@ -772,7 +724,7 @@
         }
 
         // =========================================================================
-        // ENGINE 3D VŨ TRỤ THREE.JS (VÒM VẠN SAO + QUỸ ĐẠO THUỶ RÕ RÀNG)
+        // ENGINE 3D VŨ TRỤ THREE.JS (VÒM VẠN SAO + SAO THỦY RÕ RÀNG)
         // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
@@ -787,7 +739,7 @@
 
         const planetDB = {
             sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục khổng lồ. Bấm chọn Trái Đất để đổ bộ thực hiện nhiệm vụ 3 phút!", dist: "0 AU", temp: "5,500 °C", zoom: 90 },
-            mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 20 },
+            mercury: { name: "SAO THỦY (MERCURY)", desc: "Hành tinh gần Mặt Trời nhất với bề mặt đá bazan xám bạc lồi lõm hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 20 },
             venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 22 },
             earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống! Sẵn sàng đổ bộ 2D thực hiện 4 nhiệm vụ thoát hiểm.", dist: "1.00 AU", temp: "15 °C", zoom: 22 },
             mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực và hẻm núi sâu.", dist: "1.52 AU", temp: "-63 °C", zoom: 20 },
@@ -866,7 +818,13 @@
             bCtx.fillStyle = '#808080'; bCtx.fillRect(0, 0, w, h);
 
             if (type === 'mercury') {
-                ctx.fillStyle = '#94a3b8'; ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = '#cbd5e1'; ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = '#64748b';
+                for (let i = 0; i < 200; i++) {
+                    ctx.beginPath();
+                    ctx.arc(Math.random() * w, Math.random() * h, 6 + Math.random() * 25, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             } else if (type === 'venus') {
                 ctx.fillStyle = '#f59e0b'; ctx.fillRect(0, 0, w, h);
             } else if (type === 'earth') {
@@ -968,7 +926,7 @@
             asteroidBelt = new THREE.InstancedMesh(new THREE.DodecahedronGeometry(0.2, 0), new THREE.MeshStandardMaterial({ color: 0x94a3b8 }), 2500);
             const dummy = new THREE.Object3D();
             for (let i = 0; i < 2500; i++) {
-                const angle = Math.random() * Math.PI * 2; const radius = 48 + Math.random() * 8;
+                const angle = Math.random() * Math.PI * 2; const radius = 50 + Math.random() * 8;
                 dummy.position.set(Math.cos(angle) * radius, (Math.random() - 0.5) * 1.8, Math.sin(angle) * radius);
                 dummy.updateMatrix(); asteroidBelt.setMatrixAt(i, dummy.matrix);
             }
@@ -1020,19 +978,19 @@
             planets['sun'] = { mesh: sun, distance: 0, speed: 0 };
 
             const planetConfigs = [
-                { id: 'mercury', size: 1.6, dist: 17, speed: 0.022, tilt: 0.03, atmos: null },
-                { id: 'venus', size: 2.2, dist: 25, speed: 0.016, tilt: 3.09, atmos: 0xfbbf24 },
-                { id: 'earth', size: 2.6, dist: 34, speed: 0.012, tilt: 0.41, atmos: 0x38bdf8, clouds: true },
-                { id: 'mars', size: 1.8, dist: 44, speed: 0.009, tilt: 0.44, atmos: 0xf97316 },
-                { id: 'jupiter', size: 5.8, dist: 62, speed: 0.006, tilt: 0.05, atmos: 0xfdba74 },
-                { id: 'saturn', size: 4.8, dist: 80, speed: 0.004, tilt: 0.47, atmos: 0xfef08a, rings: true },
-                { id: 'uranus', size: 3.2, dist: 98, speed: 0.003, tilt: 1.71, atmos: 0x22d3ee },
-                { id: 'neptune', size: 3.1, dist: 114, speed: 0.002, tilt: 0.49, atmos: 0x3b82f6 }
+                { id: 'mercury', size: 1.9, dist: 20, speed: 0.022, tilt: 0.03, atmos: 0xe2e8f0 },
+                { id: 'venus', size: 2.3, dist: 27, speed: 0.016, tilt: 3.09, atmos: 0xfbbf24 },
+                { id: 'earth', size: 2.6, dist: 36, speed: 0.012, tilt: 0.41, atmos: 0x38bdf8, clouds: true },
+                { id: 'mars', size: 1.9, dist: 45, speed: 0.009, tilt: 0.44, atmos: 0xf97316 },
+                { id: 'jupiter', size: 5.8, dist: 64, speed: 0.006, tilt: 0.05, atmos: 0xfdba74 },
+                { id: 'saturn', size: 4.8, dist: 82, speed: 0.004, tilt: 0.47, atmos: 0xfef08a, rings: true },
+                { id: 'uranus', size: 3.2, dist: 100, speed: 0.003, tilt: 1.71, atmos: 0x22d3ee },
+                { id: 'neptune', size: 3.1, dist: 116, speed: 0.002, tilt: 0.49, atmos: 0x3b82f6 }
             ];
 
             planetConfigs.forEach(cfg => {
-                const orbitGeo = new THREE.RingGeometry(cfg.dist - 0.12, cfg.dist + 0.12, 220);
-                const orbitRing = new THREE.Mesh(orbitGeo, new THREE.MeshBasicMaterial({ color: cfg.atmos || 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending }));
+                const orbitGeo = new THREE.RingGeometry(cfg.dist - 0.14, cfg.dist + 0.14, 220);
+                const orbitRing = new THREE.Mesh(orbitGeo, new THREE.MeshBasicMaterial({ color: cfg.atmos || 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending }));
                 orbitRing.rotation.x = Math.PI / 2;
                 spaceGroup.add(orbitRing);
 
@@ -1130,7 +1088,38 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            if (gameMode === 'SPACE') {
+            if (gameMode === 'MOON_ESCAPE_3D' && rocket3D && escapeCurve3D) {
+                if (starDomeGroup) starDomeGroup.rotation.y += 0.00015;
+
+                if (escapeProgress < 1) {
+                    escapeProgress += 0.004;
+                    if (escapeProgress >= 1) {
+                        escapeProgress = 1;
+                        rocketFlame3D.visible = false;
+                        document.getElementById('launchStatusText').innerText = "✅ Đã hạ cánh an toàn xuống Mặt Trăng!";
+                        const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
+                        document.getElementById('winDiff3D').innerText = diffNames[currentDifficulty];
+                        let m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+                        let s = String(timeLeft % 60).padStart(2, '0');
+                        document.getElementById('winTime3D').innerText = `${m}:${s}`;
+                        document.getElementById('victoryModal3D').classList.remove('hidden');
+                    }
+                }
+
+                // Cập nhật vị trí & hướng bay của tên lửa 3D dọc theo quỹ đạo cong
+                const pos = escapeCurve3D.getPointAt(escapeProgress);
+                rocket3D.position.copy(pos);
+
+                if (escapeProgress < 0.99) {
+                    const tangent = escapeCurve3D.getTangentAt(escapeProgress).normalize();
+                    rocket3D.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), tangent);
+                    rocketFlame3D.scale.y = 0.8 + Math.random() * 0.6;
+                }
+
+                // Camera 3D bay theo góc nhìn điện ảnh
+                camera.position.set(pos.x * 0.4, pos.y * 0.4 + 12, 68);
+                camera.lookAt(pos.x * 0.6, pos.y * 0.6, 0);
+            } else if (gameMode === 'SPACE') {
                 if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
                 if (starDomeGroup) starDomeGroup.rotation.y += 0.0001 * timeSpeed;
                 if (cosmicDust) cosmicDust.rotation.y += 0.00025 * timeSpeed;
