@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - 1M30S Mission & Audio Control</title>
+    <title>NASA Eyes 3D - 1M30S Siren & Explosion Boom</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -44,7 +44,7 @@
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.35; transform: scale(1.02); }
         }
-        .alert-pulse { animation: pulseAlert 0.5s infinite ease-in-out; }
+        .alert-pulse { animation: pulseAlert 0.4s infinite ease-in-out; }
     </style>
 </head>
 <body class="w-screen h-screen select-none">
@@ -59,10 +59,10 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& 1M30S DOOM</span>
+                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& SIREN & BOOM</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Nhiệm Vụ 1 Phút 30 Giây • Tự Động Bật/Tắt Nhạc • Cảnh Báo Chói Tai 30s & Đỏ Rực 10s Cuối!
+                Nhiệm Vụ 1 Phút 30 Giây • Còi Hụ Báo Động 30s • Tiếng Nổ BÙM Khi Trái Đất Tan Vỡ!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
@@ -170,7 +170,7 @@
             <div id="difficultyOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-6 z-20">
                 <div class="space-y-2">
                     <h2 class="font-orbitron font-black text-2xl text-white tracking-wider">CHỌN CẤP ĐỘ SINH TỒN (01:30)</h2>
-                    <p class="text-xs text-slate-400">Nhạc Straywav sẽ tự tắt khi vào Trái Đất. Dưới 30s còi báo động chói tai sẽ hú lên!</p>
+                    <p class="text-xs text-slate-400">Dưới 30s còi báo động khẩn cấp sẽ hú liên hồi. Hết giờ Trái Đất sẽ phát nổ BÙM!</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
                     <button onclick="startMission('easy')" class="p-4 bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
@@ -181,7 +181,7 @@
                     <button onclick="startMission('normal')" class="p-4 bg-amber-950/60 border border-amber-500/50 hover:bg-amber-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
                         <span class="text-2xl">🟡</span>
                         <span class="font-orbitron font-bold text-amber-300 text-sm">BÌNH THƯỜNG</span>
-                        <span class="text-[11px] text-slate-300">Mưa thiên thạch vừa phải. Cần khéo léo né tránh.</span>
+                        <span class="text-[11px] text-slate-300">Mưa thiên thạch vừa phải. Né tránh cẩn thận.</span>
                     </button>
                     <button onclick="startMission('hard')" class="p-4 bg-rose-950/60 border border-rose-500/50 hover:bg-rose-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
                         <span class="text-2xl">🔴</span>
@@ -334,24 +334,77 @@
             seqInterval = setInterval(triggerStep, 450);
         }
 
-        // Phát âm thanh cảnh báo chói tai (Beep tần số cao)
-        function playHarshAlertBeep() {
+        // Phát tiếng còi hú cảnh báo khẩn cấp (Alarm Siren uốn lượn)
+        function playEmergencySiren() {
             if (!audioCtx) return;
             try {
                 const now = audioCtx.currentTime;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(880, now); // Tần số cao chói tai
-                osc.frequency.exponentialRampToValueAtTime(1760, now + 0.15);
                 
-                gain.gain.setValueAtTime(0.18, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                // Hiệu ứng còi hụ lên xuống (Siren pitch sweep)
+                osc.frequency.setValueAtTime(550, now);
+                osc.frequency.linearRampToValueAtTime(1100, now + 0.35);
+                osc.frequency.linearRampToValueAtTime(550, now + 0.7);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
 
                 osc.connect(gain);
                 gain.connect(masterGain);
                 osc.start(now);
-                osc.stop(now + 0.25);
+                osc.stop(now + 0.8);
+            } catch (e) {}
+        }
+
+        // Phát tiếng nổ siêu trầm BÙM (Deep Explosion Boom)
+        function playExplosionBoom() {
+            if (!audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                
+                // Tạo tiếng sub-bass trầm đục rung chuyển
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(160, now);
+                osc.frequency.exponentialRampToValueAtTime(25, now + 1.2);
+
+                gain.gain.setValueAtTime(0.7, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4);
+
+                osc.connect(gain);
+                gain.connect(masterGain);
+                osc.start(now);
+                osc.stop(now + 1.5);
+
+                // Tạo tiếng nổ rầm (White noise explosion noise)
+                const bufferSize = audioCtx.sampleRate * 1.2;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+
+                const whiteNoise = audioCtx.createBufferSource();
+                whiteNoise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(800, now);
+                filter.frequency.exponentialRampToValueAtTime(60, now + 1.2);
+
+                const noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(0.6, now);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 1.3);
+
+                whiteNoise.connect(filter);
+                filter.connect(noiseGain);
+                noiseGain.connect(masterGain);
+
+                whiteNoise.start(now);
+                whiteNoise.stop(now + 1.4);
             } catch (e) {}
         }
 
@@ -380,7 +433,7 @@
         }
 
         // =========================================================================
-        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT (1 PHÚT 30 GIÂY + CẢNH BÁO CHÓI TAI 30S)
+        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT (1 PHÚT 30 GIÂY + CÒI HỤ 30S & TIẾNG BÙM)
         // =========================================================================
         let gameMode = 'SPACE';
         let spaceGroup, moonEscapeGroup;
@@ -454,21 +507,21 @@
                     let s = String(timeLeft % 60).padStart(2, '0');
                     document.getElementById('missionTimer').innerText = `${m}:${s}`;
 
-                    // Cảnh báo 30 giây cuối: hiển thị bảng & phát tiếng còi chói tai
+                    // Cảnh báo 30 giây cuối: còi hụ cảnh báo khẩn cấp vang lên liên hồi
                     if (timeLeft <= 30 && timeLeft > 10) {
                         const banner = document.getElementById('alertBanner30s');
                         banner.classList.remove('hidden');
                         banner.innerText = `🚨 CẢNH BÁO: CÒN ${timeLeft} GIÂY TRƯỚC KHI TRÁI ĐẤT NỔ! 🚨`;
-                        playHarshAlertBeep();
+                        playEmergencySiren();
                     }
-                    // Cảnh báo 10 giây cuối: màn hình đỏ rực máu kết hợp tiếng còi dồn dập
+                    // Cảnh báo 10 giây cuối: màn hình đỏ rực máu kết hợp còi hụ dồn dập
                     else if (timeLeft <= 10 && timeLeft > 0) {
                         const banner = document.getElementById('alertBanner30s');
                         banner.classList.remove('hidden');
                         banner.innerText = `⚠️ BÁO ĐỘNG ĐỎ: CÒN ${timeLeft} GIÂY - SẮP BÙNG NỔ! ⚠️`;
                         document.getElementById('earthUI').style.backgroundColor = '#450a0a';
                         document.getElementById('gameBoxContainer').style.borderColor = '#ef4444';
-                        playHarshAlertBeep();
+                        playEmergencySiren();
                     }
                     else if (timeLeft <= 0) {
                         triggerGameOverDoom();
@@ -483,12 +536,15 @@
             clearInterval(missionTimerInterval);
             document.getElementById('alertBanner30s').classList.add('hidden');
 
+            // Phát tiếng BÙM nổ ngay khi hết thời gian
+            playExplosionBoom();
+
             triggerWarpEffect(() => {
                 gameMode = 'MOON_ESCAPE_3D';
                 document.getElementById('earthUI').classList.add('hidden');
                 document.getElementById('moonEscapeUI').classList.remove('hidden');
                 document.getElementById('victoryModal3D').classList.add('hidden');
-                document.getElementById('launchStatusText').innerText = "💥 THẤT BẠI! Hết thời gian - Trái Đất đã bùng nổ hoàn toàn...";
+                document.getElementById('launchStatusText').innerText = "💥 BÙM! Trái Đất đã bùng nổ hoàn toàn do hết thời gian...";
 
                 spaceGroup.visible = false;
                 if (!moonEscapeGroup) buildMoonEscapeScene3D();
@@ -744,12 +800,16 @@
 
         function trigger3DMoonEscape() {
             missionState = 'LAUNCHING_3D';
+            
+            // Phát tiếng BÙM khi vượt qua màn chơi thành công hoặc kích hoạt trốn thoát
+            playExplosionBoom();
+
             triggerWarpEffect(() => {
                 gameMode = 'MOON_ESCAPE_3D';
                 document.getElementById('earthUI').classList.add('hidden');
                 document.getElementById('moonEscapeUI').classList.remove('hidden');
                 document.getElementById('victoryModal3D').classList.add('hidden');
-                document.getElementById('launchStatusText').innerText = "💥 Trái Đất bùng nổ! Tên lửa đang phóng lên Mặt Trăng...";
+                document.getElementById('launchStatusText').innerText = "💥 BÙM! Trái Đất bùng nổ! Tên lửa đang phóng lên Mặt Trăng...";
 
                 spaceGroup.visible = false;
                 if (!moonEscapeGroup) buildMoonEscapeScene3D();
