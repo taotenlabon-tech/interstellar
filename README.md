@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - 1M30S Siren & Explosion Boom</title>
+    <title>NASA Eyes 3D - Constellation Sword & Fixed Retry</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -18,7 +18,7 @@
         body { font-family: 'Share Tech Mono', monospace; background: #000; color: #38bdf8; overflow: hidden; margin: 0; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .hud-glass {
-            background: rgba(3, 7, 18, 0.88);
+            background: rgba(3, 7, 18, 0.92);
             backdrop-filter: blur(24px);
             border: 1px solid rgba(56, 189, 248, 0.4);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95), inset 0 0 30px rgba(56, 189, 248, 0.12);
@@ -59,10 +59,10 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& SIREN & BOOM</span>
+                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& SWORD CONSTELLATION</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Nhiệm Vụ 1 Phút 30 Giây • Còi Hụ Báo Động 30s • Tiếng Nổ BÙM Khi Trái Đất Tan Vỡ!
+                Nhiệm Vụ 1 Phút 30 Giây • Chòm Sao Đường Kiếm Laser • Sửa Lỗi Nút Thử Lại Tuyệt Đối!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
@@ -81,6 +81,9 @@
                 <div class="flex gap-1.5">
                     <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
                         🔊 Music: ON
+                    </button>
+                    <button onclick="toggleSwordConstellation()" id="swordBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-cyan-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
+                        ⚔️ Kiếm Sao: OFF
                     </button>
                     <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
                         👁️ Ẩn
@@ -192,18 +195,18 @@
             </div>
 
             <!-- BẢNG THẤT BẠI KHI HẾT GIỜ (00:00) -->
-            <div id="gameOverModal" class="hidden absolute inset-0 bg-rose-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-5 z-30">
-                <div class="hud-glass p-6 rounded-3xl max-w-md w-full border-rose-500 space-y-4 shadow-[0_0_60px_rgba(244,63,94,0.8)]">
+            <div id="gameOverModal" class="hidden absolute inset-0 bg-rose-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-5 z-40">
+                <div class="hud-glass p-6 rounded-3xl max-w-md w-full border-rose-500 space-y-4 shadow-[0_0_80px_rgba(244,63,94,0.9)]">
                     <div class="text-5xl animate-bounce">💥🌍❌</div>
                     <h2 class="font-orbitron font-black text-2xl text-rose-500 tracking-widest">BẠN ĐÃ THẤT BẠI!</h2>
                     <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
                         Hết 1 phút 30 giây! Trái Đất đã bùng nổ hoàn toàn do không hoàn thành nhiệm vụ kịp thời.
                     </p>
                     <div class="flex gap-3 pt-2">
-                        <button onclick="resetToDifficulty()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-orbitron font-bold text-xs rounded-xl transition shadow-lg">
+                        <button onclick="resetToDifficulty()" class="flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white font-orbitron font-bold text-xs rounded-xl transition shadow-xl cursor-pointer">
                             🔄 Thử Lại
                         </button>
-                        <button onclick="exitEarthMode()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 font-orbitron font-bold text-xs rounded-xl transition">
+                        <button onclick="exitEarthMode()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-cyan-300 font-orbitron font-bold text-xs rounded-xl transition cursor-pointer">
                             🌌 Về Vũ Trụ
                         </button>
                     </div>
@@ -239,10 +242,10 @@
                 <div>Thời gian còn lại: <span id="winTime3D" class="text-cyan-300 font-bold">00:45</span></div>
             </div>
             <div class="flex gap-3 pt-2">
-                <button onclick="replayFrom3D()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
+                <button onclick="replayFrom3D()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition cursor-pointer">
                     🔄 Chơi Lại
                 </button>
-                <button onclick="finishToUniverse()" class="flex-1 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
+                <button onclick="finishToUniverse()" class="flex-1 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition cursor-pointer">
                     🌌 Ngắm Toàn Cảnh Vũ Trụ
                 </button>
             </div>
@@ -334,7 +337,6 @@
             seqInterval = setInterval(triggerStep, 450);
         }
 
-        // Phát tiếng còi hú cảnh báo khẩn cấp (Alarm Siren uốn lượn)
         function playEmergencySiren() {
             if (!audioCtx) return;
             try {
@@ -342,8 +344,6 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
-                
-                // Hiệu ứng còi hụ lên xuống (Siren pitch sweep)
                 osc.frequency.setValueAtTime(550, now);
                 osc.frequency.linearRampToValueAtTime(1100, now + 0.35);
                 osc.frequency.linearRampToValueAtTime(550, now + 0.7);
@@ -358,13 +358,10 @@
             } catch (e) {}
         }
 
-        // Phát tiếng nổ siêu trầm BÙM (Deep Explosion Boom)
         function playExplosionBoom() {
             if (!audioCtx) return;
             try {
                 const now = audioCtx.currentTime;
-                
-                // Tạo tiếng sub-bass trầm đục rung chuyển
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
@@ -379,7 +376,6 @@
                 osc.start(now);
                 osc.stop(now + 1.5);
 
-                // Tạo tiếng nổ rầm (White noise explosion noise)
                 const bufferSize = audioCtx.sampleRate * 1.2;
                 const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
                 const output = buffer.getChannelData(0);
@@ -433,7 +429,62 @@
         }
 
         // =========================================================================
-        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT (1 PHÚT 30 GIÂY + CÒI HỤ 30S & TIẾNG BÙM)
+        // HỆ THỐNG CHÒM SAO ĐƯỜNG KIẾM (CONSTELLATION SWORD)
+        // =========================================================================
+        let swordConstellationGroup = null;
+        let isSwordVisible = false;
+
+        function buildSwordConstellation() {
+            if (swordConstellationGroup) {
+                swordConstellationGroup.visible = isSwordVisible;
+                return;
+            }
+
+            swordConstellationGroup = new THREE.Group();
+            
+            // Tọa độ các điểm chính tạo hình một thanh kiếm laser (Chuôi kiếm, chắn kiếm, lưỡi kiếm, đỉnh kiếm)
+            const swordPoints = [
+                new THREE.Vector3(0, -60, 0),   // Đuôi chuôi kiếm
+                new THREE.Vector3(0, -35, 0),   // Cán chuôi kiếm
+                new THREE.Vector3(0, -25, 0),   // Tâm chắn kiếm (Guard center)
+                new THREE.Vector3(-18, -25, 0), // Cánh chắn trái
+                new THREE.Vector3(18, -25, 0),  // Cánh chắn phải
+                new THREE.Vector3(0, -25, 0),   // Về tâm chắn
+                new THREE.Vector3(0, 60, 0)     // Mũi nhọn đỉnh kiếm
+            ];
+
+            const lineGeo = new THREE.BufferGeometry().setFromPoints(swordPoints);
+            const lineMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 3, transparent: true, opacity: 0.85 });
+            const swordLines = new THREE.Line(lineGeo, lineMat);
+            swordConstellationGroup.add(swordLines);
+
+            // Đặt các ngôi sao sáng chói tại các điểm mốc của đường kiếm
+            swordPoints.forEach((pt, idx) => {
+                const starGeo = new THREE.SphereGeometry(idx === 6 ? 1.8 : 1.2, 16, 16);
+                const starMat = new THREE.MeshBasicMaterial({ color: idx === 6 ? 0xffffff : 0x7dd3fc });
+                const starMesh = new THREE.Mesh(starGeo, starMat);
+                starMesh.position.copy(pt);
+                swordConstellationGroup.add(starMesh);
+            });
+
+            // Đặt chòm sao lơ lửng phía xa trên quỹ đạo không gian
+            swordConstellationGroup.position.set(110, 45, -130);
+            swordConstellationGroup.rotation.z = Math.PI / 5;
+            spaceGroup.add(swordConstellationGroup);
+        }
+
+        function toggleSwordConstellation() {
+            isSwordVisible = !isSwordVisible;
+            const btn = document.getElementById('swordBtn');
+            btn.innerText = isSwordVisible ? '⚔️ Kiếm Sao: ON' : '⚔️ Kiếm Sao: OFF';
+            btn.style.borderColor = isSwordVisible ? '#38bdf8' : '';
+
+            buildSwordConstellation();
+            if (swordConstellationGroup) swordConstellationGroup.visible = isSwordVisible;
+        }
+
+        // =========================================================================
+        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT & SỬA LỖI NÚT THỦ LẠI
         // =========================================================================
         let gameMode = 'SPACE';
         let spaceGroup, moonEscapeGroup;
@@ -445,7 +496,7 @@
         let currentDifficulty = 'easy';
         let missionStage = 1;
         let progressCount = 0;
-        let timeLeft = 90; // 1 phút 30 giây (90 giây)
+        let timeLeft = 90; // 90 giây (1 phút 30 giây)
 
         let player2D = { x: 80, y: 80, radius: 13, speed: 4.5, color: '#38bdf8' };
         let keys2D = {};
@@ -479,7 +530,7 @@
             missionState = 'PLAYING';
             missionStage = 1;
             progressCount = 0;
-            timeLeft = 90; // 90 giây
+            timeLeft = 90;
 
             const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
             document.getElementById('diffLabel').innerText = diffNames[diff];
@@ -507,14 +558,12 @@
                     let s = String(timeLeft % 60).padStart(2, '0');
                     document.getElementById('missionTimer').innerText = `${m}:${s}`;
 
-                    // Cảnh báo 30 giây cuối: còi hụ cảnh báo khẩn cấp vang lên liên hồi
                     if (timeLeft <= 30 && timeLeft > 10) {
                         const banner = document.getElementById('alertBanner30s');
                         banner.classList.remove('hidden');
                         banner.innerText = `🚨 CẢNH BÁO: CÒN ${timeLeft} GIÂY TRƯỚC KHI TRÁI ĐẤT NỔ! 🚨`;
                         playEmergencySiren();
                     }
-                    // Cảnh báo 10 giây cuối: màn hình đỏ rực máu kết hợp còi hụ dồn dập
                     else if (timeLeft <= 10 && timeLeft > 0) {
                         const banner = document.getElementById('alertBanner30s');
                         banner.classList.remove('hidden');
@@ -536,7 +585,6 @@
             clearInterval(missionTimerInterval);
             document.getElementById('alertBanner30s').classList.add('hidden');
 
-            // Phát tiếng BÙM nổ ngay khi hết thời gian
             playExplosionBoom();
 
             triggerWarpEffect(() => {
@@ -555,6 +603,7 @@
                 explosionProgress = 0;
                 if (rocket3D) rocket3D.visible = false;
 
+                // Đảm bảo bật hiện bảng Thất Bại có nút Thử Lại ngay sau hiệu ứng nổ
                 setTimeout(() => {
                     document.getElementById('gameOverModal').classList.remove('hidden');
                 }, 1200);
@@ -800,8 +849,6 @@
 
         function trigger3DMoonEscape() {
             missionState = 'LAUNCHING_3D';
-            
-            // Phát tiếng BÙM khi vượt qua màn chơi thành công hoặc kích hoạt trốn thoát
             playExplosionBoom();
 
             triggerWarpEffect(() => {
@@ -844,7 +891,6 @@
                 selectPlanet('earth');
                 targetCamDist = 160;
 
-                // Tự động BẬT nhạc Straywav khi ra ngoài vũ trụ
                 isMusicPlaying = true;
                 if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
                 document.getElementById('audioBtn').innerText = '🔊 Music: ON';
@@ -861,7 +907,6 @@
         }
 
         function enterEarthMode() {
-            // Tự động TẮT nhạc Straywav khi vào Trái Đất
             isMusicPlaying = false;
             document.getElementById('audioBtn').innerText = '🔇 Muted';
 
@@ -893,7 +938,6 @@
                 document.getElementById('spaceUI').classList.remove('hidden');
                 selectPlanet('earth');
 
-                // Tự động BẬT lại nhạc Straywav khi quay về vũ trụ
                 isMusicPlaying = true;
                 if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
                 document.getElementById('audioBtn').innerText = '🔊 Music: ON';
@@ -1401,4 +1445,4 @@
         }
     </script>
 </body>
-</html>
+</html>  
