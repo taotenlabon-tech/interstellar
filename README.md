@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - Earth Burning & 3D Moon Escape</title>
+    <title>NASA Eyes 3D - Earth Doom & Cinematic Explosion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -57,7 +57,7 @@
                 NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& EARTH DOOM 3D</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Trái Đất Xanh Với Hiệu Ứng Lửa Cháy 3D • Điều Chỉnh Ánh Sáng • 3 Phút Sinh Tồn & Nổ Tung 3D!
+                Trái Đất Xanh Có Lửa • Nổ Tung 3D Khi Thất Bại & Khi Trốn Thoát • Điều Chỉnh Ánh Sáng!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
@@ -107,7 +107,7 @@
                 <div class="border-t border-slate-800/80 pt-2.5 space-y-1.5">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                     <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                        Chọn hành tinh để quan sát hoặc chọn Trái Đất (đang có lửa cháy trên bề mặt) để đổ bộ làm nhiệm vụ!
+                        Chọn hành tinh để quan sát hoặc chọn Trái Đất để đổ bộ làm nhiệm vụ sinh tồn!
                     </p>
                     <div class="grid grid-cols-2 gap-1 pt-1 text-[10px] text-slate-400">
                         <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -160,7 +160,7 @@
             <div id="difficultyOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-6 z-20">
                 <div class="space-y-2">
                     <h2 class="font-orbitron font-black text-2xl text-white tracking-wider">CHỌN CẤP ĐỘ SINH TỒN (03:00)</h2>
-                    <p class="text-xs text-slate-400">Hoàn thành 4 nhiệm vụ để kích hoạt hiệu ứng Trái Đất nổ tung 3D & bay lên Mặt Trăng!</p>
+                    <p class="text-xs text-slate-400">Hết giờ hoặc thua cuộc: Trái Đất sẽ phát nổ 3D và hiển thị bảng THẤT BẠI!</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
                     <button onclick="startMission('easy')" class="p-4 bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
@@ -181,12 +181,14 @@
                 </div>
             </div>
 
-            <!-- BẢNG THẤT BẠI KHI HẾT GIỜ -->
+            <!-- BẢNG THẤT BẠI 3D KHI HẾT GIỜ HOẶC CHẠM THIÊN THẠCH -->
             <div id="gameOverModal" class="hidden absolute inset-0 bg-rose-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-5 z-30">
                 <div class="hud-glass p-6 rounded-3xl max-w-md w-full border-rose-500 space-y-4">
-                    <div class="text-4xl">💥🌍</div>
-                    <h2 class="font-orbitron font-black text-xl text-rose-400">HẾT THỜI GIAN!</h2>
-                    <p class="text-xs text-slate-200">Trái Đất đã bị hủy diệt trước khi bạn kịp hoàn thành nhiệm vụ.</p>
+                    <div class="text-5xl animate-bounce">💥🌍❌</div>
+                    <h2 class="font-orbitron font-black text-2xl text-rose-500 tracking-widest">BẠN ĐÃ THẤT BẠI!</h2>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                        Trái Đất đã bùng nổ hoàn toàn do không hoàn thành nhiệm vụ kịp thời. Nhân loại đã diệt vong.
+                    </p>
                     <div class="flex gap-3 pt-2">
                         <button onclick="resetToDifficulty()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-orbitron font-bold text-xs rounded-xl transition">
                             🔄 Thử Lại
@@ -220,7 +222,7 @@
                 CHIẾN THẮNG TUYỆT ĐỐI!
             </h2>
             <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                Bạn đã kích hoạt thành công tên lửa cứu hộ ngay trong khoảnh khắc Trái Đất bùng nổ 3D và hạ cánh an toàn xuống <strong class="text-amber-300">Mặt Trăng</strong>!
+                Bạn đã trốn thoát thành công! Quan sát toàn cảnh ngoài vũ trụ để thấy tàn tích Trái Đất vừa phát nổ phía sau.
             </p>
             <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700 text-xs space-y-1 text-slate-300">
                 <div>Cấp độ hoàn thành: <span id="winDiff3D" class="text-amber-300 font-bold">BÌNH THƯỜNG</span></div>
@@ -231,7 +233,7 @@
                     🔄 Chơi Lại
                 </button>
                 <button onclick="finishToUniverse()" class="flex-1 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
-                    🌌 Khám Phá Vũ Trụ
+                    🌌 Ngắm Toàn Cảnh Vũ Trụ
                 </button>
             </div>
         </div>
@@ -416,12 +418,38 @@
                     document.getElementById('missionTimer').innerText = `${m}:${s}`;
 
                     if (timeLeft <= 0) {
-                        missionState = 'GAMEOVER';
-                        document.getElementById('gameOverModal').classList.remove('hidden');
-                        document.getElementById('gameMsg').classList.add('hidden');
+                        triggerGameOverDoom();
                     }
                 }
             }, 1000);
+        }
+
+        function triggerGameOverDoom() {
+            missionState = 'GAMEOVER';
+            clearInterval(gameInterval);
+            clearInterval(missionTimerInterval);
+
+            // Kích hoạt hiệu ứng nổ Trái Đất 3D ngoài không gian ngay cả khi thua
+            triggerWarpEffect(() => {
+                gameMode = 'MOON_ESCAPE_3D';
+                document.getElementById('earthUI').classList.add('hidden');
+                document.getElementById('moonEscapeUI').classList.remove('hidden');
+                document.getElementById('victoryModal3D').classList.add('hidden');
+                document.getElementById('launchStatusText').innerText = "💥 THẤT BẠI! Trái Đất đã bùng nổ hoàn toàn...";
+
+                spaceGroup.visible = false;
+                if (!moonEscapeGroup) buildMoonEscapeScene3D();
+                moonEscapeGroup.visible = true;
+                if (starDomeGroup) scene.add(starDomeGroup);
+
+                isEarthExploding = true;
+                explosionProgress = 0;
+                if (rocket3D) rocket3D.visible = false; // Không có tên lửa khi thua
+
+                setTimeout(() => {
+                    document.getElementById('gameOverModal').classList.remove('hidden');
+                }, 1200);
+            });
         }
 
         function getStageTargetCount() {
@@ -492,8 +520,7 @@
                 if (m.y < 20 || m.y > canvas2D.height - 20) m.vy *= -1;
 
                 if (Math.hypot(player2D.x - m.x, player2D.y - m.y) < player2D.radius + m.radius) {
-                    player2D.x = 70;
-                    player2D.y = canvas2D.height / 2;
+                    triggerGameOverDoom();
                 }
             });
 
@@ -593,7 +620,6 @@
             dirLight.position.set(40, 50, 40);
             moonEscapeGroup.add(dirLight, new THREE.AmbientLight(0x1e293b, 0.9));
 
-            // Trái Đất xanh với hiệu ứng lửa trước khi nổ tung
             const earthMaps = generatePlanetMaps('earth');
             explodingEarthMesh = new THREE.Mesh(
                 new THREE.SphereGeometry(12, 48, 48),
@@ -603,13 +629,13 @@
             moonEscapeGroup.add(explodingEarthMesh);
 
             earthDebrisList = [];
-            for (let i = 0; i < 40; i++) {
+            for (let i = 0; i < 45; i++) {
                 const debris = new THREE.Mesh(
-                    new THREE.DodecahedronGeometry(0.6 + Math.random() * 0.9),
-                    new THREE.MeshStandardMaterial({ color: Math.random() > 0.5 ? 0xef4444 : 0xfbbf24, emissive: 0xb91c1c })
+                    new THREE.DodecahedronGeometry(0.6 + Math.random() * 1.0),
+                    new THREE.MeshStandardMaterial({ color: Math.random() > 0.4 ? 0xef4444 : 0xfbbf24, emissive: 0xb91c1c })
                 );
                 debris.position.set(-28, -12, 0);
-                const speed = 0.05 + Math.random() * 0.15;
+                const speed = 0.06 + Math.random() * 0.18;
                 const angle1 = Math.random() * Math.PI * 2;
                 const angle2 = Math.random() * Math.PI;
                 debris.userData = {
@@ -679,6 +705,7 @@
                 escapeProgress = 0;
                 isEarthExploding = true;
                 explosionProgress = 0;
+                if (rocket3D) rocket3D.visible = true;
                 if (bloomPass) bloomPass.strength = 1.2;
             });
         }
@@ -691,10 +718,19 @@
         }
 
         function finishToUniverse() {
-            if (moonEscapeGroup) moonEscapeGroup.visible = false;
-            if (starDomeGroup && spaceGroup) spaceGroup.add(starDomeGroup);
-            document.getElementById('moonEscapeUI').classList.add('hidden');
-            exitEarthMode();
+            triggerWarpEffect(() => {
+                if (moonEscapeGroup) moonEscapeGroup.visible = false;
+                if (starDomeGroup && spaceGroup) spaceGroup.add(starDomeGroup);
+                document.getElementById('moonEscapeUI').classList.add('hidden');
+                gameMode = 'SPACE';
+                spaceGroup.visible = true;
+                if (bloomPass) bloomPass.strength = 1.4;
+                if (renderer) renderer.toneMappingExposure = userBrightness;
+                document.getElementById('spaceUI').classList.remove('hidden');
+                selectPlanet('earth');
+                // Lùi camera ra xa để ngắm trọn vẹn toàn cảnh ngoài vũ trụ
+                targetCamDist = 160;
+            });
         }
 
         function triggerWarpEffect(callback) {
@@ -738,7 +774,7 @@
         }
 
         // =========================================================================
-        // ENGINE 3D VŨ TRỤ THREE.JS (TRÁI ĐẤT XANH CÓ LỬA CHÁY & CHỈNH ÁNH SÁNG)
+        // ENGINE 3D VŨ TRỤ THREE.JS
         // =========================================================================
         let scene, camera, renderer, composer, bloomPass;
         let planets = {};
@@ -844,7 +880,6 @@
             } else if (type === 'venus') {
                 ctx.fillStyle = '#f59e0b'; ctx.fillRect(0, 0, w, h);
             } else if (type === 'earth') {
-                // Đại dương xanh biếc & Lục địa xanh tươi tự nhiên
                 ctx.fillStyle = '#0284c7'; ctx.fillRect(0, 0, w, h);
                 ctx.fillStyle = '#16a34a';
                 ctx.beginPath(); ctx.ellipse(500, 400, 260, 150, 0.2, 0, Math.PI * 2); ctx.fill();
@@ -1031,7 +1066,6 @@
                     mesh.userData.cloudMesh = cloudMesh;
                 }
 
-                // Thêm các ngọn lửa 3D cháy bập bùng trên bề mặt Trái Đất xanh
                 if (cfg.hasFire) {
                     earthFireFlames = [];
                     for (let i = 0; i < 36; i++) {
@@ -1144,7 +1178,7 @@
             requestAnimationFrame(animate);
             const nowSec = performance.now() * 0.005;
 
-            if (gameMode === 'MOON_ESCAPE_3D' && rocket3D && escapeCurve3D) {
+            if (gameMode === 'MOON_ESCAPE_3D') {
                 if (starDomeGroup) starDomeGroup.rotation.y += 0.00015;
 
                 if (isEarthExploding) {
@@ -1156,39 +1190,40 @@
                         d.position.z += d.userData.vz;
                         d.rotation.x += 0.05;
                     });
-                    if (explosionProgress >= 1.0) {
-                        isEarthExploding = false;
-                        if (explodingEarthMesh) explodingEarthMesh.visible = false;
-                        earthDebrisList.forEach(d => d.visible = false);
+                }
+
+                if (rocket3D && rocket3D.visible && escapeCurve3D) {
+                    if (escapeProgress < 1) {
+                        escapeProgress += 0.004;
+                        if (escapeProgress >= 1) {
+                            escapeProgress = 1;
+                            rocketFlame3D.visible = false;
+                            document.getElementById('launchStatusText').innerText = "✅ Đã hạ cánh an toàn xuống Mặt Trăng!";
+                            const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
+                            document.getElementById('winDiff3D').innerText = diffNames[currentDifficulty];
+                            let m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+                            let s = String(timeLeft % 60).padStart(2, '0');
+                            document.getElementById('winTime3D').innerText = `${m}:${s}`;
+                            document.getElementById('victoryModal3D').classList.remove('hidden');
+                        }
                     }
-                }
 
-                if (escapeProgress < 1) {
-                    escapeProgress += 0.004;
-                    if (escapeProgress >= 1) {
-                        escapeProgress = 1;
-                        rocketFlame3D.visible = false;
-                        document.getElementById('launchStatusText').innerText = "✅ Đã hạ cánh an toàn xuống Mặt Trăng!";
-                        const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
-                        document.getElementById('winDiff3D').innerText = diffNames[currentDifficulty];
-                        let m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-                        let s = String(timeLeft % 60).padStart(2, '0');
-                        document.getElementById('winTime3D').innerText = `${m}:${s}`;
-                        document.getElementById('victoryModal3D').classList.remove('hidden');
+                    const pos = escapeCurve3D.getPointAt(escapeProgress);
+                    rocket3D.position.copy(pos);
+
+                    if (escapeProgress < 0.99) {
+                        const tangent = escapeCurve3D.getTangentAt(escapeProgress).normalize();
+                        rocket3D.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), tangent);
+                        rocketFlame3D.scale.y = 0.8 + Math.random() * 0.6;
                     }
+
+                    camera.position.set(pos.x * 0.4, pos.y * 0.4 + 12, 68);
+                    camera.lookAt(pos.x * 0.6, pos.y * 0.6, 0);
+                } else if (!rocket3D || !rocket3D.visible) {
+                    // Góc quay phim khi Thua Cuộc (ngắm toàn cảnh Trái Đất nổ tung)
+                    camera.position.set(-28, -2, 45);
+                    camera.lookAt(-28, -12, 0);
                 }
-
-                const pos = escapeCurve3D.getPointAt(escapeProgress);
-                rocket3D.position.copy(pos);
-
-                if (escapeProgress < 0.99) {
-                    const tangent = escapeCurve3D.getTangentAt(escapeProgress).normalize();
-                    rocket3D.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), tangent);
-                    rocketFlame3D.scale.y = 0.8 + Math.random() * 0.6;
-                }
-
-                camera.position.set(pos.x * 0.4, pos.y * 0.4 + 12, 68);
-                camera.lookAt(pos.x * 0.6, pos.y * 0.6, 0);
 
             } else if (gameMode === 'SPACE') {
                 if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
@@ -1196,7 +1231,6 @@
                 if (cosmicDust) cosmicDust.rotation.y += 0.00025 * timeSpeed;
                 if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
 
-                // Hiệu ứng ngọn lửa bập bùng trên bề mặt Trái Đất xanh
                 earthFireFlames.forEach(f => {
                     const flicker = f.userData.baseScale + Math.sin(nowSec * 3.5 + f.userData.phase) * 0.35;
                     f.scale.set(1, Math.max(0.4, flicker), 1);
