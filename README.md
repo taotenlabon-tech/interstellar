@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - 2D Earth Mission & Space Tycoon</title>
+    <title>NASA Eyes 3D - 2D Earth Doom Mission & Moon Escape</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -54,10 +54,10 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& NHIỆM VỤ 2D TRÁI ĐẤT</span>
+                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& THOÁT KHỎI TRÁI ĐẤT</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Vòm Vạn Sao 360° • Quỹ Đạo Sao Thủy Rõ Ràng • 4 Nhiệm Vụ Sinh Tồn 2D Trên Trái Đất!
+                Vòm Vạn Sao 360° • Quỹ Đạo Sao Thủy Rõ Ràng • 3 Phút Sinh Tồn & Bay Lên Mặt Trăng!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
@@ -115,7 +115,7 @@
                     </div>
 
                     <button id="landEarthBtn" onclick="enterEarthMode()" class="hidden w-full mt-2 py-2.5 px-3 bg-gradient-to-r from-rose-600 to-amber-500 hover:brightness-110 text-white font-orbitron font-black text-xs rounded-xl shadow-[0_0_25px_rgba(244,63,94,0.7)] transition animate-bounce">
-                        🌍 ĐỔ BỘ TRÁI ĐẤT - NHIỆM VỤ 2D
+                        🌍 ĐỔ BỘ TRÁI ĐẤT - NHIỆM VỤ 3 PHÚT
                     </button>
                 </div>
             </div>
@@ -136,16 +136,16 @@
 
     <!-- GIAO DIỆN GAME 2D TRÊN TRÁI ĐẤT -->
     <div id="earthUI" class="hidden absolute inset-0 z-30 bg-slate-950 flex flex-col items-center justify-center p-4">
-        <div class="absolute top-4 left-4 right-4 flex justify-between items-center hud-glass px-5 py-3 rounded-2xl max-w-4xl mx-auto w-full">
+        <div class="absolute top-4 left-4 right-4 flex justify-between items-center hud-glass px-5 py-3 rounded-2xl max-w-4xl mx-auto w-full z-10">
             <div class="flex items-center gap-6">
                 <div>
-                    <div class="text-[10px] text-rose-400">⏳ THỜI GIAN NHIỆM VỤ</div>
-                    <div id="missionTimer" class="font-orbitron font-bold text-sm text-amber-300">10:00</div>
+                    <div class="text-[10px] text-rose-400">⏳ THỜI GIAN CÒN LẠI</div>
+                    <div id="missionTimer" class="font-orbitron font-bold text-sm text-amber-300">03:00</div>
                 </div>
                 <div class="h-6 w-[1px] bg-slate-700"></div>
                 <div>
-                    <div class="text-[10px] text-cyan-400">🎮 MỤC TIÊU HIỆN TẠI</div>
-                    <div id="missionText" class="font-orbitron font-bold text-xs text-cyan-300">Thu thập 3 Bình Nước & Năng Lượng (0/3)</div>
+                    <div class="text-[10px] text-cyan-400">🎮 NHIỆM VỤ HIỆN TẠI (<span id="diffLabel" class="text-amber-300">DỄ</span>)</div>
+                    <div id="missionText" class="font-orbitron font-bold text-xs text-cyan-300">Chọn cấp độ khó để bắt đầu!</div>
                 </div>
             </div>
             <button onclick="exitEarthMode()" class="px-4 py-2 bg-slate-900 border border-slate-700 hover:border-cyan-400 rounded-xl text-xs font-bold text-cyan-300 transition">
@@ -153,11 +153,79 @@
             </button>
         </div>
 
-        <div class="relative w-full max-w-4xl h-[70vh] bg-[#030712] border border-cyan-500/40 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(56,189,248,0.2)]">
+        <div class="relative w-full max-w-4xl h-[74vh] bg-[#030712] border border-cyan-500/40 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(56,189,248,0.2)] mt-12">
             <canvas id="game2DCanvas" class="w-full h-full block"></canvas>
-            <div id="gameMsg" class="absolute inset-x-0 bottom-6 text-center pointer-events-none">
-                <span class="px-4 py-2 bg-slate-900/90 border border-cyan-500/60 rounded-xl text-xs font-bold text-amber-300 shadow-lg">
-                    ⌨️ Dùng phím MŨI TÊN (hoặc W, A, S, D) để điều khiển phi hành gia thu thập vật phẩm!
+
+            <!-- MÀN HÌNH CHỌN CẤP ĐỘ KHÓ -->
+            <div id="difficultyOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-6 z-20">
+                <div class="space-y-2">
+                    <h2 class="font-orbitron font-black text-2xl text-white tracking-wider">CHỌN CẤP ĐỘ SINH TỒN (03:00)</h2>
+                    <p class="text-xs text-slate-400">Hoàn thành 4 nhiệm vụ trước khi Trái Đất nổ tung để phóng tên lửa lên Mặt Trăng!</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+                    <button onclick="startMission('easy')" class="p-4 bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
+                        <span class="text-2xl">🟢</span>
+                        <span class="font-orbitron font-bold text-emerald-300 text-sm">DỄ</span>
+                        <span class="text-[11px] text-slate-300">Mục tiêu tiêu chuẩn. Không có thiên thạch rơi.</span>
+                    </button>
+                    <button onclick="startMission('normal')" class="p-4 bg-amber-950/60 border border-amber-500/50 hover:bg-amber-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
+                        <span class="text-2xl">🟡</span>
+                        <span class="font-orbitron font-bold text-amber-300 text-sm">BÌNH THƯỜNG</span>
+                        <span class="text-[11px] text-slate-300">Có mưa thiên thạch vừa phải. Tránh né cẩn thận!</span>
+                    </button>
+                    <button onclick="startMission('hard')" class="p-4 bg-rose-950/60 border border-rose-500/50 hover:bg-rose-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
+                        <span class="text-2xl">🔴</span>
+                        <span class="font-orbitron font-bold text-rose-400 text-sm">SIÊU KHÓ</span>
+                        <span class="text-[11px] text-slate-300">Nhiệm vụ gấp đôi! Mưa thiên thạch dồn dập tốc độ cao.</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- BẢNG CHÚC MỪNG HOÀN THÀNH NHIỆM VỤ & BAY LÊN MẶT TRĂNG -->
+            <div id="victoryModal" class="hidden absolute inset-0 bg-slate-950/70 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center space-y-5 z-30">
+                <div class="hud-glass p-6 sm:p-8 rounded-3xl max-w-md w-full border-amber-400/60 space-y-4 shadow-[0_0_60px_rgba(251,191,36,0.4)]">
+                    <div class="text-4xl animate-bounce">🌕🚀🎉</div>
+                    <h2 class="font-orbitron font-black text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-cyan-300">
+                        NHIỆM VỤ HOÀN THÀNH!
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                        Tàu cứu hộ đã thoát khỏi Trái Đất rực lửa và hạ cánh an toàn xuống <strong class="text-amber-300">Mặt Trăng</strong>! Nền văn minh nhân loại đã được bảo toàn.
+                    </p>
+                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-700 text-xs space-y-1 text-slate-300">
+                        <div>Cấp độ hoàn thành: <span id="winDiff" class="text-amber-300 font-bold">BÌNH THƯỜNG</span></div>
+                        <div>Thời gian còn lại: <span id="winTime" class="text-cyan-300 font-bold">01:24</span></div>
+                    </div>
+                    <div class="flex gap-3 pt-2">
+                        <button onclick="resetToDifficulty()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
+                            🔄 Chơi Lại
+                        </button>
+                        <button onclick="exitEarthMode()" class="flex-1 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
+                            🌌 Về Vũ Trụ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BẢNG THẤT BẠI KHI HẾT GIỜ -->
+            <div id="gameOverModal" class="hidden absolute inset-0 bg-rose-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-5 z-30">
+                <div class="hud-glass p-6 rounded-3xl max-w-md w-full border-rose-500 space-y-4">
+                    <div class="text-4xl">💥🌍</div>
+                    <h2 class="font-orbitron font-black text-xl text-rose-400">HẾT THỜI GIAN!</h2>
+                    <p class="text-xs text-slate-200">Trái Đất đã bị hủy diệt trước khi bạn kịp phóng tên lửa thoát hiểm.</p>
+                    <div class="flex gap-3 pt-2">
+                        <button onclick="resetToDifficulty()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-orbitron font-bold text-xs rounded-xl transition">
+                            🔄 Thử Lại
+                        </button>
+                        <button onclick="exitEarthMode()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 font-orbitron font-bold text-xs rounded-xl transition">
+                            🌌 Về Vũ Trụ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gameMsg" class="hidden absolute inset-x-0 bottom-4 text-center pointer-events-none z-10">
+                <span class="px-4 py-1.5 bg-slate-900/90 border border-cyan-500/60 rounded-xl text-[11px] font-bold text-amber-300 shadow-lg">
+                    ⌨️ Dùng phím MŨI TÊN hoặc W, A, S, D để di chuyển! Tránh thiên thạch đỏ!
                 </span>
             </div>
         </div>
@@ -266,122 +334,204 @@
         }
 
         // =========================================================================
-        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT
+        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT & HOẠT ẢNH BAY LÊN MẶT TRĂNG
         // =========================================================================
         let gameMode = 'SPACE';
         let spaceGroup;
         let canvas2D, ctx2D, gameInterval, missionTimerInterval;
+        let missionState = 'SELECT'; // 'SELECT', 'PLAYING', 'LAUNCHING', 'GAMEOVER'
+        let currentDifficulty = 'easy';
         let missionStage = 1; // 1: Nước, 2: Trạm khiên, 3: Cứu nhà khoa học, 4: Bệ phóng
         let progressCount = 0;
-        let timeLeft = 600; // 10 phút
+        let timeLeft = 180; // 3 phút = 180 giây
 
-        let player2D = { x: 400, y: 300, radius: 14, speed: 4, color: '#38bdf8' };
+        let player2D = { x: 80, y: 80, radius: 13, speed: 4.5, color: '#38bdf8' };
         let keys2D = {};
         let items2D = [];
+        let meteors2D = [];
 
-        function init2DGame() {
+        // Biến hoạt ảnh tên lửa bay lên Mặt Trăng
+        let rocketAnim = { x: 0, y: 0, progress: 0, stars: [] };
+
+        window.addEventListener('keydown', e => keys2D[e.key] = true);
+        window.addEventListener('keyup', e => keys2D[e.key] = false);
+
+        function setup2DCanvas() {
             canvas2D = document.getElementById('game2DCanvas');
             canvas2D.width = canvas2D.parentElement.clientWidth;
             canvas2D.height = canvas2D.parentElement.clientHeight;
             ctx2D = canvas2D.getContext('2d');
+        }
 
-            window.addEventListener('keydown', e => keys2D[e.key] = true);
-            window.addEventListener('keyup', e => keys2D[e.key] = false);
+        function resetToDifficulty() {
+            missionState = 'SELECT';
+            document.getElementById('difficultyOverlay').classList.remove('hidden');
+            document.getElementById('victoryModal').classList.add('hidden');
+            document.getElementById('gameOverModal').classList.add('hidden');
+            document.getElementById('gameMsg').classList.add('hidden');
+            document.getElementById('missionTimer').innerText = "03:00";
+            document.getElementById('missionText').innerText = "Chọn cấp độ khó để bắt đầu!";
+        }
+
+        function startMission(diff) {
+            currentDifficulty = diff;
+            missionState = 'PLAYING';
+            missionStage = 1;
+            progressCount = 0;
+            timeLeft = 180; // 3 phút
+
+            const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
+            document.getElementById('diffLabel').innerText = diffNames[diff];
+            document.getElementById('difficultyOverlay').classList.add('hidden');
+            document.getElementById('victoryModal').classList.add('hidden');
+            document.getElementById('gameOverModal').classList.add('hidden');
+            document.getElementById('gameMsg').classList.remove('hidden');
+
+            player2D.x = 70;
+            player2D.y = canvas2D.height / 2;
 
             spawnMissionItems();
+            spawnMeteors();
+            updateMissionHUD();
 
             if (gameInterval) clearInterval(gameInterval);
-            gameInterval = setInterval(update2DGame, 1000 / 60);
+            gameInterval = setInterval(gameLoop2D, 1000 / 60);
 
             if (missionTimerInterval) clearInterval(missionTimerInterval);
             missionTimerInterval = setInterval(() => {
-                if (timeLeft > 0 && gameMode === 'EARTH') {
+                if (missionState === 'PLAYING' && gameMode === 'EARTH') {
                     timeLeft--;
                     let m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
                     let s = String(timeLeft % 60).padStart(2, '0');
                     document.getElementById('missionTimer').innerText = `${m}:${s}`;
+
+                    if (timeLeft <= 0) {
+                        missionState = 'GAMEOVER';
+                        document.getElementById('gameOverModal').classList.remove('hidden');
+                        document.getElementById('gameMsg').classList.add('hidden');
+                    }
                 }
             }, 1000);
         }
 
+        function getStageTargetCount() {
+            if (missionStage === 4) return 1; // Bệ phóng tên lửa luôn là 1
+            if (currentDifficulty === 'hard') {
+                return missionStage === 1 ? 5 : missionStage === 2 ? 5 : 6;
+            }
+            return missionStage === 1 ? 3 : missionStage === 2 ? 3 : 4;
+        }
+
+        function updateMissionHUD() {
+            let target = getStageTargetCount();
+            let texts = [
+                "",
+                `Thu thập Bình Nước & Năng Lượng (${progressCount}/${target})`,
+                `Sửa chữa Trạm Khiên Từ Trường (${progressCount}/${target})`,
+                `Giải cứu Nhà Khoa Học (${progressCount}/${target})`,
+                `Chạy ngay đến Bệ Phóng Tên Lửa! (${progressCount}/${target})`
+            ];
+            document.getElementById('missionText').innerText = texts[missionStage];
+        }
+
         function spawnMissionItems() {
             items2D = [];
-            let count = missionStage === 1 ? 3 : missionStage === 2 ? 3 : missionStage === 3 ? 4 : 1;
+            let count = getStageTargetCount();
             let type = missionStage === 1 ? 'water' : missionStage === 2 ? 'shield' : missionStage === 3 ? 'scientist' : 'rocket';
 
             for (let i = 0; i < count; i++) {
                 items2D.push({
-                    x: 80 + Math.random() * (canvas2D.width - 160),
-                    y: 80 + Math.random() * (canvas2D.height - 160),
-                    radius: 16,
+                    x: 140 + Math.random() * (canvas2D.width - 200),
+                    y: 60 + Math.random() * (canvas2D.height - 120),
+                    radius: missionStage === 4 ? 22 : 15,
                     type: type,
                     collected: false
                 });
             }
         }
 
-        function update2DGame() {
+        function spawnMeteors() {
+            meteors2D = [];
+            if (currentDifficulty === 'easy') return;
+            let count = currentDifficulty === 'normal' ? 6 : 14;
+            let speedBase = currentDifficulty === 'normal' ? 2.5 : 4.8;
+
+            for (let i = 0; i < count; i++) {
+                meteors2D.push({
+                    x: 160 + Math.random() * (canvas2D.width - 200),
+                    y: Math.random() * canvas2D.height,
+                    radius: 10 + Math.random() * 8,
+                    vx: (Math.random() - 0.5) * speedBase,
+                    vy: (Math.random() > 0.5 ? 1 : -1) * (speedBase + Math.random() * 1.5)
+                });
+            }
+        }
+
+        function gameLoop2D() {
             if (gameMode !== 'EARTH') return;
 
-            // Di chuyển nhân vật
+            if (missionState === 'PLAYING') {
+                update2DPlaying();
+                render2DPlaying();
+            } else if (missionState === 'LAUNCHING') {
+                updateAndRenderMoonLaunch();
+            }
+        }
+
+        function update2DPlaying() {
             if ((keys2D['ArrowUp'] || keys2D['w'] || keys2D['W']) && player2D.y > 20) player2D.y -= player2D.speed;
             if ((keys2D['ArrowDown'] || keys2D['s'] || keys2D['S']) && player2D.y < canvas2D.height - 20) player2D.y += player2D.speed;
             if ((keys2D['ArrowLeft'] || keys2D['a'] || keys2D['A']) && player2D.x > 20) player2D.x -= player2D.speed;
             if ((keys2D['ArrowRight'] || keys2D['d'] || keys2D['D']) && player2D.x < canvas2D.width - 20) player2D.x += player2D.speed;
 
-            // Kiểm tra va chạm vật phẩm
+            // Di chuyển thiên thạch
+            meteors2D.forEach(m => {
+                m.x += m.vx;
+                m.y += m.vy;
+                if (m.x < 130 || m.x > canvas2D.width - 20) m.vx *= -1;
+                if (m.y < 20 || m.y > canvas2D.height - 20) m.vy *= -1;
+
+                // Va chạm thiên thạch đẩy lùi về điểm xuất phát
+                if (Math.hypot(player2D.x - m.x, player2D.y - m.y) < player2D.radius + m.radius) {
+                    player2D.x = 70;
+                    player2D.y = canvas2D.height / 2;
+                }
+            });
+
+            // Thu thập vật phẩm
             items2D.forEach(item => {
                 if (!item.collected) {
-                    let dist = Math.hypot(player2D.x - item.x, player2D.y - item.y);
-                    if (dist < player2D.radius + item.radius) {
+                    if (Math.hypot(player2D.x - item.x, player2D.y - item.y) < player2D.radius + item.radius) {
                         item.collected = true;
                         progressCount++;
                         checkMissionProgress();
                     }
                 }
             });
-
-            render2DGame();
         }
 
         function checkMissionProgress() {
-            let target = missionStage === 1 ? 3 : missionStage === 2 ? 3 : missionStage === 3 ? 4 : 1;
+            let target = getStageTargetCount();
             if (progressCount >= target) {
                 missionStage++;
                 progressCount = 0;
                 if (missionStage > 4) {
-                    alert('🎉 CHÚC MỪNG! Bạn đã hoàn thành xuất sắc toàn bộ 4 nhiệm vụ sinh tồn và đưa nhân loại thoát khỏi Trái Đất thành công!');
-                    exitEarthMode();
-                    missionStage = 1;
+                    startMoonLaunchAnimation();
                 } else {
-                    let texts = [
-                        "",
-                        "Thu thập 3 Bình Nước & Năng Lượng",
-                        "Sửa chữa 3 Trạm Khiên Từ Trường",
-                        "Giải cứu 4 Nhà Khoa Học",
-                        "Chạy đến Bệ Phóng Tên Lửa Khẩn Cấp!"
-                    ];
-                    document.getElementById('missionText').innerText = `${texts[missionStage]} (${progressCount}/${missionStage === 3 ? 4 : 3})` ;
+                    updateMissionHUD();
                     spawnMissionItems();
                 }
             } else {
-                let texts = [
-                    "",
-                    "Thu thập 3 Bình Nước & Năng Lượng",
-                    "Sửa chữa 3 Trạm Khiên Từ Trường",
-                    "Giải cứu 4 Nhà Khoa Học",
-                    "Chạy đến Bệ Phóng Tên Lửa Khẩn Cấp!"
-                ];
-                document.getElementById('missionText').innerText = `${texts[missionStage]} (${progressCount}/${missionStage === 3 ? 4 : missionStage === 4 ? 1 : 3})`;
+                updateMissionHUD();
             }
         }
 
-        function render2DGame() {
+        function render2DPlaying() {
             ctx2D.fillStyle = '#090d16';
             ctx2D.fillRect(0, 0, canvas2D.width, canvas2D.height);
 
-            // Vẽ lưới bản đồ sa mạc Trái Đất
-            ctx2D.strokeStyle = 'rgba(244, 63, 94, 0.1)';
+            // Lưới địa hình Trái Đất
+            ctx2D.strokeStyle = 'rgba(244, 63, 94, 0.12)';
             ctx2D.lineWidth = 1;
             for (let x = 0; x < canvas2D.width; x += 40) {
                 ctx2D.beginPath(); ctx2D.moveTo(x, 0); ctx2D.lineTo(x, canvas2D.height); ctx2D.stroke();
@@ -390,7 +540,11 @@
                 ctx2D.beginPath(); ctx2D.moveTo(0, y); ctx2D.lineTo(canvas2D.width, y); ctx2D.stroke();
             }
 
-            // Vẽ vật phẩm nhiệm vụ
+            // Vùng an toàn xuất phát bên trái
+            ctx2D.fillStyle = 'rgba(56, 189, 248, 0.08)';
+            ctx2D.fillRect(0, 0, 120, canvas2D.height);
+
+            // Vẽ vật phẩm
             items2D.forEach(item => {
                 if (!item.collected) {
                     ctx2D.save();
@@ -400,15 +554,26 @@
                     ctx2D.shadowColor = ctx2D.fillStyle;
                     ctx2D.shadowBlur = 15;
                     ctx2D.fill();
-                    ctx2D.fillStyle = '#fff';
-                    ctx2D.font = '12px Orbitron';
+                    ctx2D.font = item.type === 'rocket' ? '18px Arial' : '14px Arial';
                     ctx2D.textAlign = 'center';
-                    ctx2D.fillText(item.type === 'water' ? '💧' : item.type === 'shield' ? '⚡' : item.type === 'scientist' ? '🧑‍🚀' : '🚀', item.x, item.y + 4);
+                    ctx2D.fillText(item.type === 'water' ? '💧' : item.type === 'shield' ? '⚡' : item.type === 'scientist' ? '🧑‍🚀' : '🚀', item.x, item.y + 5);
                     ctx2D.restore();
                 }
             });
 
-            // Vẽ nhân vật phi hành gia 2D
+            // Vẽ thiên thạch
+            meteors2D.forEach(m => {
+                ctx2D.save();
+                ctx2D.beginPath();
+                ctx2D.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
+                ctx2D.fillStyle = '#f43f5e';
+                ctx2D.shadowColor = '#f43f5e';
+                ctx2D.shadowBlur = 15;
+                ctx2D.fill();
+                ctx2D.restore();
+            });
+
+            // Vẽ nhân vật
             ctx2D.save();
             ctx2D.beginPath();
             ctx2D.arc(player2D.x, player2D.y, player2D.radius, 0, Math.PI * 2);
@@ -420,6 +585,153 @@
             ctx2D.strokeStyle = '#ffffff';
             ctx2D.stroke();
             ctx2D.restore();
+        }
+
+        // =========================================================================
+        // HOẠT ẢNH TÊN LỬA BAY TỪ TRÁI ĐẤT LÊN MẶT TRĂNG & BẢNG CHÚC MỪNG
+        // =========================================================================
+        function startMoonLaunchAnimation() {
+            missionState = 'LAUNCHING';
+            document.getElementById('gameMsg').classList.add('hidden');
+            document.getElementById('missionText').innerText = "🚀 ĐANG PHÓNG TÀU CỨU HỘ LÊN MẶT TRĂNG...";
+
+            rocketAnim.progress = 0;
+            rocketAnim.stars = [];
+            for (let i = 0; i < 80; i++) {
+                rocketAnim.stars.push({
+                    x: Math.random() * canvas2D.width,
+                    y: Math.random() * canvas2D.height,
+                    r: 1 + Math.random() * 2
+                });
+            }
+        }
+
+        function updateAndRenderMoonLaunch() {
+            if (rocketAnim.progress < 1) {
+                rocketAnim.progress += 0.0055; // Khoảng 3 giây bay lên Mặt Trăng
+                if (rocketAnim.progress >= 1) {
+                    rocketAnim.progress = 1;
+                    showVictoryModal();
+                }
+            }
+
+            const w = canvas2D.width;
+            const h = canvas2D.height;
+
+            // Nền vũ trụ tối
+            ctx2D.fillStyle = '#02040a';
+            ctx2D.fillRect(0, 0, w, h);
+
+            // Vẽ sao lấp lánh
+            ctx2D.fillStyle = '#ffffff';
+            rocketAnim.stars.forEach(s => {
+                ctx2D.beginPath();
+                ctx2D.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx2D.fill();
+            });
+
+            // Vẽ Trái Đất rực lửa ở góc dưới bên trái
+            const earthX = w * 0.18;
+            const earthY = h * 0.82;
+            const earthR = 75;
+            const earthGrad = ctx2D.createRadialGradient(earthX, earthY, 10, earthX, earthY, earthR);
+            earthGrad.addColorStop(0, '#fbbf24');
+            earthGrad.addColorStop(0.6, '#ea580c');
+            earthGrad.addColorStop(1, '#7f1d1d');
+            ctx2D.save();
+            ctx2D.beginPath();
+            ctx2D.arc(earthX, earthY, earthR, 0, Math.PI * 2);
+            ctx2D.fillStyle = earthGrad;
+            ctx2D.shadowColor = '#f43f5e';
+            ctx2D.shadowBlur = 35;
+            ctx2D.fill();
+            ctx2D.restore();
+
+            // Vẽ Mặt Trăng sáng bạc ở góc trên bên phải
+            const moonX = w * 0.82;
+            const moonY = h * 0.22;
+            const moonR = 52;
+            const moonGrad = ctx2D.createRadialGradient(moonX - 10, moonY - 10, 5, moonX, moonY, moonR);
+            moonGrad.addColorStop(0, '#f8fafc');
+            moonGrad.addColorStop(0.7, '#cbd5e1');
+            moonGrad.addColorStop(1, '#64748b');
+            ctx2D.save();
+            ctx2D.beginPath();
+            ctx2D.arc(moonX, moonY, moonR, 0, Math.PI * 2);
+            ctx2D.fillStyle = moonGrad;
+            ctx2D.shadowColor = '#e2e8f0';
+            ctx2D.shadowBlur = 30;
+            ctx2D.fill();
+            ctx2D.restore();
+
+            // Vẽ quỹ đạo đường đứt nét từ Trái Đất tới Mặt Trăng
+            ctx2D.save();
+            ctx2D.setLineDash([6, 8]);
+            ctx2D.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+            ctx2D.lineWidth = 2;
+            ctx2D.beginPath();
+            ctx2D.moveTo(earthX, earthY);
+            ctx2D.quadraticCurveTo(w * 0.45, h * 0.25, moonX, moonY);
+            ctx2D.stroke();
+            ctx2D.restore();
+
+            // Tính vị trí tên lửa theo đường cong Bezier bậc 2
+            const t = rocketAnim.progress;
+            const cx = w * 0.45;
+            const cy = h * 0.25;
+            const rx = (1 - t) * (1 - t) * earthX + 2 * (1 - t) * t * cx + t * t * moonX;
+            const ry = (1 - t) * (1 - t) * earthY + 2 * (1 - t) * t * cy + t * t * moonY;
+
+            // Tính góc xoay mũi tên lửa theo hướng bay
+            const dx = 2 * (1 - t) * (cx - earthX) + 2 * t * (moonX - cx);
+            const dy = 2 * (1 - t) * (cy - earthY) + 2 * t * (moonY - cy);
+            const angle = Math.atan2(dy, dx);
+
+            // Vẽ luồng lửa phản lực và tên lửa
+            ctx2D.save();
+            ctx2D.translate(rx, ry);
+            ctx2D.rotate(angle);
+
+            // Lửa đuôi tên lửa
+            if (t < 0.98) {
+                ctx2D.beginPath();
+                ctx2D.moveTo(-14, -5);
+                ctx2D.lineTo(-32 - Math.random() * 14, 0);
+                ctx2D.lineTo(-14, 5);
+                ctx2D.fillStyle = '#f59e0b';
+                ctx2D.shadowColor = '#fbbf24';
+                ctx2D.shadowBlur = 15;
+                ctx2D.fill();
+            }
+
+            // Thân tên lửa
+            ctx2D.fillStyle = '#ffffff';
+            ctx2D.beginPath();
+            ctx2D.moveTo(18, 0);
+            ctx2D.lineTo(-12, -8);
+            ctx2D.lineTo(-12, 8);
+            ctx2D.closePath();
+            ctx2D.fill();
+
+            // Mũi tên lửa đỏ
+            ctx2D.fillStyle = '#f43f5e';
+            ctx2D.beginPath();
+            ctx2D.moveTo(18, 0);
+            ctx2D.lineTo(8, -4.5);
+            ctx2D.lineTo(8, 4.5);
+            ctx2D.closePath();
+            ctx2D.fill();
+
+            ctx2D.restore();
+        }
+
+        function showVictoryModal() {
+            const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
+            document.getElementById('winDiff').innerText = diffNames[currentDifficulty];
+            let m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+            let s = String(timeLeft % 60).padStart(2, '0');
+            document.getElementById('winTime').innerText = `${m}:${s}`;
+            document.getElementById('victoryModal').classList.remove('hidden');
         }
 
         function triggerWarpEffect(callback) {
@@ -440,7 +752,10 @@
                 document.getElementById('spaceUI').classList.add('hidden');
                 document.getElementById('earthUI').classList.remove('hidden');
 
-                setTimeout(init2DGame, 100);
+                setTimeout(() => {
+                    setup2DCanvas();
+                    resetToDifficulty();
+                }, 80);
             });
         }
 
@@ -471,10 +786,10 @@
         let isFreeFly = false, freeFlyAngle = 0;
 
         const planetDB = {
-            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục khổng lồ. Bấm chọn Trái Đất để đổ bộ thực hiện nhiệm vụ 2D!", dist: "0 AU", temp: "5,500 °C", zoom: 90 },
+            sun: { name: "MẶT TRỜI (SOL)", desc: "Khối cầu plasma sôi sục khổng lồ. Bấm chọn Trái Đất để đổ bộ thực hiện nhiệm vụ 3 phút!", dist: "0 AU", temp: "5,500 °C", zoom: 90 },
             mercury: { name: "SAO THỦY (MERCURY)", desc: "Bề mặt đá bazan xám bạc lồi lõm hàng triệu hố thiên thạch.", dist: "0.39 AU", temp: "430 °C", zoom: 20 },
             venus: { name: "SAO KIM (VENUS)", desc: "Khí quyển siêu đặc cuộn xoáy mây axit sulfuric ánh vàng rực.", dist: "0.72 AU", temp: "462 °C", zoom: 22 },
-            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống! Sẵn sàng đổ bộ 2D thực hiện nhiệm vụ sinh tồn.", dist: "1.00 AU", temp: "15 °C", zoom: 22 },
+            earth: { name: "TRÁI ĐẤT (EARTH)", desc: "Hành tinh sự sống! Sẵn sàng đổ bộ 2D thực hiện 4 nhiệm vụ thoát hiểm.", dist: "1.00 AU", temp: "15 °C", zoom: 22 },
             mars: { name: "SAO HỎA (MARS)", desc: "Sa mạc oxit sắt đỏ rực với chỏm băng cực và hẻm núi sâu.", dist: "1.52 AU", temp: "-63 °C", zoom: 20 },
             jupiter: { name: "SAO MỘC (JUPITER)", desc: "Khí quyển dải băng tầng khí động học & cơn bão Vết Đỏ Lớn.", dist: "5.20 AU", temp: "-110 °C", zoom: 32 },
             saturn: { name: "SAO THỔ (SATURN)", desc: "Hệ thống vành đai băng đa tầng phân tách bởi khe Cassini sắc nét.", dist: "9.58 AU", temp: "-140 °C", zoom: 38 },
