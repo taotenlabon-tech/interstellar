@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - Earth Doom & Cinematic Explosion</title>
+    <title>NASA Eyes 3D - 2 Min Doom & Explosion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -54,14 +54,14 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& EARTH DOOM 3D</span>
+                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& 2 MIN DOOM</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Trái Đất Xanh Có Lửa • Nổ Tung 3D Khi Thất Bại & Khi Trốn Thoát • Điều Chỉnh Ánh Sáng!
+                Nhiệm Vụ 2 Phút • Trái Đất Nổ Tung 3D Khi Hết Giờ • Tránh Thiên Thạch • Thoát Hiểm Lên Mặt Trăng!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
-            ⚡ KHỞI ĐỘNG VŨ TRỤ & HỆ THỐNG KHẨN CẤP
+            ⚡ KHỞI ĐỘNG VŨ TRỤ & NHIỆM VỤ 2 PHÚT
         </button>
     </div>
 
@@ -107,7 +107,7 @@
                 <div class="border-t border-slate-800/80 pt-2.5 space-y-1.5">
                     <div id="planetTitle" class="text-sm font-orbitron font-bold text-amber-300 tracking-wide">MẶT TRỜI (SOL)</div>
                     <p id="planetDesc" class="text-[11px] text-slate-300 leading-relaxed">
-                        Chọn hành tinh để quan sát hoặc chọn Trái Đất để đổ bộ làm nhiệm vụ sinh tồn!
+                        Chọn hành tinh để quan sát hoặc chọn Trái Đất để đổ bộ thực hiện nhiệm vụ sinh tồn 2 phút!
                     </p>
                     <div class="grid grid-cols-2 gap-1 pt-1 text-[10px] text-slate-400">
                         <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
@@ -115,7 +115,7 @@
                     </div>
 
                     <button id="landEarthBtn" onclick="enterEarthMode()" class="hidden w-full mt-2 py-2.5 px-3 bg-gradient-to-r from-rose-600 to-amber-500 hover:brightness-110 text-white font-orbitron font-black text-xs rounded-xl shadow-[0_0_25px_rgba(244,63,94,0.7)] transition animate-bounce">
-                        🔥 ĐỔ BỘ TRÁI ĐẤT - NHIỆM VỤ 3 PHÚT
+                        🔥 ĐỔ BỘ TRÁI ĐẤT - NHIỆM VỤ 2 PHÚT
                     </button>
                 </div>
             </div>
@@ -140,7 +140,7 @@
             <div class="flex items-center gap-6">
                 <div>
                     <div class="text-[10px] text-rose-400">⏳ THỜI GIAN CÒN LẠI</div>
-                    <div id="missionTimer" class="font-orbitron font-bold text-sm text-amber-300">03:00</div>
+                    <div id="missionTimer" class="font-orbitron font-bold text-sm text-amber-300">02:00</div>
                 </div>
                 <div class="h-6 w-[1px] bg-slate-700"></div>
                 <div>
@@ -159,8 +159,8 @@
             <!-- MÀN HÌNH CHỌN CẤP ĐỘ KHÓ -->
             <div id="difficultyOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-6 z-20">
                 <div class="space-y-2">
-                    <h2 class="font-orbitron font-black text-2xl text-white tracking-wider">CHỌN CẤP ĐỘ SINH TỒN (03:00)</h2>
-                    <p class="text-xs text-slate-400">Hết giờ hoặc thua cuộc: Trái Đất sẽ phát nổ 3D và hiển thị bảng THẤT BẠI!</p>
+                    <h2 class="font-orbitron font-black text-2xl text-white tracking-wider">CHỌN CẤP ĐỘ SINH TỒN (02:00)</h2>
+                    <p class="text-xs text-slate-400">Hoàn thành nhiệm vụ trước 2 phút. Nếu hết giờ, Trái Đất sẽ phát nổ 3D và bạn thất bại!</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
                     <button onclick="startMission('easy')" class="p-4 bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
@@ -181,13 +181,13 @@
                 </div>
             </div>
 
-            <!-- BẢNG THẤT BẠI 3D KHI HẾT GIỜ HOẶC CHẠM THIÊN THẠCH -->
+            <!-- BẢNG THẤT BẠI 3D KHI HẾT GIỜ (02:00) -->
             <div id="gameOverModal" class="hidden absolute inset-0 bg-rose-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-5 z-30">
                 <div class="hud-glass p-6 rounded-3xl max-w-md w-full border-rose-500 space-y-4">
                     <div class="text-5xl animate-bounce">💥🌍❌</div>
                     <h2 class="font-orbitron font-black text-2xl text-rose-500 tracking-widest">BẠN ĐÃ THẤT BẠI!</h2>
                     <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                        Trái Đất đã bùng nổ hoàn toàn do không hoàn thành nhiệm vụ kịp thời. Nhân loại đã diệt vong.
+                        Hết 2 phút! Trái Đất đã bùng nổ hoàn toàn do không hoàn thành nhiệm vụ kịp thời.
                     </p>
                     <div class="flex gap-3 pt-2">
                         <button onclick="resetToDifficulty()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-orbitron font-bold text-xs rounded-xl transition">
@@ -208,25 +208,25 @@
         </div>
     </div>
 
-    <!-- GIAO DIỆN HOẠT ẢNH 3D NỔ TUNG TRÁI ĐẤT & BAY LÊN MẶT TRĂNG -->
+    <!-- GIAO DIỆN HOẠT ẢNH 3D NỔ TUNG TRÁI ĐẤT & TRỐN THOÁT -->
     <div id="moonEscapeUI" class="hidden fixed inset-0 z-40 pointer-events-none flex flex-col justify-between p-6">
         <div class="hud-glass px-5 py-3 rounded-2xl max-w-md mx-auto text-center border-amber-400/50">
             <div class="text-[10px] text-amber-300 tracking-widest font-bold">💥 BÙNG NỔ TRÁI ĐẤT & THOÁT HIỂM 3D</div>
             <div id="launchStatusText" class="font-orbitron font-bold text-sm text-white mt-0.5">Trái Đất đang phát nổ... Phóng tên lửa lên Mặt Trăng!</div>
         </div>
 
-        <!-- BẢNG CHÚC MỪNG HIỆN RA KHI TÀU CHẠM MẶT TRĂNG 3D -->
+        <!-- BẢNG CHÚC MỪNG -->
         <div id="victoryModal3D" class="hidden pointer-events-auto m-auto hud-glass p-6 sm:p-8 rounded-3xl max-w-md w-full border-amber-400/70 text-center space-y-4 shadow-[0_0_80px_rgba(251,191,36,0.5)]">
             <div class="text-5xl animate-bounce">🌕🚀🎉</div>
             <h2 class="font-orbitron font-black text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-cyan-300">
                 CHIẾN THẮNG TUYỆT ĐỐI!
             </h2>
             <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                Bạn đã trốn thoát thành công! Quan sát toàn cảnh ngoài vũ trụ để thấy tàn tích Trái Đất vừa phát nổ phía sau.
+                Bạn đã trốn thoát thành công trước khi hết giờ! Quan sát toàn cảnh ngoài vũ trụ để thấy tàn tích Trái Đất vừa phát nổ phía sau.
             </p>
             <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700 text-xs space-y-1 text-slate-300">
                 <div>Cấp độ hoàn thành: <span id="winDiff3D" class="text-amber-300 font-bold">BÌNH THƯỜNG</span></div>
-                <div>Thời gian còn lại: <span id="winTime3D" class="text-cyan-300 font-bold">01:24</span></div>
+                <div>Thời gian còn lại: <span id="winTime3D" class="text-cyan-300 font-bold">01:00</span></div>
             </div>
             <div class="flex gap-3 pt-2">
                 <button onclick="replayFrom3D()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-orbitron font-bold text-xs rounded-xl transition">
@@ -348,7 +348,7 @@
         }
 
         // =========================================================================
-        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT & NỔ TUNG 3D
+        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT & NỔ TUNG 3D (2 PHÚT)
         // =========================================================================
         let gameMode = 'SPACE';
         let spaceGroup, moonEscapeGroup;
@@ -360,7 +360,7 @@
         let currentDifficulty = 'easy';
         let missionStage = 1;
         let progressCount = 0;
-        let timeLeft = 180; // 3 phút
+        let timeLeft = 120; // Giảm xuống còn 2 phút (120 giây)
 
         let player2D = { x: 80, y: 80, radius: 13, speed: 4.5, color: '#38bdf8' };
         let keys2D = {};
@@ -382,7 +382,7 @@
             document.getElementById('difficultyOverlay').classList.remove('hidden');
             document.getElementById('gameOverModal').classList.add('hidden');
             document.getElementById('gameMsg').classList.add('hidden');
-            document.getElementById('missionTimer').innerText = "03:00";
+            document.getElementById('missionTimer').innerText = "02:00";
             document.getElementById('missionText').innerText = "Chọn cấp độ khó để bắt đầu!";
         }
 
@@ -391,7 +391,7 @@
             missionState = 'PLAYING';
             missionStage = 1;
             progressCount = 0;
-            timeLeft = 180;
+            timeLeft = 120; // 2 phút
 
             const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
             document.getElementById('diffLabel').innerText = diffNames[diff];
@@ -429,13 +429,13 @@
             clearInterval(gameInterval);
             clearInterval(missionTimerInterval);
 
-            // Kích hoạt hiệu ứng nổ Trái Đất 3D ngoài không gian ngay cả khi thua
+            // Kích hoạt hiệu ứng nổ Trái Đất 3D ngoài không gian khi hết giờ
             triggerWarpEffect(() => {
                 gameMode = 'MOON_ESCAPE_3D';
                 document.getElementById('earthUI').classList.add('hidden');
                 document.getElementById('moonEscapeUI').classList.remove('hidden');
                 document.getElementById('victoryModal3D').classList.add('hidden');
-                document.getElementById('launchStatusText').innerText = "💥 THẤT BẠI! Trái Đất đã bùng nổ hoàn toàn...";
+                document.getElementById('launchStatusText').innerText = "💥 THẤT BẠI! Hết 2 phút - Trái Đất đã bùng nổ hoàn toàn...";
 
                 spaceGroup.visible = false;
                 if (!moonEscapeGroup) buildMoonEscapeScene3D();
@@ -513,6 +513,7 @@
             if ((keys2D['ArrowLeft'] || keys2D['a'] || keys2D['A']) && player2D.x > 20) player2D.x -= player2D.speed;
             if ((keys2D['ArrowRight'] || keys2D['d'] || keys2D['D']) && player2D.x < canvas2D.width - 20) player2D.x += player2D.speed;
 
+            // Chạm thiên thạch chỉ bị đẩy lùi / không nổ Trái Đất ngay lập tức
             meteors2D.forEach(m => {
                 m.x += m.vx;
                 m.y += m.vy;
@@ -520,7 +521,8 @@
                 if (m.y < 20 || m.y > canvas2D.height - 20) m.vy *= -1;
 
                 if (Math.hypot(player2D.x - m.x, player2D.y - m.y) < player2D.radius + m.radius) {
-                    triggerGameOverDoom();
+                    player2D.x = 70; // Đẩy lùi về bệ xuất phát an toàn
+                    player2D.y = canvas2D.height / 2;
                 }
             });
 
@@ -728,7 +730,6 @@
                 if (renderer) renderer.toneMappingExposure = userBrightness;
                 document.getElementById('spaceUI').classList.remove('hidden');
                 selectPlanet('earth');
-                // Lùi camera ra xa để ngắm trọn vẹn toàn cảnh ngoài vũ trụ
                 targetCamDist = 160;
             });
         }
@@ -1220,7 +1221,7 @@
                     camera.position.set(pos.x * 0.4, pos.y * 0.4 + 12, 68);
                     camera.lookAt(pos.x * 0.6, pos.y * 0.6, 0);
                 } else if (!rocket3D || !rocket3D.visible) {
-                    // Góc quay phim khi Thua Cuộc (ngắm toàn cảnh Trái Đất nổ tung)
+                    // Góc quay phim khi Hết Giờ (Thua) - ngắm toàn cảnh Trái Đất nổ tung
                     camera.position.set(-28, -2, 45);
                     camera.lookAt(-28, -12, 0);
                 }
