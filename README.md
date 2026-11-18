@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - 2 Min Doom & Explosion</title>
+    <title>NASA Eyes 3D - 2 Min Doom & Red Alert</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -40,6 +40,11 @@
             position: fixed; inset: 0; background: radial-gradient(circle, rgba(244,63,94,0.9) 0%, rgba(15,5,10,1) 100%);
             z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.6s ease;
         }
+        @keyframes pulseAlert {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.02); }
+        }
+        .alert-pulse { animation: pulseAlert 0.8s infinite ease-in-out; }
     </style>
 </head>
 <body class="w-screen h-screen select-none">
@@ -54,10 +59,10 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& 2 MIN DOOM</span>
+                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& RED ALERT DOOM</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Nhiệm Vụ 2 Phút • Trái Đất Nổ Tung 3D Khi Hết Giờ • Tránh Thiên Thạch • Thoát Hiểm Lên Mặt Trăng!
+                Nhiệm Vụ 2 Phút • Cảnh Báo 20s & Màn Hình Đỏ Rực 10s • Bùm Nổ 3D Khi Hết Giờ!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
@@ -135,11 +140,11 @@
     </div>
 
     <!-- GIAO DIỆN GAME 2D TRÊN TRÁI ĐẤT -->
-    <div id="earthUI" class="hidden absolute inset-0 z-30 bg-slate-950 flex flex-col items-center justify-center p-4">
-        <div class="absolute top-4 left-4 right-4 flex justify-between items-center hud-glass px-5 py-3 rounded-2xl max-w-4xl mx-auto w-full z-10">
+    <div id="earthUI" class="hidden absolute inset-0 z-30 bg-slate-950 flex flex-col items-center justify-center p-4 transition-colors duration-500">
+        <div id="hudTopBar" class="absolute top-4 left-4 right-4 flex justify-between items-center hud-glass px-5 py-3 rounded-2xl max-w-4xl mx-auto w-full z-10 transition-colors duration-500">
             <div class="flex items-center gap-6">
                 <div>
-                    <div class="text-[10px] text-rose-400">⏳ THỜI GIAN CÒN LẠI</div>
+                    <div id="timerLabel" class="text-[10px] text-rose-400">⏳ THỜI GIAN CÒN LẠI</div>
                     <div id="missionTimer" class="font-orbitron font-bold text-sm text-amber-300">02:00</div>
                 </div>
                 <div class="h-6 w-[1px] bg-slate-700"></div>
@@ -153,14 +158,19 @@
             </button>
         </div>
 
-        <div class="relative w-full max-w-4xl h-[74vh] bg-[#030712] border border-cyan-500/40 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(56,189,248,0.2)] mt-12">
+        <div id="gameBoxContainer" class="relative w-full max-w-4xl h-[74vh] bg-[#030712] border border-cyan-500/40 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(56,189,248,0.2)] mt-12 transition-colors duration-500">
             <canvas id="game2DCanvas" class="w-full h-full block"></canvas>
+
+            <!-- BẢNG CẢNH BÁO 20S CUỐI -->
+            <div id="alertBanner20s" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-20 px-6 py-2 bg-rose-600/90 border border-white text-white font-orbitron font-black text-xs rounded-xl shadow-[0_0_30px_rgba(244,63,94,0.9)] alert-pulse pointer-events-none">
+                ⚠️ CẢNH BÁO: CHỈ CÒN 20 GIÂY TRƯỚC KHI TRÁI ĐẤT PHÁT NỔ! ⚠️
+            </div>
 
             <!-- MÀN HÌNH CHỌN CẤP ĐỘ KHÓ -->
             <div id="difficultyOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-6 z-20">
                 <div class="space-y-2">
                     <h2 class="font-orbitron font-black text-2xl text-white tracking-wider">CHỌN CẤP ĐỘ SINH TỒN (02:00)</h2>
-                    <p class="text-xs text-slate-400">Hoàn thành nhiệm vụ trước 2 phút. Nếu hết giờ, Trái Đất sẽ phát nổ 3D và bạn thất bại!</p>
+                    <p class="text-xs text-slate-400">Cảnh báo: Dưới 20s sẽ báo động đỏ, dưới 10s màn hình đỏ rực trước khi phát nổ 3D!</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
                     <button onclick="startMission('easy')" class="p-4 bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900/60 hover:scale-105 rounded-2xl transition flex flex-col items-center space-y-2">
@@ -348,7 +358,7 @@
         }
 
         // =========================================================================
-        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT & NỔ TUNG 3D (2 PHÚT)
+        // HỆ THỐNG GAME 2D TRÊN TRÁI ĐẤT & NỔ TUNG 3D (2 PHÚT + CẢNH BÁO ĐỎ 20s/10s)
         // =========================================================================
         let gameMode = 'SPACE';
         let spaceGroup, moonEscapeGroup;
@@ -360,7 +370,7 @@
         let currentDifficulty = 'easy';
         let missionStage = 1;
         let progressCount = 0;
-        let timeLeft = 120; // Giảm xuống còn 2 phút (120 giây)
+        let timeLeft = 120; // 2 phút
 
         let player2D = { x: 80, y: 80, radius: 13, speed: 4.5, color: '#38bdf8' };
         let keys2D = {};
@@ -382,6 +392,9 @@
             document.getElementById('difficultyOverlay').classList.remove('hidden');
             document.getElementById('gameOverModal').classList.add('hidden');
             document.getElementById('gameMsg').classList.add('hidden');
+            document.getElementById('alertBanner20s').classList.add('hidden');
+            document.getElementById('earthUI').style.backgroundColor = '#030712';
+            document.getElementById('hudTopBar').style.backgroundColor = '';
             document.getElementById('missionTimer').innerText = "02:00";
             document.getElementById('missionText').innerText = "Chọn cấp độ khó để bắt đầu!";
         }
@@ -391,13 +404,15 @@
             missionState = 'PLAYING';
             missionStage = 1;
             progressCount = 0;
-            timeLeft = 120; // 2 phút
+            timeLeft = 120;
 
             const diffNames = { easy: 'DỄ', normal: 'BÌNH THƯỜNG', hard: 'SIÊU KHÓ' };
             document.getElementById('diffLabel').innerText = diffNames[diff];
             document.getElementById('difficultyOverlay').classList.add('hidden');
             document.getElementById('gameOverModal').classList.add('hidden');
             document.getElementById('gameMsg').classList.remove('hidden');
+            document.getElementById('alertBanner20s').classList.add('hidden');
+            document.getElementById('earthUI').style.backgroundColor = '#030712';
 
             player2D.x = 70;
             player2D.y = canvas2D.height / 2;
@@ -417,7 +432,17 @@
                     let s = String(timeLeft % 60).padStart(2, '0');
                     document.getElementById('missionTimer').innerText = `${m}:${s}`;
 
-                    if (timeLeft <= 0) {
+                    // Cảnh báo 20 giây cuối
+                    if (timeLeft <= 20 && timeLeft > 10) {
+                        document.getElementById('alertBanner20s').classList.remove('hidden');
+                    }
+                    // Cảnh báo 10 giây cuối: màn hình chuyển đỏ rực máu
+                    else if (timeLeft <= 10 && timeLeft > 0) {
+                        document.getElementById('alertBanner20s').innerText = `⚠️ BÁO ĐỘNG ĐỎ: CÒN ${timeLeft} GIÂY TRƯỚC KHI NỔ TUNG! ⚠️`;
+                        document.getElementById('earthUI').style.backgroundColor = '#450a0a';
+                        document.getElementById('gameBoxContainer').style.borderColor = '#ef4444';
+                    }
+                    else if (timeLeft <= 0) {
                         triggerGameOverDoom();
                     }
                 }
@@ -428,8 +453,8 @@
             missionState = 'GAMEOVER';
             clearInterval(gameInterval);
             clearInterval(missionTimerInterval);
+            document.getElementById('alertBanner20s').classList.add('hidden');
 
-            // Kích hoạt hiệu ứng nổ Trái Đất 3D ngoài không gian khi hết giờ
             triggerWarpEffect(() => {
                 gameMode = 'MOON_ESCAPE_3D';
                 document.getElementById('earthUI').classList.add('hidden');
@@ -444,7 +469,7 @@
 
                 isEarthExploding = true;
                 explosionProgress = 0;
-                if (rocket3D) rocket3D.visible = false; // Không có tên lửa khi thua
+                if (rocket3D) rocket3D.visible = false;
 
                 setTimeout(() => {
                     document.getElementById('gameOverModal').classList.remove('hidden');
@@ -513,7 +538,6 @@
             if ((keys2D['ArrowLeft'] || keys2D['a'] || keys2D['A']) && player2D.x > 20) player2D.x -= player2D.speed;
             if ((keys2D['ArrowRight'] || keys2D['d'] || keys2D['D']) && player2D.x < canvas2D.width - 20) player2D.x += player2D.speed;
 
-            // Chạm thiên thạch chỉ bị đẩy lùi / không nổ Trái Đất ngay lập tức
             meteors2D.forEach(m => {
                 m.x += m.vx;
                 m.y += m.vy;
@@ -521,7 +545,7 @@
                 if (m.y < 20 || m.y > canvas2D.height - 20) m.vy *= -1;
 
                 if (Math.hypot(player2D.x - m.x, player2D.y - m.y) < player2D.radius + m.radius) {
-                    player2D.x = 70; // Đẩy lùi về bệ xuất phát an toàn
+                    player2D.x = 70;
                     player2D.y = canvas2D.height / 2;
                 }
             });
@@ -556,10 +580,10 @@
         }
 
         function render2DPlaying() {
-            ctx2D.fillStyle = '#090d16';
+            ctx2D.fillStyle = timeLeft <= 10 ? '#1a0505' : '#090d16';
             ctx2D.fillRect(0, 0, canvas2D.width, canvas2D.height);
 
-            ctx2D.strokeStyle = 'rgba(244, 63, 94, 0.12)';
+            ctx2D.strokeStyle = timeLeft <= 10 ? 'rgba(239, 68, 68, 0.25)' : 'rgba(244, 63, 94, 0.12)';
             ctx2D.lineWidth = 1;
             for (let x = 0; x < canvas2D.width; x += 40) {
                 ctx2D.beginPath(); ctx2D.moveTo(x, 0); ctx2D.lineTo(x, canvas2D.height); ctx2D.stroke();
@@ -568,7 +592,7 @@
                 ctx2D.beginPath(); ctx2D.moveTo(0, y); ctx2D.lineTo(canvas2D.width, y); ctx2D.stroke();
             }
 
-            ctx2D.fillStyle = 'rgba(56, 189, 248, 0.08)';
+            ctx2D.fillStyle = timeLeft <= 10 ? 'rgba(239, 68, 68, 0.15)' : 'rgba(56, 189, 248, 0.08)';
             ctx2D.fillRect(0, 0, 120, canvas2D.height);
 
             items2D.forEach(item => {
@@ -612,7 +636,7 @@
         }
 
         // =========================================================================
-        // HOẠT ẢNH 3D NỔ TUNG TRÁI ĐẤT & TÊN LỬA BAY LÊN MẶT TRĂNG
+        // HOẠT ẢNH 3D NỔ TUNG TRÁI ĐẤT & TRỐN THOÁT
         // =========================================================================
         function buildMoonEscapeScene3D() {
             moonEscapeGroup = new THREE.Group();
@@ -1221,7 +1245,6 @@
                     camera.position.set(pos.x * 0.4, pos.y * 0.4 + 12, 68);
                     camera.lookAt(pos.x * 0.6, pos.y * 0.6, 0);
                 } else if (!rocket3D || !rocket3D.visible) {
-                    // Góc quay phim khi Hết Giờ (Thua) - ngắm toàn cảnh Trái Đất nổ tung
                     camera.position.set(-28, -2, 45);
                     camera.lookAt(-28, -12, 0);
                 }
