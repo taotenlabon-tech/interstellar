@@ -104,11 +104,11 @@
                 <div class="grid grid-cols-2 gap-2 text-[10px]">
                     <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
                         <div class="flex justify-between text-slate-400 mb-1"><span>🔊 Âm lượng</span><span id="volVal" class="text-rose-400 font-bold">85%</span></div>
-                        <input type="range" min="0" max="1" step="0.05" value="0.85" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
+                        <input id="volSlider" type="range" min="0" max="1" step="0.05" value="0.85" oninput="setVolume(this.value)" class="w-full accent-rose-500 h-1 cursor-pointer">
                     </div>
                     <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
                         <div class="flex justify-between text-slate-400 mb-1"><span>☀️ Ánh sáng</span><span id="brightVal" class="text-amber-300 font-bold">125%</span></div>
-                        <input type="range" min="0.3" max="2.5" step="0.05" value="1.25" oninput="setBrightness(this.value)" class="w-full accent-amber-400 h-1 cursor-pointer">
+                        <input id="brightSlider" type="range" min="0.3" max="2.5" step="0.05" value="1.25" oninput="setBrightness(this.value)" class="w-full accent-amber-400 h-1 cursor-pointer">
                     </div>
                 </div>
 
@@ -120,6 +120,9 @@
                     <div class="grid grid-cols-2 gap-1 pt-1 text-[10px] text-slate-400">
                         <div>Khoảng cách: <span id="planetDist" class="text-slate-200">0 AU</span></div>
                         <div>Nhiệt độ: <span id="planetTemp" class="text-amber-300">5,500 °C</span></div>
+                    </div>
+                    <div class="text-[10px] text-cyan-300/90 pt-0.5">
+                        🏆 Kỷ lục còn lại: <span id="bestRecordText" class="font-bold text-amber-300">Chưa có</span>
                     </div>
 
                     <button id="landEarthBtn" onclick="enterEarthMode()" class="hidden w-full mt-2 py-2.5 px-3 bg-gradient-to-r from-rose-600 to-amber-500 hover:brightness-110 text-white font-orbitron font-black text-xs rounded-xl shadow-[0_0_25px_rgba(244,63,94,0.7)] transition animate-bounce">
@@ -257,11 +260,63 @@
     <script>
         let audioCtx, masterGain, delayNode, feedbackGain, isMusicPlaying = false, seqInterval;
 
+        const STORAGE_KEY = 'nasa_eyes_3d_save_v1';
+        let savedData = {
+            volume: 0.85,
+            brightness: 1.25,
+            swordOn: false,
+            lastDiff: 'easy',
+            bestTimeLeft: null
+        };
+
+        function loadSavedData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return;
+                const parsed = JSON.parse(raw);
+                savedData = { ...savedData, ...parsed };
+            } catch (e) {}
+        }
+
+        function persistSavedData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
+            } catch (e) {}
+        }
+
+        function formatSeconds(sec) {
+            const m = String(Math.floor(sec / 60)).padStart(2, '0');
+            const s = String(sec % 60).padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateBestRecordUI() {
+            const el = document.getElementById('bestRecordText');
+            if (!el) return;
+            if (typeof savedData.bestTimeLeft === 'number') {
+                el.innerText = `Còn ${formatSeconds(savedData.bestTimeLeft)}`;
+            } else {
+                el.innerText = 'Chưa có';
+            }
+        }
+
+        function applySavedSettingsToUI() {
+            userBrightness = savedData.brightness;
+            const volSlider = document.getElementById('volSlider');
+            const brightSlider = document.getElementById('brightSlider');
+            if (volSlider) volSlider.value = savedData.volume;
+            if (brightSlider) brightSlider.value = savedData.brightness;
+            document.getElementById('volVal').innerText = Math.round(savedData.volume * 100) + '%';
+            document.getElementById('brightVal').innerText = Math.round(savedData.brightness * 100) + '%';
+            if (renderer) renderer.toneMappingExposure = userBrightness;
+            updateBestRecordUI();
+        }
+
         function startProceduralStrayMusic() {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             audioCtx = new AudioContext();
             masterGain = audioCtx.createGain();
-            masterGain.gain.value = 0.85;
+            masterGain.gain.value = savedData.volume;
 
             delayNode = audioCtx.createDelay();
             delayNode.delayTime.value = 0.5;
@@ -406,12 +461,16 @@
 
         function setVolume(v) {
             const val = parseFloat(v);
+            savedData.volume = val;
+            persistSavedData();
             document.getElementById('volVal').innerText = Math.round(val * 100) + '%';
             if (masterGain && audioCtx) masterGain.gain.setTargetAtTime(val, audioCtx.currentTime, 0.05);
         }
 
         function setBrightness(v) {
             userBrightness = parseFloat(v);
+            savedData.brightness = userBrightness;
+            persistSavedData();
             document.getElementById('brightVal').innerText = Math.round(userBrightness * 100) + '%';
             if (renderer) renderer.toneMappingExposure = userBrightness;
         }
@@ -429,10 +488,16 @@
         }
 
         // =========================================================================
-        // HỆ THỐNG CHÒM SAO ĐƯỜNG KIẾM (CONSTELLATION SWORD)
+        // HỆ THỐNG CHÒM SAO ĐƯỜNG KIẾM (CONSTELLATION SWORD) & SAO BĂNG 3D
         // =========================================================================
         let swordConstellationGroup = null;
+        let swordStarMeshes = [];
+        let swordSweepOrb = null;
         let isSwordVisible = false;
+        let shootingStarLine = null;
+        let shootingStarActive = false;
+        let shootingStarVel = new THREE.Vector3();
+        let shootingStarCooldown = 140;
 
         function buildSwordConstellation() {
             if (swordConstellationGroup) {
@@ -441,46 +506,105 @@
             }
 
             swordConstellationGroup = new THREE.Group();
-            
-            // Tọa độ các điểm chính tạo hình một thanh kiếm laser (Chuôi kiếm, chắn kiếm, lưỡi kiếm, đỉnh kiếm)
+            swordStarMeshes = [];
+
             const swordPoints = [
-                new THREE.Vector3(0, -60, 0),   // Đuôi chuôi kiếm
-                new THREE.Vector3(0, -35, 0),   // Cán chuôi kiếm
-                new THREE.Vector3(0, -25, 0),   // Tâm chắn kiếm (Guard center)
-                new THREE.Vector3(-18, -25, 0), // Cánh chắn trái
-                new THREE.Vector3(18, -25, 0),  // Cánh chắn phải
-                new THREE.Vector3(0, -25, 0),   // Về tâm chắn
-                new THREE.Vector3(0, 60, 0)     // Mũi nhọn đỉnh kiếm
+                new THREE.Vector3(0, -60, 0),
+                new THREE.Vector3(0, -35, 0),
+                new THREE.Vector3(0, -25, 0),
+                new THREE.Vector3(-18, -25, 0),
+                new THREE.Vector3(18, -25, 0),
+                new THREE.Vector3(0, -25, 0),
+                new THREE.Vector3(0, 60, 0)
             ];
 
             const lineGeo = new THREE.BufferGeometry().setFromPoints(swordPoints);
-            const lineMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 3, transparent: true, opacity: 0.85 });
+            const lineMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 3, transparent: true, opacity: 0.88 });
             const swordLines = new THREE.Line(lineGeo, lineMat);
             swordConstellationGroup.add(swordLines);
 
-            // Đặt các ngôi sao sáng chói tại các điểm mốc của đường kiếm
             swordPoints.forEach((pt, idx) => {
                 const starGeo = new THREE.SphereGeometry(idx === 6 ? 1.8 : 1.2, 16, 16);
                 const starMat = new THREE.MeshBasicMaterial({ color: idx === 6 ? 0xffffff : 0x7dd3fc });
                 const starMesh = new THREE.Mesh(starGeo, starMat);
                 starMesh.position.copy(pt);
+                starMesh.userData = { baseScale: 1, phase: idx * 0.9 };
                 swordConstellationGroup.add(starMesh);
+                swordStarMeshes.push(starMesh);
             });
 
-            // Đặt chòm sao lơ lửng phía xa trên quỹ đạo không gian
+            // Điểm sáng chạy dọc lưỡi kiếm từ chắn kiếm lên đỉnh kiếm
+            swordSweepOrb = new THREE.Mesh(
+                new THREE.SphereGeometry(1.5, 16, 16),
+                new THREE.MeshBasicMaterial({ color: 0xfef08a })
+            );
+            swordSweepOrb.position.set(0, -25, 0.5);
+            swordConstellationGroup.add(swordSweepOrb);
+
             swordConstellationGroup.position.set(110, 45, -130);
             swordConstellationGroup.rotation.z = Math.PI / 5;
             spaceGroup.add(swordConstellationGroup);
         }
 
-        function toggleSwordConstellation() {
-            isSwordVisible = !isSwordVisible;
+        function setSwordState(visible, save = true) {
+            isSwordVisible = visible;
             const btn = document.getElementById('swordBtn');
-            btn.innerText = isSwordVisible ? '⚔️ Kiếm Sao: ON' : '⚔️ Kiếm Sao: OFF';
-            btn.style.borderColor = isSwordVisible ? '#38bdf8' : '';
+            if (btn) {
+                btn.innerText = isSwordVisible ? '⚔️ Kiếm Sao: ON' : '⚔️ Kiếm Sao: OFF';
+                btn.style.borderColor = isSwordVisible ? '#38bdf8' : '';
+            }
+            if (isSwordVisible || swordConstellationGroup) {
+                buildSwordConstellation();
+                if (swordConstellationGroup) swordConstellationGroup.visible = isSwordVisible;
+            }
+            if (save) {
+                savedData.swordOn = isSwordVisible;
+                persistSavedData();
+            }
+        }
 
-            buildSwordConstellation();
-            if (swordConstellationGroup) swordConstellationGroup.visible = isSwordVisible;
+        function toggleSwordConstellation() {
+            setSwordState(!isSwordVisible, true);
+        }
+
+        function createShootingStar() {
+            const pts = [
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(-14, 6, -4)
+            ];
+            const geo = new THREE.BufferGeometry().setFromPoints(pts);
+            const mat = new THREE.LineBasicMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.95 });
+            shootingStarLine = new THREE.Line(geo, mat);
+            shootingStarLine.visible = false;
+            spaceGroup.add(shootingStarLine);
+        }
+
+        function triggerShootingStar() {
+            if (!shootingStarLine) return;
+            const startX = -180 + Math.random() * 140;
+            const startY = 45 + Math.random() * 65;
+            const startZ = -120 + Math.random() * 180;
+            shootingStarLine.position.set(startX, startY, startZ);
+            shootingStarVel.set(3.6 + Math.random() * 1.4, -1.6 - Math.random() * 0.8, 1.1 + Math.random() * 0.8);
+            shootingStarLine.visible = true;
+            shootingStarActive = true;
+        }
+
+        function updateShootingStar() {
+            if (!shootingStarLine) return;
+            if (!shootingStarActive) {
+                shootingStarCooldown--;
+                if (shootingStarCooldown <= 0) {
+                    triggerShootingStar();
+                    shootingStarCooldown = 360 + Math.floor(Math.random() * 280);
+                }
+                return;
+            }
+            shootingStarLine.position.add(shootingStarVel);
+            if (shootingStarLine.position.x > 220 || shootingStarLine.position.y < -80) {
+                shootingStarActive = false;
+                shootingStarLine.visible = false;
+            }
         }
 
         // =========================================================================
@@ -496,7 +620,7 @@
         let currentDifficulty = 'easy';
         let missionStage = 1;
         let progressCount = 0;
-        let timeLeft = 90; // 90 giây (1 phút 30 giây)
+        let timeLeft = 90;
 
         let player2D = { x: 80, y: 80, radius: 13, speed: 4.5, color: '#38bdf8' };
         let keys2D = {};
@@ -527,6 +651,8 @@
 
         function startMission(diff) {
             currentDifficulty = diff;
+            savedData.lastDiff = diff;
+            persistSavedData();
             missionState = 'PLAYING';
             missionStage = 1;
             progressCount = 0;
@@ -603,7 +729,6 @@
                 explosionProgress = 0;
                 if (rocket3D) rocket3D.visible = false;
 
-                // Đảm bảo bật hiện bảng Thất Bại có nút Thử Lại ngay sau hiệu ứng nổ
                 setTimeout(() => {
                     document.getElementById('gameOverModal').classList.remove('hidden');
                 }, 1200);
@@ -702,6 +827,11 @@
                 missionStage++;
                 progressCount = 0;
                 if (missionStage > 4) {
+                    if (typeof savedData.bestTimeLeft !== 'number' || timeLeft > savedData.bestTimeLeft) {
+                        savedData.bestTimeLeft = timeLeft;
+                        persistSavedData();
+                        updateBestRecordUI();
+                    }
                     trigger3DMoonEscape();
                 } else {
                     updateMissionHUD();
@@ -1166,6 +1296,7 @@
         }
 
         function init3D() {
+            loadSavedData();
             const container = document.getElementById('canvasContainer');
             scene = new THREE.Scene();
             spaceGroup = new THREE.Group();
@@ -1176,7 +1307,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.toneMapping = THREE.ReinhardToneMapping;
-            renderer.toneMappingExposure = userBrightness;
+            renderer.toneMappingExposure = savedData.brightness;
             container.appendChild(renderer.domElement);
 
             const renderScene = new THREE.RenderPass(scene, camera);
@@ -1196,6 +1327,7 @@
             createStarDome();
             createAsteroidBelt();
             createSpacetimeGrid();
+            createShootingStar();
 
             sunUniforms = { uTime: { value: 0 } };
             const sun = new THREE.Mesh(new THREE.SphereGeometry(9.5, 64, 64), new THREE.ShaderMaterial({ uniforms: sunUniforms, vertexShader: sunVertexShader, fragmentShader: sunFragmentShader }));
@@ -1305,6 +1437,11 @@
                 camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); composer.setSize(window.innerWidth, window.innerHeight);
             });
 
+            applySavedSettingsToUI();
+            if (savedData.swordOn) {
+                setSwordState(true, false);
+            }
+
             animate();
         }
 
@@ -1401,6 +1538,20 @@
                 if (cosmicDust) cosmicDust.rotation.y += 0.00025 * timeSpeed;
                 if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
 
+                if (swordConstellationGroup && swordConstellationGroup.visible) {
+                    swordConstellationGroup.rotation.y += 0.0012 * timeSpeed;
+                    swordStarMeshes.forEach(sm => {
+                        const twinkle = 0.8 + 0.35 * Math.sin(nowSec * 0.8 + sm.userData.phase);
+                        sm.scale.setScalar(twinkle);
+                    });
+                    if (swordSweepOrb) {
+                        const t = (Math.sin(nowSec * 0.45) + 1) * 0.5;
+                        swordSweepOrb.position.y = -25 + t * 85;
+                    }
+                }
+
+                updateShootingStar();
+
                 earthFireFlames.forEach(f => {
                     const flicker = f.userData.baseScale + Math.sin(nowSec * 3.5 + f.userData.phase) * 0.35;
                     f.scale.set(1, Math.max(0.4, flicker), 1);
@@ -1445,4 +1596,4 @@
         }
     </script>
 </body>
-</html>  
+</html>
