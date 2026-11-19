@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Eyes 3D - Constellation Sword & Fixed Retry</title>
+    <title>NASA Eyes 3D - Distant Milky Way & Fixed Retry</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -59,10 +59,10 @@
         </div>
         <div class="space-y-2 max-w-lg">
             <h1 class="font-orbitron font-black text-2xl sm:text-4xl text-white tracking-widest">
-                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& SWORD CONSTELLATION</span>
+                NASA EYES 3D <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-400 to-cyan-300">& DISTANT MILKY WAY</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Nhiệm Vụ 1 Phút 30 Giây • Chòm Sao Đường Kiếm Laser • Sửa Lỗi Nút Thử Lại Tuyệt Đối!
+                Nhiệm Vụ 1 Phút 30 Giây • Dải Ngân Hà Xa Xôi • Sửa Lỗi Nút Thử Lại Tuyệt Đối!
             </p>
         </div>
         <button onclick="startExperience()" class="px-9 py-4 bg-gradient-to-r from-rose-600 via-amber-500 to-cyan-500 hover:brightness-110 font-orbitron font-bold text-xs sm:text-sm rounded-full text-white shadow-[0_0_60px_rgba(244,63,94,0.8)] transition active:scale-95">
@@ -82,8 +82,8 @@
                     <button onclick="toggleSpaceAudio()" id="audioBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-rose-300 rounded-lg text-[10px] font-bold hover:border-rose-400 transition">
                         🔊 Music: ON
                     </button>
-                    <button onclick="toggleSwordConstellation()" id="swordBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-cyan-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
-                        ⚔️ Kiếm Sao: OFF
+                    <button onclick="toggleMilkyWay()" id="galaxyBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-cyan-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
+                        🌌 Ngân Hà: ON
                     </button>
                     <button onclick="toggleHud()" id="hudToggleBtn" class="px-2 py-1 bg-slate-900/90 border border-slate-700 text-slate-300 rounded-lg text-[10px] font-bold hover:border-cyan-400 transition">
                         👁️ Ẩn
@@ -264,7 +264,7 @@
         let savedData = {
             volume: 0.85,
             brightness: 1.25,
-            swordOn: false,
+            milkyWayOn: true,
             lastDiff: 'easy',
             bestTimeLeft: null
         };
@@ -275,6 +275,9 @@
                 if (!raw) return;
                 const parsed = JSON.parse(raw);
                 savedData = { ...savedData, ...parsed };
+                if (typeof savedData.milkyWayOn !== 'boolean') {
+                    savedData.milkyWayOn = true;
+                }
             } catch (e) {}
         }
 
@@ -488,83 +491,103 @@
         }
 
         // =========================================================================
-        // HỆ THỐNG CHÒM SAO ĐƯỜNG KIẾM (CONSTELLATION SWORD) & SAO BĂNG 3D
+        // DẢI NGÂN HÀ NHIỀU SAO Ở XA & SAO BĂNG 3D
         // =========================================================================
-        let swordConstellationGroup = null;
-        let swordStarMeshes = [];
-        let swordSweepOrb = null;
-        let isSwordVisible = false;
+        let milkyWayGroup = null;
+        let isMilkyWayVisible = true;
         let shootingStarLine = null;
         let shootingStarActive = false;
         let shootingStarVel = new THREE.Vector3();
         let shootingStarCooldown = 140;
 
-        function buildSwordConstellation() {
-            if (swordConstellationGroup) {
-                swordConstellationGroup.visible = isSwordVisible;
+        function buildDistantMilkyWay() {
+            if (milkyWayGroup) {
+                milkyWayGroup.visible = isMilkyWayVisible;
                 return;
             }
 
-            swordConstellationGroup = new THREE.Group();
-            swordStarMeshes = [];
+            milkyWayGroup = new THREE.Group();
 
-            const swordPoints = [
-                new THREE.Vector3(0, -60, 0),
-                new THREE.Vector3(0, -35, 0),
-                new THREE.Vector3(0, -25, 0),
-                new THREE.Vector3(-18, -25, 0),
-                new THREE.Vector3(18, -25, 0),
-                new THREE.Vector3(0, -25, 0),
-                new THREE.Vector3(0, 60, 0)
-            ];
+            // Dải sao ngân hà ở xa (khoảng cách 1100 - 2300) uốn lượn theo mặt phẳng nghiêng
+            const count = 45000;
+            const pos = new Float32Array(count * 3);
+            const col = new Float32Array(count * 3);
 
-            const lineGeo = new THREE.BufferGeometry().setFromPoints(swordPoints);
-            const lineMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 3, transparent: true, opacity: 0.88 });
-            const swordLines = new THREE.Line(lineGeo, lineMat);
-            swordConstellationGroup.add(swordLines);
+            const coreColor = new THREE.Color(0xfef3c7);
+            const cyanArm = new THREE.Color(0x7dd3fc);
+            const violetArm = new THREE.Color(0xc4b5fd);
+            const warmStar = new THREE.Color(0xfde68a);
 
-            swordPoints.forEach((pt, idx) => {
-                const starGeo = new THREE.SphereGeometry(idx === 6 ? 1.8 : 1.2, 16, 16);
-                const starMat = new THREE.MeshBasicMaterial({ color: idx === 6 ? 0xffffff : 0x7dd3fc });
-                const starMesh = new THREE.Mesh(starGeo, starMat);
-                starMesh.position.copy(pt);
-                starMesh.userData = { baseScale: 1, phase: idx * 0.9 };
-                swordConstellationGroup.add(starMesh);
-                swordStarMeshes.push(starMesh);
+            for (let i = 0; i < count; i++) {
+                const u = Math.random() * Math.PI * 2;
+                const bandSpread = (Math.random() - 0.5) * 0.42 + Math.sin(u * 2.0) * 0.09;
+                const thickness = (Math.random() - 0.5) * 180 * (1.0 - Math.abs(bandSpread) * 1.4);
+                const radius = 1150 + Math.random() * 1100;
+
+                // Tọa độ quanh dải băng ngân hà
+                const x = radius * Math.cos(u) * Math.cos(bandSpread) - thickness * Math.sin(u) * 0.35;
+                const y = radius * Math.sin(bandSpread) + thickness * 0.7;
+                const z = radius * Math.sin(u) * Math.cos(bandSpread) + thickness * Math.cos(u) * 0.35;
+
+                pos[i * 3] = x;
+                pos[i * 3 + 1] = y;
+                pos[i * 3 + 2] = z;
+
+                const mixT = Math.random();
+                let c;
+                if (Math.abs(bandSpread) < 0.11) {
+                    c = coreColor.clone().lerp(warmStar, mixT * 0.6);
+                } else if (mixT < 0.55) {
+                    c = cyanArm.clone().lerp(new THREE.Color(0xffffff), Math.random() * 0.4);
+                } else {
+                    c = violetArm.clone().lerp(cyanArm, Math.random() * 0.5);
+                }
+
+                const b = 0.65 + Math.random() * 0.55;
+                col[i * 3] = c.r * b;
+                col[i * 3 + 1] = c.g * b;
+                col[i * 3 + 2] = c.b * b;
+            }
+
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+
+            const mat = new THREE.PointsMaterial({
+                size: 4.4,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.92,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
             });
 
-            // Điểm sáng chạy dọc lưỡi kiếm từ chắn kiếm lên đỉnh kiếm
-            swordSweepOrb = new THREE.Mesh(
-                new THREE.SphereGeometry(1.5, 16, 16),
-                new THREE.MeshBasicMaterial({ color: 0xfef08a })
-            );
-            swordSweepOrb.position.set(0, -25, 0.5);
-            swordConstellationGroup.add(swordSweepOrb);
+            const points = new THREE.Points(geo, mat);
+            milkyWayGroup.add(points);
 
-            swordConstellationGroup.position.set(110, 45, -130);
-            swordConstellationGroup.rotation.z = Math.PI / 5;
-            spaceGroup.add(swordConstellationGroup);
+            // Nghiêng dải ngân hà để tạo đường băng vắt ngang bầu trời xa
+            milkyWayGroup.rotation.set(0.45, 0.25, -0.38);
+            milkyWayGroup.visible = isMilkyWayVisible;
+            spaceGroup.add(milkyWayGroup);
         }
 
-        function setSwordState(visible, save = true) {
-            isSwordVisible = visible;
-            const btn = document.getElementById('swordBtn');
+        function setMilkyWayState(visible, save = true) {
+            isMilkyWayVisible = visible;
+            const btn = document.getElementById('galaxyBtn');
             if (btn) {
-                btn.innerText = isSwordVisible ? '⚔️ Kiếm Sao: ON' : '⚔️ Kiếm Sao: OFF';
-                btn.style.borderColor = isSwordVisible ? '#38bdf8' : '';
+                btn.innerText = isMilkyWayVisible ? '🌌 Ngân Hà: ON' : '🌌 Ngân Hà: OFF';
+                btn.style.borderColor = isMilkyWayVisible ? '#38bdf8' : '';
             }
-            if (isSwordVisible || swordConstellationGroup) {
-                buildSwordConstellation();
-                if (swordConstellationGroup) swordConstellationGroup.visible = isSwordVisible;
-            }
+            buildDistantMilkyWay();
+            if (milkyWayGroup) milkyWayGroup.visible = isMilkyWayVisible;
             if (save) {
-                savedData.swordOn = isSwordVisible;
+                savedData.milkyWayOn = isMilkyWayVisible;
                 persistSavedData();
             }
         }
 
-        function toggleSwordConstellation() {
-            setSwordState(!isSwordVisible, true);
+        function toggleMilkyWay() {
+            setMilkyWayState(!isMilkyWayVisible, true);
         }
 
         function createShootingStar() {
@@ -1438,9 +1461,7 @@
             });
 
             applySavedSettingsToUI();
-            if (savedData.swordOn) {
-                setSwordState(true, false);
-            }
+            setMilkyWayState(savedData.milkyWayOn, false);
 
             animate();
         }
@@ -1488,6 +1509,7 @@
 
             if (gameMode === 'MOON_ESCAPE_3D') {
                 if (starDomeGroup) starDomeGroup.rotation.y += 0.00015;
+                if (milkyWayGroup) milkyWayGroup.rotation.y += 0.00012;
 
                 if (isEarthExploding) {
                     explosionProgress += 0.015;
@@ -1535,20 +1557,9 @@
             } else if (gameMode === 'SPACE') {
                 if (sunUniforms) sunUniforms.uTime.value += 0.015 * timeSpeed;
                 if (starDomeGroup) starDomeGroup.rotation.y += 0.0001 * timeSpeed;
+                if (milkyWayGroup && milkyWayGroup.visible) milkyWayGroup.rotation.y += 0.00014 * timeSpeed;
                 if (cosmicDust) cosmicDust.rotation.y += 0.00025 * timeSpeed;
                 if (asteroidBelt && asteroidBelt.visible) asteroidBelt.rotation.y += 0.0018 * timeSpeed;
-
-                if (swordConstellationGroup && swordConstellationGroup.visible) {
-                    swordConstellationGroup.rotation.y += 0.0012 * timeSpeed;
-                    swordStarMeshes.forEach(sm => {
-                        const twinkle = 0.8 + 0.35 * Math.sin(nowSec * 0.8 + sm.userData.phase);
-                        sm.scale.setScalar(twinkle);
-                    });
-                    if (swordSweepOrb) {
-                        const t = (Math.sin(nowSec * 0.45) + 1) * 0.5;
-                        swordSweepOrb.position.y = -25 + t * 85;
-                    }
-                }
 
                 updateShootingStar();
 
